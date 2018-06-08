@@ -1,0 +1,34 @@
+{
+    "*****PRODUTO*****": [{
+            "id_funcao": "1",
+            "funcao": null
+        }, {
+            "id_funcao": "2",
+            "funcao": "Bolso"
+        }, {
+            "id_funcao": "3",
+            "funcao": "Pesponto peitilho"
+        }],
+    "Camiseta gola polo": [{
+            "id_funcao": "9",
+            "funcao": "Abertura lateral"
+        }, {
+            "id_funcao": "6",
+            "funcao": "Barra"
+        }, {
+            "id_funcao": "7",
+            "funcao": "Etiqueta"
+        }, {
+            "id_funcao": "8",
+            "funcao": "Limpeza"
+        }, {
+            "id_funcao": "4",
+            "funcao": "Montagem da pe\u00e7a e gola"
+        }, {
+            "id_funcao": "10",
+            "funcao": "Peitilho"
+        }, {
+            "id_funcao": "5",
+            "funcao": "Vi\u00e9s na gola"
+        }]
+}

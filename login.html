@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="Kunz, Marcelo 2016">
+
+        <title>Bem Vindos</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="../sigep/startbootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../sigep/startbootstrap/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+        <link href="../sigep/startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+        <link href="../sigep/startbootstrap/vendor/morrisjs/morris.css" rel="stylesheet">
+        <link href="../sigep/startbootstrap/vendor/font-awesome/css/font-awesome.min.css"  rel="stylesheet">
+        <link rel="stylesheet" href="mpdf60/lang2fonts.css" type="text/css"/>
+
+
+    </head>
+    <body>
+        <div class="container">
+            <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
+                <div class="panel panel-info" >
+                    <div class="panel-heading">
+                        <div class="panel-title">Sign In</div>
+                        <!--<div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>-->
+                    </div>     
+                    <div style="padding-top:30px" class="panel-body" >
+                        <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+
+                        <form id="loginform" class="form-horizontal" role="form" method="post" action="login.php">
+                            <div style="margin-bottom: 25px" class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="login" type="text" class="form-control" name="login" value="usuario@usuario.com" required="required" placeholder="username or email">                                        
+                            </div>
+                            <div style="margin-bottom: 25px" class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="password" class="form-control" name="senha" value="123456" placeholder="password" required="required">
+                            </div>
+
+                            <div style="margin-top:10px" class="form-group">                            <!-- Button -->
+                                <div class="col-sm-12 controls">
+                                    <button type="submit" id="valida" name="valida" value="Login" class="btn btn-success">
+                                        Login
+                                    </button>
+                                    <!--<a id="btn-login" href="#" class="btn btn-success">Login  </a>-->
+                                    <!--<a id="btn-fblogin" href="#" class="btn btn-primary">Login with Facebook</a>-->
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12 control">
+                                    <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
+                                        Don't have an account! 
+                                        <a href="#" onClick="$('#loginbox').hide();
+                                                $('#signupbox').show()">
+                                            Sign Up Here
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>                     
+                </div>  
+            </div>
+            <div id="signupbox" style="display:none; margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="panel-title">Sign Up</div>
+                        <div style="float:right; font-size: 85%; position: relative; top:-10px">
+                            <a id="signinlink" href="#" onclick="$('#signupbox').hide();
+                                    $('#loginbox').show()">
+                                Sign In
+                            </a>
+                        </div>
+                    </div>  
+                    <div class="panel-body" >
+                        <form method="post" id="form_usuario" class="form-horizontal" action="view/cadastraUsuario.php">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="nome">Nome:</label>                    
+                                    <input type="text" name="nome" id="nome" class="form-control" required="required" placeholder="E-mail" />                    
+                                </div>
+                                <div class="form-group">
+                                    <label for="sobrenome">Sobrenome:</label>                    
+                                    <input type="text" name="sobrenome" id="sobrenome" class="form-control" required="required" placeholder="E-mail" />                    
+                                </div>                                
+                                <div class="form-group">
+                                    <label for="login">Login:</label>                    
+                                    <input type="text" name="login" id="login" class="form-control" required="required" placeholder="E-mail" />                    
+                                </div>
+                                <div class="form-group">
+                                    <label for="senha">Senha:</label>
+                                    <input type="password" name="senha" id="senha" class="form-control" onkeyup="verificaSenha();" required="required" placeholder="Senha" />                    
+                                </div>
+                                <div class="form-group" >
+                                    <label for="conf_senha">Confirma senha:</label>                    
+                                    <input type="password" name="conf_senha" id="conf_senha" class="form-control" onkeyup="verificaSenha();" required="required" placeholder="Confirma sua senha" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="permissao">Selecione o nivel do Usuario:</label>
+                                    <select name="permissao" id="permissao" class="form-control">
+                                        <!--<option value="Selecione">Selecione...</option>-->
+                                        <!--<option value="1">Administrador</option>-->
+                                        <option value="2">Usuário Comum</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" name="cadastrar" value="Cadastrar" class="btn btn-info" onclick="verificaCheckBox();">Cadastrar</button>
+                                    <a class="btn btn-default" id="signinlink" href="#" onclick="$('#signupbox').hide();
+                                            $('#loginbox').show()">
+                                       Cancelar
+                                    </a>
+
+                                    <!--<button type="reset" name="cadastrar" value="Cancelar" class="btn btn-default" >Cancelar</button>-->        
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+ <!-- /#wrapper -->
+
+        <!-- jQuery -->
+        <script src="../sigep/startbootstrap/vendor/jquery/jquery.min.js"></script>
+
+        <!-- Bootstrap Core JavaScript -->
+        <script src="../sigep/startbootstrap/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Metis Menu Plugin JavaScript -->
+        <script src="../sigep/startbootstrap/vendor/metisMenu/metisMenu.min.js"></script>
+
+        <!-- Morris Charts JavaScript -->
+        <script src="../sigep/startbootstrap/vendor/raphael/raphael.min.js"></script>
+        <script src="../sigep/startbootstrap/vendor/morrisjs/morris.min.js"></script>
+        <script src="../sigep/startbootstrap/data/morris-data.js"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script src="../sigep/startbootstrap/dist/js/sb-admin-2.js"></script>
+    </body>
+</html>

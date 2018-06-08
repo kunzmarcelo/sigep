@@ -1,0 +1,23 @@
+{
+    "Cal\u00e7as legging": {
+        "data_producao": "2017-09-13",
+        "tempo_producao": "03:20:00",
+        "tempo_meta": "02:30:00",
+        "pecas_fabricadas": "73",
+        "meta_pecas": "75"
+    },
+    "Camiseta gola polo": {
+        "data_producao": "2017-09-14",
+        "tempo_producao": "00:00:01",
+        "tempo_meta": "03:22:48",
+        "pecas_fabricadas": "1",
+        "meta_pecas": "81"
+    },
+    "Camisa masculina ": {
+        "data_producao": "2017-09-14",
+        "tempo_producao": "00:00:01",
+        "tempo_meta": "00:32:00",
+        "pecas_fabricadas": "5",
+        "meta_pecas": "5"
+    }
+}
