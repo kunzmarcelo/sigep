@@ -159,12 +159,9 @@ controlaAcessoUrl($url, $pagina);
                                 <th>Posto</th>
                                 <th>Produto</th>
                                 <th>Operação</th>
-                                <th>Booas</th>
+                                <th>Boas</th>
                                 <th>Ruins</th>
-                                <th>Total</th>
-                                <th>Inicio</th>
-                                <th>Final</th>
-                                <th>Motivo</th>
+                                <th>Total</th>                               
                                 <th>OBS</th>                                    
                                 <th><i class='fa fa-trash-o'></i></th>
                             </tr>
@@ -205,9 +202,7 @@ controlaAcessoUrl($url, $pagina);
                                         $DATALOTE = $DATALOTE[2] . '/' . $DATALOTE[1];
                                         //$DATALOTE = $DATALOTE[2] . '/' . $DATALOTE[1] . '/' . $DATALOTE[0];
 
-                                        $teste = explode(";", $dados->motivo);
-                                        $motivo = "<span class='label label-danger'>" . $teste[0] . "</span>";
-
+                                        
                                         $total_pecas = $dados->pecas_boas + $dados->pecas_ruins;
 
 
@@ -217,10 +212,7 @@ controlaAcessoUrl($url, $pagina);
                                         } else {
                                             $produto = $dados->descricao;
                                             $operacao = $dados->operacao;
-                                        }
-                                        if ($dados->hora_ini == '00:00:00' && $dados->hora_fim == '00:00:00') {
-                                            $hora_ini = '-';
-                                            $hora_fim = '-';
+                                        }                                      
 
                                             echo "<tr>
                                                         <td title='id'>" . $dados->id_diario . "</td>
@@ -229,12 +221,10 @@ controlaAcessoUrl($url, $pagina);
                                                         <td title='id_maquina' class='editavel'>" . $dados->numero . "</td>
                                                         <td title='id_produto' class='editavel'>" . substr($produto, 0, 18) . "</td>
                                                         <td title='id_operacao' class='editavel'>" . $operacao . "</td>
-                                                        <td title='pecas_boas' class='editavel'><b>" . $dados->pecas_boas . "</b></td>
-                                                        <td title='pecas_ruins' class='editavel'><b>" . $dados->pecas_ruins . "</b></td>
+                                                        <td title='pecas_boas' class='editavel'>" . $dados->pecas_boas . "</td>
+                                                        <td title='pecas_ruins' class='editavel'>" . $dados->pecas_ruins . "</td>
                                                         <td title='total de peças'><b>" . $total_pecas . "</b></td>
-                                                        <td title='hora_ini' class='editavel'>" . $hora_ini . "</td>
-                                                        <td title='hora_fim' class='editavel'>" . $hora_fim . "</td>
-                                                        <td title='motivo' class='editavel'>" . $motivo . "</td>                                                
+                                                        
                                                         <td title='obs' class='editavel'>" . $dados->obs . "</td>                                                                                                                        
                                                         <td>
                                                             <a href='#' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_diario . ");'>
@@ -242,30 +232,7 @@ controlaAcessoUrl($url, $pagina);
                                                             </a>
                                                         </td>
                                                     </tr>";
-                                        } else {
-                                            $hora_ini = $dados->hora_ini;
-                                            $hora_fim = $dados->hora_fim;
-                                            echo "<tr  class='danger'>
-                                                        <td title='id'>" . $dados->id_diario . "</td>
-                                                        <td title='data' class='editavel'><b>" . $DATALOTE . "</b></td>
-                                                        <td title='turno' class='editavel'>" . $dados->turno . "</td>
-                                                        <td title='id_maquina' class='editavel'>" . $dados->numero . "</td>
-                                                        <td title='id_produto' class='editavel'>" . substr($produto, 0, 18) . "</td>
-                                                        <td title='id_operacao' class='editavel'>" . $operacao . "</td>
-                                                        <td title='pecas_boas' class='editavel'><b>" . $dados->pecas_boas . "</b></td>
-                                                        <td title='pecas_ruins' class='editavel'><b>" . $dados->pecas_ruins . "</b></td>
-                                                        <td title='total de peças'><b>" . $total_pecas . "</b></td>
-                                                        <td title='hora_ini' class='editavel'>" . $hora_ini . "</td>
-                                                        <td title='hora_fim' class='editavel'>" . $hora_fim . "</td>
-                                                        <td title='motivo' class='editavel'>" . $motivo . "</td>                                                
-                                                        <td title='obs' class='editavel'>" . $dados->obs . "</td>                                                                                                                        
-                                                        <td>
-                                                            <a href='#' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_diario . ");'>
-                                                                <i class='fa fa-trash'></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>";
-                                        }
+                                        
 
                                         if ($dados->turno == 'Tarde') {
                                             $turno = $dados->turno;
@@ -286,7 +253,7 @@ controlaAcessoUrl($url, $pagina);
                             </tbody>
                         </table>
                     </div>
-                    <div class="panel panel-default">
+<!--                    <div class="panel panel-default">
                         <div class="panel-heading" style="text-align: center">                               
                             Relátorio Final - Funcionário <b><?= $funcionario ?></b>, entre as datas: <b><?= $data1 . ' à ' . $data2; ?></b>
                         </div>                                              
@@ -354,7 +321,7 @@ controlaAcessoUrl($url, $pagina);
                                 </tr>                                
                             </tbody>
                         </table>
-                    </div>
+                    </div>-->
                 </div>
                 <?php
             }

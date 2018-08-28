@@ -10,6 +10,7 @@ class Funcionario extends BancoDadosPDO {
     protected $ativo;
     protected $sexo;
     protected $update_date;
+    protected $id_setor;
 
     function __get($atributo) {
         return $this->$atributo;
@@ -19,12 +20,15 @@ class Funcionario extends BancoDadosPDO {
         $this->$atributo = $valor;
     }
 
-    function cadastraFuncionario($nome,$departamento,$ativo,$update_date,$sexo) {
-        return $this->inserir("funcionario", "nome,ativo,departamento,update_date,sexo", "'$nome','$ativo','$departamento','$update_date','$sexo'");
+    function cadastraFuncionario($nome,$departamento,$ativo,$update_date,$sexo,$id_setor) {
+        return $this->inserir("funcionario", "nome,ativo,departamento,sexo,update_date,id_setor", "'$nome','$ativo','$departamento','$sexo','$update_date','$id_setor'");
     }
 
     function listaFuncionario() {
-        return $this->listarTodos("funcionario ORDER BY nome ASC");
+        return $this->listarTodos("funcionario, setores WHERE funcionario.id_setor = setores.id_setor ORDER BY nome ASC");
+    }
+    function listaFuncionarioStatus($status) {
+        return $this->listarTodos("funcionario, setores WHERE funcionario.id_setor = setores.id_setor AND funcionario.ativo ='$status ' AND setores.descricao_setor != 'Geral' ORDER BY setores.ordem, funcionario.nome ASC");
     }
 
     function excluirFuncionario($id) {

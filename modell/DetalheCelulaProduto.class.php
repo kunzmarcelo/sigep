@@ -57,8 +57,20 @@ AND detalhe_celula_produto.data between '$data_ini' AND '$data_fim'
 AND detalhe_celula_produto.status = $status
 AND detalhe_celula_produto.id_celula = $id_celula ORDER BY detalhe_celula_produto.data ASC");
     }
-    
-    function listaCelulaProdutodDiasProducao($data_ini, $data_fim, $id_celula,$id_produto) {
+    function listaCelulaProdutoPecasVelocidade($data_ini, $data_fim, $id_celula) {
+        return $this->listarTodosMuitosParaMuitos("
+            detalhe_celula_produto.data AS DATACELULA,
+sum(detalhe_celula_produto.pecas_determinadas) AS pecas_determinadas,
+sum(detalhe_celula_produto.pecas_finalizadas) AS pecas_finalizadas,
+celula_trabalho.funcionarios",
+                "detalhe_celula_produto, produto,celula_trabalho", 
+                "detalhe_celula_produto.id_produto = produto.id_produto 
+AND detalhe_celula_produto.id_celula = celula_trabalho.id_celula 
+AND detalhe_celula_produto.data between '$data_ini' AND '$data_fim'
+AND detalhe_celula_produto.id_celula = $id_celula GROUP BY detalhe_celula_produto.data");
+    }
+
+    function listaCelulaProdutodDiasProducao($data_ini, $data_fim, $id_celula, $id_produto) {
         return $this->listarTodosMuitosParaMuitos("
             detalhe_celula_produto.data AS DATACELULA, 
             detalhe_celula_produto.obs AS OBSERVACAO, 
@@ -86,20 +98,38 @@ ORDER BY detalhe_celula_produto.status DESC");
     function somaMensal($mes, $ano) {
         return $this->listarTodosMuitosParaMuitos("detalhe_celula_produto.data, sum(detalhe_celula_produto.pecas_determinadas) AS NPECAS, sum(detalhe_celula_produto.pecas_finalizadas) AS NFEITAS ", "detalhe_celula_produto", " Month(detalhe_celula_produto.data) = '$mes' AND Year(data) = '$ano'");
     }
-    
-    function graficoFaturamentoMes($mes,$ano){
-        return $this->listarTodosMuitosParaMuitos("sum(pecas_determinadas) AS NPECAS, sum(pecas_finalizadas) AS NFEITAS", "detalhe_celula_produto"," Month(data) = '$mes' AND Year(data) = '$ano'");
+
+    function graficoFaturamentoMes($mes, $ano) {
+        return $this->listarTodosMuitosParaMuitos("sum(pecas_determinadas) AS NPECAS, sum(pecas_finalizadas) AS NFEITAS", "detalhe_celula_produto", " Month(data) = '$mes' AND Year(data) = '$ano'");
     }
 
-    function somaMensalProdutoCelula($data_ini, $data_fim, $id_celula) {
+    function somaMensalProdutoCelula($data_ini, $data_fim,$id_celula) {
         return $this->listarTodosMuitosParaMuitos(" sum(detalhe_celula_produto.pecas_determinadas) AS NPECAS ,
-sum(detalhe_celula_produto.pecas_finalizadas) AS NFEITAS,
-produto.*,celula_trabalho.funcionarios", "detalhe_celula_produto, produto,celula_trabalho", "detalhe_celula_produto.id_produto = produto.id_produto
-AND detalhe_celula_produto.id_celula = celula_trabalho.id_celula
-AND detalhe_celula_produto.data between '$data_ini' AND '$data_fim'
-AND celula_trabalho.pessoas_celula='$id_celula'
-GROUP BY produto.descricao");
+                sum(detalhe_celula_produto.pecas_finalizadas) AS NFEITAS,
+                produto.*,celula_trabalho.funcionarios", 
+                "detalhe_celula_produto, produto,celula_trabalho", 
+                "detalhe_celula_produto.id_produto = produto.id_produto
+                AND detalhe_celula_produto.id_celula = celula_trabalho.id_celula
+                AND detalhe_celula_produto.data between '$data_ini' AND '$data_fim'
+                AND detalhe_celula_produto.id_celula = $id_celula    
+                GROUP BY produto.descricao");
     }
+
+    function graficoMensalProdutoCelula($mes,$ano, $id_celula) {
+        return $this->listarTodosMuitosParaMuitos(
+               "sum(detalhe_celula_produto.pecas_determinadas) AS NPECAS ,
+		sum(detalhe_celula_produto.pecas_finalizadas) AS NFEITAS,
+		sum(detalhe_celula_produto.pecas_determinadas*preco)AS TOTALNPECAS,
+		sum(detalhe_celula_produto.pecas_finalizadas*preco)AS TOTALNFEITAS,
+                detalhe_celula_produto.data,
+		produto.preco, produto.descricao,celula_trabalho.funcionarios", "detalhe_celula_produto, produto,celula_trabalho", "detalhe_celula_produto.id_produto = produto.id_produto
+                AND detalhe_celula_produto.id_celula = celula_trabalho.id_celula
+                AND MONTH(detalhe_celula_produto.data)='$mes' 
+                AND YEAR(detalhe_celula_produto.data)='$ano'
+                AND celula_trabalho.pessoas_celula='$id_celula'
+                GROUP BY MONTH(detalhe_celula_produto.data);");
+    }
+
 //AND detalhe_celula_produto.status = '$status'
     function excluirCelulaProduto($id) {
         return $this->excluir("detalhe_celula_produto", "id='$id'");

@@ -84,14 +84,24 @@ controlaAcessoUrl($url, $pagina);
                                                 <input type="time" id="tempo" name="tempo" class="form-control" step='1' min="00:00:00" max="23:59:00"/>
                                             </div>
                                             <div class="form-group">
-                                                <label for="setor">Setor de operação:</label>
-                                                <select name="setor" required="required" class="form-control">
-                                                    <option value="">Selecione...</option>
-                                                    <option value="Inicio">Inicio</option>
-                                                    <option value="Costura">Costura</option>
-                                                    <option value="Acabamento">Acabamento</option>
-                                                    <option value="Finalização">Finalização</option>
-                                                </select>
+                                                <label for="id_setor">Setor de operação:</label>
+                                                
+                                                <select name="id_setor" class="form-control" required="required" >                                       
+                                                    <?php
+                                                    echo "<option value=''>Selecione</option>";
+                                                    include_once '../modell/Setores.class.php';
+                                                    $fun = new Setores();
+                                                    $matriz = $fun->listaSetor();
+
+                                                    while ($dados = $matriz->fetchObject()) {
+                                                        if ($dados->status_setor == true) {
+                                                            $cod = $dados->id_setor;
+                                                            $nome = $dados->descricao_setor;
+                                                            echo "<option value='" . $cod . "'>" . $nome . "</option>";
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>                                                
                                             </div>                                           
                                             <div class="form-group">                                   
                                                 <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
@@ -111,7 +121,7 @@ controlaAcessoUrl($url, $pagina);
                                 $operacao = \filter_input(INPUT_POST, 'funcao');
                                 $custo_operacao = \filter_input(INPUT_POST, 'custo_funcao');
                                 $tempo_operacao = \filter_input(INPUT_POST, 'tempo');
-                                $setor_operacao = \filter_input(INPUT_POST, 'setor');
+                                $setor_operacao = \filter_input(INPUT_POST, 'id_setor');
                                 $status_operacao = true;
                                 $id_produto = \filter_input(INPUT_POST, 'id_produto');
                                 $cadastro = \filter_input(INPUT_POST, 'cadastrar');

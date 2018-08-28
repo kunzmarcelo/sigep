@@ -123,12 +123,12 @@ controlaAcessoUrl($url, $pagina);
     $data_ini = $data_teste;
 
     $data1 = explode("-", $data_ini);
-    $data_fim = $data1[0] . '-' . $data1[1];
+    $data_ini = $data_teste2[0] . '-' . $data_teste2[1] . '-' . '01';
 
 //echo $data_teste2[0].'-'.$data_teste2[1].'-'.'01';
 //$data_teste = date("Y-m-d");
 //echo $data_teste;
-    $data_ini = $data_teste2[0] . '-' . $data_teste2[1] . '-' . '01';
+    $data_fim = $data1[0] . '-' . $data1[1];
     $data_fim2 = $data_fim . '-31';
     $mes = $data1[1] . '/' . $data1[0];
 

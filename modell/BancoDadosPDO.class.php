@@ -26,7 +26,7 @@ class BancoDadosPDO {
         try {
 
 
-            $this->base = "sigep";
+            $this->base = "sigep2";
             $this->db = new PDO("mysql:host=localhost;dbname=$this->base", "root", "");
             // $this->base = "micuim";
             // $this->db = new PDO("mysql:host=localhost;dbname=$this->base", "micuim", "pD0Fb9Q164");
@@ -50,7 +50,7 @@ class BancoDadosPDO {
     function inserir($tabela, $campos, $valores) {
         // mysql_set_charset('utf8');
         $sql = "insert into $tabela ($campos) values ($valores)";
-        //echo $sql;
+        //  echo $sql;
         try {
             $resultado = $this->db->exec($sql);
             return true;

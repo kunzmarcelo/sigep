@@ -4,7 +4,8 @@ session_start();
 $url = basename($_SERVER['SCRIPT_FILENAME']);
 $pagina = basename(__FILE__);
 if ($url != 'index.php')
-    include_once "../view/funcoes.php"; {
+    include_once "../view/funcoes.php";
+{
     include_once "../view/funcoes.php";
 }
 controlaAcessoUrl($url, $pagina);
@@ -17,7 +18,7 @@ controlaAcessoUrl($url, $pagina);
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
-        <?php include_once "./actionCabecalho.php"; ?>
+<?php include_once "./actionCabecalho.php"; ?>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
         <script type="text/javascript">
@@ -72,7 +73,7 @@ controlaAcessoUrl($url, $pagina);
     <body>
 
         <div id="wrapper">
-            <?php require_once './actionfonteMenu.php'; ?>
+<?php require_once './actionfonteMenu.php'; ?>
             <div id="page-wrapper">
 
                 <div class="row">
@@ -89,7 +90,7 @@ controlaAcessoUrl($url, $pagina);
                             $resultado = $titulo->fetchObject();
                             ?>
 
-                            <?= $resultado->nome ?>
+<?= $resultado->nome ?>
                         </h1>
                     </div>
                     <!-- /.col-lg-12 -->
@@ -272,20 +273,20 @@ controlaAcessoUrl($url, $pagina);
                                                 while ($dados = $matriz->fetchObject()) {
                                                     $tempo_producao2 = explode(":", $dados->tempo_operacao);
 
-                                                    if ($dados->setor_operacao == 'Inicio') {
-                                                        $setor = "<span class='label label-default'>Início</span>";
-                                                    } elseif ($dados->setor_operacao == 'Costura') {
-                                                        $setor = "<span class='label label-info'>Costura</span>";
-                                                    } elseif ($dados->setor_operacao == 'Acabamento') {
-                                                        $setor = "<span class='label label-primary'>Acabamento</span>";
-                                                    } elseif ($dados->setor_operacao == 'Finalização') {
-                                                        $setor = "<span class='label label-success'>Finalização</span>";
+                                                    if ($dados->descricao_setor == 'Inicio') {
+                                                        $setor = "<span class='label label-default'>$dados->descricao_setor</span>";
+                                                    } elseif ($dados->descricao_setor == 'Costura') {
+                                                        $setor = "<span class='label label-info'>$dados->descricao_setor</span>";
+                                                    } elseif ($dados->descricao_setor == 'Acabamento') {
+                                                        $setor = "<span class='label label-primary'>$dados->descricao_setor</span>";
+                                                    } elseif ($dados->descricao_setor == 'Finalização') {
+                                                        $setor = "<span class='label label-success'>$dados->descricao_setor</span>";
                                                     }
 
                                                     echo "<td title='operacao' class='editavel'><b> " . $dados->operacao . "</b></td>
-                                                    <td title='tempo_operacao' class='editavel'> " . $dados->tempo_operacao . "</td>
-                                                    <td title='setor_operacao' class='editavel'> " . $setor . "</td>
-                                                </tr>";
+                                                            <td title='tempo_operacao' class='editavel'> " . $dados->tempo_operacao . "</td>
+                                                            <td title='setor_operacao' class='editavel'> " . $setor . "</td>
+                                                        </tr>";
                                                 }
 
 
@@ -334,6 +335,6 @@ controlaAcessoUrl($url, $pagina);
             ?>
         </div>
 
-        <?php require_once "./actionRodape.php"; ?>
+<?php require_once "./actionRodape.php"; ?>
     </body>
 </html>

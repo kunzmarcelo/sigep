@@ -4,8 +4,7 @@ session_start();
 $url = basename($_SERVER['SCRIPT_FILENAME']);
 $pagina = basename(__FILE__);
 if ($url != 'index.php')
-    include_once "../view/funcoes.php";
-{
+    include_once "../view/funcoes.php"; {
     include_once "../view/funcoes.php";
 }
 controlaAcessoUrl($url, $pagina);
@@ -18,13 +17,13 @@ controlaAcessoUrl($url, $pagina);
 <html lang="pt-BR">
     <head>
 
-<?php include_once "./actionCabecalho.php"; ?>
+        <?php include_once "./actionCabecalho.php"; ?>
 
 
     </head>
     <body>
         <div id="wrapper">
-<?php require_once './actionfonteMenu.php'; ?>
+            <?php require_once './actionfonteMenu.php'; ?>
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
@@ -50,7 +49,7 @@ controlaAcessoUrl($url, $pagina);
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading" style="text-align: center">
-                               Formulário de cálculo
+                                Formulário de cálculo
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -69,7 +68,7 @@ controlaAcessoUrl($url, $pagina);
                                                         if ($dados->status == true) {
                                                             $cod = $dados->id_produto;
                                                             $nome = $dados->descricao;
-                                                            echo "<option value=" . $nome . ">" . $nome . "</option>";
+                                                            echo "<option value='" . $nome . "'>" . $nome . "</option>";
                                                         }
                                                     }
                                                     ?>
@@ -84,24 +83,23 @@ controlaAcessoUrl($url, $pagina);
                                                 <input type="time" id="tempo" name="tempo" class="form-control" step='1' min="00:00:00" max="23:59:00" required="required"    />
                                             </div>
                                             <div class="form-group">
-                                                <label for="id_celula" class="tamanho-fonte">Pessoas por célula de trabalho:</label><small> (Campo Obrigatório)</small>
-                                                <select name="id_celula" class="form-control" required="required" >                                       
-                                                    <?php
-                                                    echo "<option value=''>Selecione ...</option>";
-                                                    include_once '../modell/CelulaTrabalho.class.php';
-                                                    $lote = new CelulaTrabalho();
-                                                    $matriz = $lote->listaCelula();
 
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->status_celula == TRUE) {
-                                                            $id_celula = $dados->id_celula;
-                                                            $pessoas_celula = $dados->pessoas_celula;
-                                                            $funcionarios = $dados->funcionarios;
-                                                            echo "<option value=" . $id_celula . ">" . $pessoas_celula . ' - ' . $funcionarios . "</option>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </select>                            
+
+
+                                                <label for="n_pessoas" class="tamanho-fonte">Quantidade de Funcionários:</label><small> (Campo Obrigatório)</small>
+                                                <select name="n_pessoas" class="form-control" required="required" >
+                                                    <option value="">Selecione...</option>
+                                                    <option value="1">1 Funcionários</option>
+                                                    <option value="2">2 Funcionários</option>
+                                                    <option value="3">3 Funcionários</option>
+                                                    <option value="4">4 Funcionários</option>
+                                                    <option value="5">5 Funcionários</option>
+                                                    <option value="6">6 Funcionários</option>
+                                                    <option value="7">7 Funcionários</option>
+                                                    <option value="8">8 Funcionários</option>
+                                                    <option value="9">9 Funcionários</option>
+                                                </select>
+
                                             </div>
                                             <div class="form-group">
                                                 <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
@@ -115,15 +113,15 @@ controlaAcessoUrl($url, $pagina);
                                     $titulo = \filter_input(INPUT_POST, 'id_produto');
                                     $n_peca = \filter_input(INPUT_POST, 'n_peca');
                                     $tempo = \filter_input(INPUT_POST, 'tempo'); //                            
-                                    $n_pessoas = \filter_input(INPUT_POST, 'id_celula'); //                            
+                                    $n_pessoas = \filter_input(INPUT_POST, 'n_pessoas'); //                            
                                     $cadastro = \filter_input(INPUT_POST, 'cadastrar');
 
                                     if (isset($cadastro)) {
                                         if (empty($tempo) || empty($n_peca)) {
                                             echo "<div class='alert alert-danger alert-dismissable'>
-                                            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                            Algum dos campos acima não foi preenchido corretamente.
-                                        </div>";
+                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                    Algum dos campos acima não foi preenchido corretamente.
+                                                </div>";
                                             //echo "<div class='alert alert-danger' role='alert'>Algum dos campos acima não foi preenchido corretamente.</div>";
                                         } else {
 
@@ -164,10 +162,11 @@ controlaAcessoUrl($url, $pagina);
                                             ?>
 
                                         </div>
+                                        <hr>
                                         <div class="form-group">
-                                            <label>Conforme dados acima informados a produção levará:</label>                                   
+                                            <label>Resultado</label>                                   
                                             <div class='alert alert-info alert-dismissable'>                                            
-        <?= "<label> $horas hora (s), $minutos minuto (s) e $segundos segundo (s)</label>" ?>
+                                                <?= "<label> $horas hora (s), $minutos minuto (s) e $segundos segundo (s)</label>" ?>
                                             </div>
 
                                         </div>
@@ -190,7 +189,7 @@ controlaAcessoUrl($url, $pagina);
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td><?= $n_peca ?></td>
+                                                <td><?= $n_peca ?> peças</td>
                                                 <td> <?= $titulo ?></td>
                                                 <td> <?= $n_pessoas ?> Funcionários</td>
                                                 <td> 
@@ -203,7 +202,7 @@ controlaAcessoUrl($url, $pagina);
                                                     $sobra_minutos = ($sobra_horas % 60);
                                                     $segundos = $sobra_minutos;
                                                     ?>
-        <?= "$horas hora (s), $minutos minuto (s) e $segundos segundo (s)" ?>
+                                                    <?= "$horas hora (s), $minutos minuto (s) e $segundos segundo (s)" ?>
                                                 </td>
                                                 <td> 
                                                     <?php
@@ -214,7 +213,7 @@ controlaAcessoUrl($url, $pagina);
                                                     $minutos = floor($sobra_horas / 60);
                                                     $sobra_minutos = ($sobra_horas % 60);
                                                     $segundos = $sobra_minutos;
-                                                    echo "<label> $horas hora (s), $minutos minuto (s) e $segundos segundo (s)¹</label>"
+                                                    echo "<label> 0$horas:$minutos:$segundos</label>"
                                                     ?>
                                                 </td>
                                             </tr>
@@ -249,6 +248,6 @@ controlaAcessoUrl($url, $pagina);
             });
         </script>
 
-<?php require_once "./actionRodape.php"; ?>
+        <?php require_once "./actionRodape.php"; ?>
     </body>
 </html>

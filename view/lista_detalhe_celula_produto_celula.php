@@ -4,8 +4,7 @@ session_start();
 $url = basename($_SERVER['SCRIPT_FILENAME']);
 $pagina = basename(__FILE__);
 if ($url != 'index.php')
-    include_once "../view/funcoes.php";
-{
+    include_once "../view/funcoes.php"; {
     include_once "../view/funcoes.php";
 }
 controlaAcessoUrl($url, $pagina);
@@ -18,7 +17,7 @@ controlaAcessoUrl($url, $pagina);
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
-<?php include_once "./actionCabecalho.php"; ?>
+        <?php include_once "./actionCabecalho.php"; ?>
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
@@ -74,7 +73,7 @@ controlaAcessoUrl($url, $pagina);
     <body>
 
         <div id="wrapper">
-<?php require_once './actionfonteMenu.php'; ?>
+            <?php require_once './actionfonteMenu.php'; ?>
             <div id="page-wrapper">
 
                 <div class="col-lg-12">
@@ -102,7 +101,7 @@ controlaAcessoUrl($url, $pagina);
                         <form class="form-horizontal" method="post">                            
                             <div class="form-group">                                
                                 <label for="data">Data inicial:</label>
-                                <input type="date" name="data" value="" class="form-control" required="required" >
+                                <input type="date" name="data" value="<?= date('Y-m-d') ?>" class="form-control" required="required" >
                             </div>
                             <div class="form-group">
                                 <label for="id_celula" class="tamanho-fonte">Pessoas por célula de trabalho:</label><small> (Campo Obrigatório)</small>
@@ -191,6 +190,8 @@ controlaAcessoUrl($url, $pagina);
                                     <!--<th>²Concluído</th>-->
                                     <th>³Faltam</th>
                                     <th>Status</th>
+                                    <th><i class="fa fa-trash"></i></th>
+
                                 </tr>
                             </thead>
                             <tbody>                       
@@ -324,21 +325,25 @@ controlaAcessoUrl($url, $pagina);
                                         }
 
                                         echo "<tr>
-                                             <td title='id'>" . $dados->id . "</td>
-                                             <td title='data' class='editavel'>" . $data1[2] . '/' . $data1[1] . "</td>                                                   
-                                             <td title='funcionarios'>" . $dados->funcionarios . "</td>                                                   
-                                             <td title='falta' class='editavel'>" . $falta . "</td>                                                 
-                                             <td title='motivo_falta' class='editavel'>" . $motivo_falta . "</td>                                                 
-                                             <td title='id_produto' class='editavel'>" . $dados->descricao . "</td>
-                                             <td title='obs' class='editavel'>" . $OBSERVACAO . " </td>
-                                             <td title='pecas_determinadas' class='editavel'>" . number_format($dados->pecas_determinadas, 2, '.', '.') . "</td>
-                                             <td title='pecas_finalizadas' class='editavel'>" . number_format($dados->pecas_finalizadas, 2, '.', '.') . "</td>
-                                             <td title='tempo_unitario' class='editavel'>" . $dados->tempo_unitario . "</td>
-                                             <td title='margem_erro' class='editavel'><b>" . number_format($porcentagem, 2, '.', '.') . " %</b></td>
-                                             <td title='(número de peças * tempo Unitário) / número de pessoas'>" . $tempo_estimado_resultado . " </td>                                             
-                                             <td title='Peças que faltam'>" . $faltam2 . "</td>
-                                             <td title='status' class='editavel'>" . $status . " </td>
-                                              </tr>";
+                                                <td title='id'>" . $dados->id . "</td>
+                                                <td title='data' class='editavel'>" . $data1[2] . '/' . $data1[1] . "</td>                                                   
+                                                <td title='funcionarios'>" . $dados->funcionarios . "</td>                                                   
+                                                <td title='falta' class='editavel'>" . $falta . "</td>                                                 
+                                                <td title='motivo_falta' class='editavel'>" . $motivo_falta . "</td>                                                 
+                                                <td title='id_produto' class='editavel'>" . $dados->descricao . "</td>
+                                                <td title='obs' class='editavel'>" . $OBSERVACAO . " </td>
+                                                <td title='pecas_determinadas' class='editavel'>" . number_format($dados->pecas_determinadas, 2, '.', '.') . "</td>
+                                                <td title='pecas_finalizadas' class='editavel'>" . number_format($dados->pecas_finalizadas, 2, '.', '.') . "</td>
+                                                <td title='tempo_unitario' class='editavel'>" . $dados->tempo_unitario . "</td>
+                                                <td title='margem_erro' class='editavel'><b>" . number_format($porcentagem, 2, '.', '.') . " %</b></td>
+                                                <td title='(número de peças * tempo Unitário) / número de pessoas'>" . $tempo_estimado_resultado . " </td>                                             
+                                                <td title='Peças que faltam'>" . $faltam2 . "</td>
+                                                <td title='status' class='editavel'>" . $status . " </td>
+                                              <td>     
+							<span class='glyphicon glyphicon-trash' id='deletar' value='deletar'   onclick='deletar(" . $dados->id . ");'></span> 													
+                                                    </td>
+
+</tr>";
                                         // <td title='percentual de peças concluidas'>" . number_format($diferenca, 2, '.', '.') . " %</td>
                                         $somaTempoHora += $horas1;
                                         $somaTempoMinu += $minutos1;
@@ -832,9 +837,10 @@ controlaAcessoUrl($url, $pagina);
         </script>
 
 
+        <script src="../ajax/detalhe_celula_produto/deletar_detalhe_celula_produto.js"></script>
 
 
-<?php require_once "./actionRodape.php"; ?>
+        <?php require_once "./actionRodape.php"; ?>
 
     </body>
 </html>

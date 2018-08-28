@@ -116,6 +116,61 @@ controlaAcessoUrl($url, $pagina);
                         </div>
                     </div>
                 </div>
+                
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="text-align: center">
+                        Listagem
+                    </div>                 
+                    <table class="table table-hover" id="tblEditavel">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>N°</th>
+                                <th>Posto</th>
+                                <th><i class="fa fa-low-vision"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>                       
+
+                            <?php
+                            include_once "../modell/PostoTrabalho.class.php";
+                            $lote = new PostoTrabalho();
+                            $matriz = $lote->listaPosto();
+                            if (empty($matriz)) {
+                                echo "<div class='alert alert-info alert-dismissable'>
+                                            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                            Não possui nenhum registro armazenado.
+                                            </div>";
+                            } else {
+                                while ($dados = $matriz->fetchObject()) {
+                                    if ($dados->status == true) {
+                                        echo "<tr>
+                                                    <td title='id'>" . $dados->id_posto . "</td>
+                                                    <td title='nome' class='editavel'>" . $dados->numero . "</td>
+                                                    <td title='descricao' class='editavel'>" . $dados->descricao . "</td>                                                   
+                                                        <td>     
+							<span class='glyphicon glyphicon-eye-open' id='desativar' value='desativar'  onclick='desativar(" . $dados->id_posto . ");'></span> 													
+                                                    </td>
+                                                </tr>";
+                                    } else {
+                                        echo "<tr>
+                                                    <td title='id'>" . $dados->id_posto . "</td>
+                                                    <td title='numero' class='editavel'>" . $dados->numero . "</td>
+                                                    <td title='descricao' class='editavel'>" . $dados->descricao . "</td>
+                                                    <td>     
+							<span class='glyphicon glyphicon-eye-close' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_posto . ");'></span> 													
+                                                    </td>
+                                                </tr>";
+                                    }
+                                }
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+                
             </div>
         </div>
 <?php require_once "./actionRodape.php"; ?>

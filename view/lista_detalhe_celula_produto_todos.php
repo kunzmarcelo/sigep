@@ -99,38 +99,17 @@ controlaAcessoUrl($url, $pagina);
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="form-group">
-                                <form class="form-horizontal" method="post">
-                                    <div class="form-group"> 
-                                        <div class="col-xs-6 ">
-                                            <label for="id_celula" class="tamanho-fonte">Pessoas por célula de trabalho:</label><small> (Campo Obrigatório)</small>
-                                            <select name="id_celula" class="form-control" required="required" >                                       
-                                                <?php
-                                                echo "<option value=''>Selecione ...</option>";
-                                                include_once '../modell/CelulaTrabalho.class.php';
-                                                $lote = new CelulaTrabalho();
-                                                $matriz = $lote->listaCelula();
-
-                                                while ($dados = $matriz->fetchObject()) {
-                                                    if ($dados->status_celula == TRUE) {
-                                                        $cod = $dados->id_celula;
-                                                        $n_lote = $dados->funcionarios;
-                                                        echo "<option value=" . $cod . ">" . $n_lote . "</option>";
-                                                    }
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>                                    
+                                <form class="form-horizontal" method="post">                                                                      
                                     <div class="form-group">                                
                                         <div class="col-xs-6 ">
                                             <label for="data">Data inicial:</label>
-                                            <input type="date" name="data" value="" class="form-control" required="required" >
+                                            <input type="date" name="data" value="<?= date('Y-m-01') ?>" class="form-control" required="required" >
                                         </div>									
                                     </div>									
                                     <div class="form-group">                                
                                         <div class="col-xs-6 ">
                                             <label for="data2">Data Final:</label>
-                                            <input type="date" name="data2" value="" class="form-control" required="required" >
+                                            <input type="date" name="data2" value="<?= date('Y-m-t') ?>" class="form-control" required="required" >
                                         </div>									
                                     </div>									
                                     <div class="form-group">                                
@@ -172,7 +151,7 @@ controlaAcessoUrl($url, $pagina);
                             $data_ini = $_POST['data'];
                             $data_fim = $_POST['data2'];
                             //$status = $_POST['status'];
-                            $id_celula = $_POST['id_celula'];
+                           $status = 3; //proximo dia
 
                             $data1 = explode("-", $data_ini);
                             $data2 = explode("-", $data_fim);
@@ -190,10 +169,12 @@ controlaAcessoUrl($url, $pagina);
                                             <tr>
                                                 <!--<th>Célula</th>-->                               
                                                 <th>Produto</th>
-                                                <th>¹ Produção Estimada</th>
-                                                <th>² Produção Executada</th>
-                                                <th>³ Faltaram</th>
-                                                <th>Sub Total</th>
+                                                <th>¹ Quant. </th>
+                                                <th>¹ Valor Estimado</th>
+                                                <th>² Produzido</th>
+                                                <th>² Faturado</th>
+                                                <!--<th>³ Não Faturado</th>-->
+                                                <th>³ Deixou de faturar</th>
                                             </tr>
                                         </thead>
                                         <tbody>                       
@@ -202,42 +183,49 @@ controlaAcessoUrl($url, $pagina);
                                             $data1 = explode("-", $data_ini);
                                             include_once "../modell/DetalheCelulaProduto.class.php";
                                             $lote = new DetalheCelulaProduto();
-                                            $matriz = $lote->somaMensalProdutoCelula($data_ini, $data_fim, $id_celula);
+                                            $id_celula = 9;
+                                            $matriz = $lote->somaMensalProdutoCelula($data_ini, $data_fim,$id_celula);
                                             $diferenca = 0;
                                             $nomes = 0;
                                             $sub_total = 0;
                                             $somaTempoSegu = 0;
                                             $somaPeca = 0;
                                             $somaPecaPronta = 0;
+                                            $estimativaValor = 0;
+                                            $faturadoValor = 0;
 
                                             while ($dados = $matriz->fetchObject()) {
                                                 $faltas = $dados->NPECAS - $dados->NFEITAS;
                                                 echo "<tr>
-                                              <td>" . $dados->descricao . "</td>
-                                              <td>" . $dados->NPECAS . "</td>
-                                              <td>" . $dados->NFEITAS . "</td>
-                                              <td>" . $faltas . "</td>
-                                              <td>R$ " . number_format($dados->NFEITAS * $dados->preco, 2, ',', '.') . "</td>
-                                              </tr>";
+                                                        <td>" . $dados->descricao . "</td>
+                                                        <td>" . $dados->NPECAS . " peças</td>
+                                                        <td>R$ " . number_format($dados->NPECAS * $dados->preco, 2, ',', '.') . "</td>
+                                                        <td>" . $dados->NFEITAS . " peças</td>
+                                                        <td>R$ " . number_format($dados->NFEITAS * $dados->preco, 2, ',', '.') . "</td>                                                        
+                                                        <td>R$ " . number_format($faltas * $dados->preco, 2, ',', '.') . "</td>
+                                                    </tr>";
                                                 $nomes = $dados->funcionarios;
                                                 $somaPeca += $dados->NPECAS;
                                                 $somaPecaPronta += $dados->NFEITAS;
                                                 $sub_total += $dados->NFEITAS * $dados->preco;
+                                                $estimativaValor += $dados->NPECAS * $dados->preco;
+                                                $faturadoValor += $dados->NFEITAS * $dados->preco;
                                             }
                                             ?>
                                         </tbody>
                                     </table>
                                 </div>
                                 <hr>
-                                <hr>                   
+                                <!--<hr>-->                   
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Célula</th>                                
-                                            <th>Total peças determinadas</th>
-                                            <th>Total Peças executadas</th>
-                                            <th>Total faltaram</th>
-                                            <th>Total</th>
+                                            <th>Célula</th>
+                                            <th>Estimativa</th>
+                                            <!--<th>Total peças determinadas</th>-->
+                                            <th>Faturado</th>
+                                            <!--<th>Não Faturado</th>-->
+                                            <th>Deixou de Faturar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -245,12 +233,15 @@ controlaAcessoUrl($url, $pagina);
                                             <td>
                                                 <?= $nomes; ?>
                                             </td>                                   
-                                            <td>
+                                            <td>R$ <?= number_format($estimativaValor, 2, ',', '.') ?></td>                                
+                                            <td>R$ <?= number_format($faturadoValor, 2, ',', '.') ?></td>                                
+                                            <td>R$ <?= number_format($estimativaValor - $faturadoValor, 2, ',', '.') ?></td>                                
+<!--                                            <td>
                                                 <?= $somaPeca ?> peças
-                                            </td>
-                                            <td><?= $somaPecaPronta ?> peças</td>                                
-                                            <td><?= $somaPeca - $somaPecaPronta ?> peças</td>                                
-                                            <td>R$ <?= number_format($sub_total, 2, ',', '.') ?></td>                                
+                                            </td>-->
+                                            <!--<td><?= $somaPecaPronta ?> peças</td>-->                                
+<!--                                            <td><?= $somaPeca - $somaPecaPronta ?> peças</td>                                
+                                            <td>R$ <?= number_format($sub_total, 2, ',', '.') ?></td>                                -->
                                         </tr>
                                     </tbody>                            
                                 </table>

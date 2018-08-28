@@ -28,6 +28,9 @@ class ConfigSalario extends BancoDadosPDO {
     function listaConfigSalario() {
         return $this->listarTodos("config_salario ORDER BY valor ASC");
     }
+    function listaConfigSalarioUm($status) {
+        return $this->listarUm("config_salario","status_config_salario='$status'");
+    }
 
     function excluirConfigSalario($id) {
         return $this->excluir("config_salario", "id_config_salario='$id'");

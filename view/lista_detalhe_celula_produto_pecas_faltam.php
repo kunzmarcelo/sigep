@@ -4,7 +4,8 @@ session_start();
 $url = basename($_SERVER['SCRIPT_FILENAME']);
 $pagina = basename(__FILE__);
 if ($url != 'index.php')
-    include_once "../view/funcoes.php"; {
+    include_once "../view/funcoes.php";
+{
     include_once "../view/funcoes.php";
 }
 controlaAcessoUrl($url, $pagina);
@@ -17,7 +18,7 @@ controlaAcessoUrl($url, $pagina);
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
-        <?php include_once "./actionCabecalho.php"; ?>
+<?php include_once "./actionCabecalho.php"; ?>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
         <script type="text/javascript">
@@ -71,23 +72,24 @@ controlaAcessoUrl($url, $pagina);
     </head>
     <body>
         <div id="wrapper">
-            <?php require_once './actionfonteMenu.php'; ?>
+<?php require_once './actionfonteMenu.php'; ?>
             <div id="page-wrapper">
 
                 <div class="col-lg-12">
                     <h1 class="page-header">
                         <?php
-                        $url = $_SERVER['REQUEST_URI'];
-                        $part = explode("/", $url);
-                        $part[3];
-
-                        include_once '../modell/Produto.class.php';
-                        $con = new BancoDadosPDO();
-                        $titulo = $con->listarUm("menu_filho", "link like '$part[3]'");
-                        $resultado = $titulo->fetchObject();
+//                        $url = $_SERVER['REQUEST_URI'];
+//                        $part = explode("/", $url);
+//                        $part[3];
+//
+//                        include_once '../modell/Produto.class.php';
+//                        $con = new BancoDadosPDO();
+//                        $titulo = $con->listarUm("menu_filho", "link like '$part[3]'");
+//                        $resultado = $titulo->fetchObject();
+ //$resultado->nome
                         ?>
+                        Listagem de peças parâmetros
 
-                        <?= $resultado->nome ?>
                     </h1>
                 </div>
                 <!-- /.col-lg-12 -->
@@ -97,7 +99,7 @@ controlaAcessoUrl($url, $pagina);
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="form-group">
-                                <form class="form-horizontal" method="post">                                    
+                                <form class="form-horizontal" method="get">                                    
                                     <div class="form-group"> 
                                         <div class="col-xs-6">
                                             <label for="id_celula" class="tamanho-fonte">Pessoas por célula de trabalho:</label><small> (Campo Obrigatório)</small>
@@ -124,10 +126,10 @@ controlaAcessoUrl($url, $pagina);
                                             <label for="status" class="tamanho-fonte">Status:</label><small> (Campo Obrigatório)</small>
                                             <select name="status" class="form-control" required="required" >                                       
                                                 <option value="">Selecione...</option>
-                                                <option value="0">0 - Parado  </option>
-                                                <option value="1">1 - Em Produção</option>
-                                                <option value="2">2 - Finalizado</option>
-                                                <option value="3">3 - Proximo Dia</option>
+                                                <option value="0">Parado  </option>
+                                                <option value="1">Em Produção</option>
+                                                <option value="2">Finalizado</option>
+                                                <option value="3">Proximo Dia</option>
                                             </select>
                                         </div>
                                     </div>
@@ -202,11 +204,11 @@ controlaAcessoUrl($url, $pagina);
                                     <tbody>                       
 
                                         <?php
-                                        if (isset($_POST['enviar'])) {
-                                            $data_ini = $_POST['data'];
-                                            $data_fim = $_POST['data2'];
-                                            $status = $_POST['status'];
-                                            $id_celula = $_POST['id_celula'];
+                                        if (isset($_GET['enviar'])) {
+                                            $data_ini = $_GET['data'];
+                                            $data_fim = $_GET['data2'];
+                                            $status = $_GET['status'];
+                                            $id_celula = $_GET['id_celula'];
 
                                             $data1 = explode("-", $data_ini);
                                             include_once "../modell/DetalheCelulaProduto.class.php";
@@ -290,18 +292,18 @@ controlaAcessoUrl($url, $pagina);
                                                 }
 
                                                 echo "<tr>
-                                                    <td title='id'>" . $dados->id . "</td>
-                                                    <td title='data' class='editavel'>" . $data1[2] . '/' . $data1[1] . "</b></td>                                                   
-                                                    <td title='numero'>" . $dados->pessoas_celula . ' - ' . $dados->funcionarios . "</td>                                                   
-                                                    <td title='falta' class='editavel'>" . $falta . "</td>                                                 
-                                                    <td title='motivo_falta' class='editavel'>" . $motivo_falta . "</td>                                                 
-                                                    <td title='id_produto' class='editavel'>" . $dados->descricao . "</td>
-                                                    <td title='obs' class='editavel'>" . $OBSERVACAO . " </td>                                                   
-                                                    <td title='Faltam' >" . number_format($faltas, 2, '.', '.') . "</td>
-                                                    <td title='tempo_unitario' class='editavel'>" . $dados->tempo_unitario . "</td>
-                                                    <td title='(número de peças * tempo Unitário) / número de pessoas'>" . '0' . $horas1 . ':' . $minutos1 . ':' . $segundos1 . " </td>
-                                                    <td title='status' class='editavel'>" . $status . " </td>
-                                              </tr>";
+                                                        <td title='id'>" . $dados->id . "</td>
+                                                        <td title='data' class='editavel'>" . $data1[2] . '/' . $data1[1] . "</b></td>                                                   
+                                                        <td title='numero'>" . $dados->pessoas_celula . ' - ' . $dados->funcionarios . "</td>                                                   
+                                                        <td title='falta' class='editavel'>" . $falta . "</td>                                                 
+                                                        <td title='motivo_falta' class='editavel'>" . $motivo_falta . "</td>                                                 
+                                                        <td title='id_produto' class='editavel'>" . $dados->descricao . "</td>
+                                                        <td title='obs' class='editavel'>" . $OBSERVACAO . " </td>                                                   
+                                                        <td title='Faltam' >" . number_format($faltas, 2, '.', '.') . "</td>
+                                                        <td title='tempo_unitario' class='editavel'>" . $dados->tempo_unitario . "</td>
+                                                        <td title='(número de peças * tempo Unitário) / número de pessoas'>" . '0' . $horas1 . ':' . $minutos1 . ':' . $segundos1 . " </td>
+                                                        <td title='status' class='editavel'>" . $status . " </td>
+                                                  </tr>";
                                                 $somaTempoHora += $horas1;
                                                 $somaTempoMinu += $minutos1;
                                                 $somaTempoSegu += $segundos1;
@@ -318,181 +320,37 @@ controlaAcessoUrl($url, $pagina);
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Calendário</th>                                
-                                            <th>Desconto</th>                                
-                                            <th>Tempo líquido</th>                                
-                                            <th>Σ Quant. Faltam</th>
-                                            <th>Tempo para produção</th>
-                                            <th>≠ Tempo Líquido - Tempo de produção</th>
+                                            <th>Período</th>
+                                            <th>Total de Peças que Faltam</th>
+                                            <th>Tempo estimado para recuperação da produção</th>
                                         </tr>
                                     </thead>
 
-                                    <?php
-                                    if ($data <= '2017-10-18') { // não mecher nesta data
-                                        ?>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <?php
-                                                    $hora_ini1 = explode(":", "07:30:00");
-                                                    $hora_fim1 = explode(":", "17:55:00");
-                                                    $hora_int1 = explode(":", "02:05:00");
 
-                                                    $tempo1 = (($hora_ini1[0] * 3600) + ($hora_ini1[1] * 60) + ($hora_ini1[2]));
-                                                    $tempo2 = (($hora_fim1[0] * 3600) + ($hora_fim1[1] * 60) + ($hora_fim1[2]));
-                                                    $tempo3 = (($hora_int1[0] * 3600) + ($hora_int1[1] * 60) + ($hora_int1[2]));
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <?php
+                                                $data_ini = explode("-", $_GET['data']);
+                                                $data_fim = explode("-", $_GET['data2']);
+                                                echo" $data_ini[2]/$data_ini[1] á $data_fim[2]/$data_fim[1]/$data_fim[0]";
+                                                ?>
+                                            </td>
+                                            <td><?= $somaPeca - $somaPecaPronta ?> peças</td>
+                                            <td> 
+                                                <?php
+                                                $total_segundos1 = (($somaTempoHora * 3600) + ($somaTempoMinu * 60) + ($somaTempoSegu));
+                                                $horas1 = floor($total_segundos1 / (60 * 60));
+                                                $sobra_horas1 = ($total_segundos1 % (60 * 60));
+                                                $minutos1 = floor($sobra_horas1 / 60);
+                                                $sobra_minutos1 = ($sobra_horas1 % 60);
+                                                $segundos1 = $sobra_minutos1;
+                                                echo "<b><span> $horas1 hora(s) $minutos1 minuto(s) $segundos1 segundo(s) </span></b>";
+                                                ?>
 
-                                                    $resultado_tempo = ($tempo2 - $tempo1) - $tempo3;
-                                                    $total_segundos = $resultado_tempo;
-
-                                                    $horas = floor($total_segundos / (60 * 60));
-                                                    $sobra_horas = ($total_segundos % (60 * 60));
-                                                    $minutos = floor($sobra_horas / 60);
-                                                    $sobra_minutos = ($sobra_horas % 60);
-                                                    $segundos = $sobra_minutos;
-                                                    echo "<strike>0$horas:$minutos:0$segundos</strike>";
-                                                    ?>
-
-                                                </td>
-                                                <td> <?php
-                                            echo "<strike>" . $var = 0;
-                                            "</strike>";
-                                                    ?>% </td>
-                                                <td> 
-                                                    <?php
-                                                    $hora_ini1 = explode(":", "07:30:00");
-                                                    $hora_fim1 = explode(":", "17:55:00");
-                                                    $hora_int1 = explode(":", "02:05:00");
-
-                                                    $tempo1 = (($hora_ini1[0] * 3600) + ($hora_ini1[1] * 60) + ($hora_ini1[2]));
-                                                    $tempo2 = (($hora_fim1[0] * 3600) + ($hora_fim1[1] * 60) + ($hora_fim1[2]));
-                                                    $tempo3 = (($hora_int1[0] * 3600) + ($hora_int1[1] * 60) + ($hora_int1[2]));
-
-                                                    $resultado_tempo = ($tempo2 - $tempo1) - $tempo3;
-                                                    $total_segundos = ($resultado_tempo - (($resultado_tempo * $var) / 100 ));
-
-                                                    $horas = floor($total_segundos / (60 * 60));
-                                                    $sobra_horas = ($total_segundos % (60 * 60));
-                                                    $minutos = floor($sobra_horas / 60);
-                                                    $sobra_minutos = ($sobra_horas % 60);
-                                                    $segundos = $sobra_minutos;
-                                                    echo "0$horas:$minutos:0$segundos</label>"
-                                                    ?>
-
-                                                </td>
-                                                <td><?= $somaPeca - $somaPecaPronta ?> peças</td>
-                                                <td> 
-                                                    <?php
-                                                    $total_segundos1 = (($somaTempoHora * 3600) + ($somaTempoMinu * 60) + ($somaTempoSegu));
-                                                    $horas1 = floor($total_segundos1 / (60 * 60));
-                                                    $sobra_horas1 = ($total_segundos1 % (60 * 60));
-                                                    $minutos1 = floor($sobra_horas1 / 60);
-                                                    $sobra_minutos1 = ($sobra_horas1 % 60);
-                                                    $segundos1 = $sobra_minutos1;
-                                                    echo "<span> 0$horas1:$minutos1:$segundos1 </span>";
-                                                    ?>
-
-                                                </td>
-                                                <td> 
-                                                    <?php
-                                                    $total_segundos1 = ((($tempo2 - $tempo1) - $tempo3) - (($somaTempoHora * 3600) + ($somaTempoMinu * 60) + ($somaTempoSegu)));
-                                                    $horas1 = floor($total_segundos1 / (60 * 60));
-                                                    $sobra_horas1 = ($total_segundos1 % (60 * 60));
-                                                    $minutos1 = floor($sobra_horas1 / 60);
-                                                    $sobra_minutos1 = ($sobra_horas1 % 60);
-                                                    $segundos1 = $sobra_minutos1;
-                                                    if ($horas1 == '-1') {
-                                                        echo "<label> 00 hora (s), 00 minuto (s) e 00 segundo (s)</label>";
-                                                    } else {
-                                                        echo "<label> $horas1 hora (s), $minutos1 minuto (s) e $segundos1 segundo (s)</label>";
-                                                    }
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <?php
-                                    } else {
-                                        ?>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <?php
-                                                    $hora_ini1 = explode(":", "07:30:00");
-                                                    $hora_fim1 = explode(":", "17:55:00");
-                                                    $hora_int1 = explode(":", "02:05:00");
-
-                                                    $tempo1 = (($hora_ini1[0] * 3600) + ($hora_ini1[1] * 60) + ($hora_ini1[2]));
-                                                    $tempo2 = (($hora_fim1[0] * 3600) + ($hora_fim1[1] * 60) + ($hora_fim1[2]));
-                                                    $tempo3 = (($hora_int1[0] * 3600) + ($hora_int1[1] * 60) + ($hora_int1[2]));
-
-                                                    $resultado_tempo = ($tempo2 - $tempo1) - $tempo3;
-                                                    $total_segundos = $resultado_tempo;
-
-                                                    $horas = floor($total_segundos / (60 * 60));
-                                                    $sobra_horas = ($total_segundos % (60 * 60));
-                                                    $minutos = floor($sobra_horas / 60);
-                                                    $sobra_minutos = ($sobra_horas % 60);
-                                                    $segundos = $sobra_minutos;
-                                                    echo "<strike>0$horas:$minutos:0$segundos</strike>"
-                                                    ?>
-
-                                                </td>
-                                                <td> <?php echo $var = 5; ?>% </td>
-                                                <td> 
-                                                    <?php
-                                                    $hora_ini1 = explode(":", "07:30:00");
-                                                    $hora_fim1 = explode(":", "17:55:00");
-                                                    $hora_int1 = explode(":", "02:05:00");
-
-                                                    $tempo1 = (($hora_ini1[0] * 3600) + ($hora_ini1[1] * 60) + ($hora_ini1[2]));
-                                                    $tempo2 = (($hora_fim1[0] * 3600) + ($hora_fim1[1] * 60) + ($hora_fim1[2]));
-                                                    $tempo3 = (($hora_int1[0] * 3600) + ($hora_int1[1] * 60) + ($hora_int1[2]));
-
-                                                    $resultado_tempo = ($tempo2 - $tempo1) - $tempo3;
-                                                    $total_segundos = ($resultado_tempo - (($resultado_tempo * $var) / 100 ));
-
-                                                    $horas = floor($total_segundos / (60 * 60));
-                                                    $sobra_horas = ($total_segundos % (60 * 60));
-                                                    $minutos = floor($sobra_horas / 60);
-                                                    $sobra_minutos = ($sobra_horas % 60);
-                                                    $segundos = $sobra_minutos;
-                                                    echo "0$horas:$minutos:0$segundos</label>"
-                                                    ?>
-
-                                                </td>
-                                                <td><?= $somaPeca - $somaPecaPronta ?> peças</td>
-                                                <td> 
-                                                    <?php
-                                                    $total_segundos1 = (($somaTempoHora * 3600) + ($somaTempoMinu * 60) + ($somaTempoSegu));
-                                                    $horas1 = floor($total_segundos1 / (60 * 60));
-                                                    $sobra_horas1 = ($total_segundos1 % (60 * 60));
-                                                    $minutos1 = floor($sobra_horas1 / 60);
-                                                    $sobra_minutos1 = ($sobra_horas1 % 60);
-                                                    $segundos1 = $sobra_minutos1;
-                                                    echo "<span> 0$horas1:$minutos1:$segundos1 </span>";
-                                                    ?>
-
-                                                </td>
-                                                <td> 
-                                                    <?php
-                                                    $total_segundos1 = (((($tempo2 - $tempo1) - $tempo3) - (($resultado_tempo * $var) / 100 )) - (($somaTempoHora * 3600) + ($somaTempoMinu * 60) + ($somaTempoSegu)));
-                                                    $horas1 = floor($total_segundos1 / (60 * 60));
-                                                    $sobra_horas1 = ($total_segundos1 % (60 * 60));
-                                                    $minutos1 = floor($sobra_horas1 / 60);
-                                                    $sobra_minutos1 = ($sobra_horas1 % 60);
-                                                    $segundos1 = $sobra_minutos1;
-                                                    if ($horas1 == '-1') {
-                                                        echo "<label> 00 hora (s), 00 minuto (s) e 00 segundo (s)</label>";
-                                                    } else {
-                                                        echo "<label> $horas1 hora (s), $minutos1 minuto (s) e $segundos1 segundo (s)</label>";
-                                                    }
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <?php
-                                    }
-                                    ?>
+                                            </td>                                                
+                                        </tr>
+                                    </tbody>                                        
                                 </table>
 
                                 <hr>
@@ -523,6 +381,6 @@ controlaAcessoUrl($url, $pagina);
 
 
 
-        <?php require_once "./actionRodape.php"; ?>
+<?php require_once "./actionRodape.php"; ?>
     </body>
 </html>

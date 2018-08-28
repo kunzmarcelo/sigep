@@ -19,6 +19,7 @@ controlaAcessoUrl($url, $pagina);
     <head>
         <?php include_once "./actionCabecalho.php"; ?>
 
+
     </head>
     <body>
         <div id="wrapper">
@@ -159,12 +160,13 @@ controlaAcessoUrl($url, $pagina);
                                                                 $diferenca2 = "<span class='label label-info'>" . number_format($diferenca, 2, '.', '.') . " %</span>";
                                                             }
                                                             echo "<tr>                                                   
-                                                        <td title='data' >" . $mes . "</b></td>                                                   
-                                                        <td title='numero'>" . $dados->NPECAS . " peças</td>                                                   
-                                                        <td title='numero'>" . $dados->NFEITAS . " peças</td>
-                                                        <td title='numero'>" . $faltam . " peças</td>
-                                                        <td>" . $diferenca2 . "</td>                                                
-                                                      </tr>";
+                                                                    <td title='data' >" . $mes . "</b></td>                                                   
+                                                                    <td title='numero'>" . $dados->NPECAS . " peças</td>                                                   
+                                                                    <td title='numero'>" . $dados->NFEITAS . " peças</td>
+                                                                    <td title='numero'>" . $faltam . " peças</td>
+                                                                    <td>" . $diferenca2 . "</td>                                                
+                                                                    <td></td>                                                
+                                                                  </tr>";
                                                         }
                                                     }
                                                     $nr++;
@@ -174,19 +176,106 @@ controlaAcessoUrl($url, $pagina);
                                         </table>
                                     </div>
                                 </div>
-
-                                <?php
-                            }
-                            /* Captação de dados */
-                            $buffer = ob_get_contents(); // Obtém os dados do buffer interno
-                            $filename = "code.html"; // Nome do arquivo HTML
-                            file_put_contents($filename, $buffer); // Grava os dados do buffer interno no arquivo HTML
-                            ?>  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id='chart_div' style="width: 400px; height: 120px;"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+            <script type="text/javascript">
+                google.charts.load('current', {'packages': ['gauge']});
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+
+                    var data = google.visualization.arrayToDataTable([
+                        ['Label', 'Value'],
+    <?php
+    $data_ini = $_POST['data'];
+//                                    $data_fim = $_POST['data1'];
+
+    $data1 = explode("-", $data_ini);
+    $data2 = explode("-", '2018-12-31');
+    include_once "../modell/DetalheCelulaProduto.class.php";
+    $lote = new DetalheCelulaProduto();
+
+    $diferenca = 0;
+    $nr = $data1[1];
+    $ano = $data1[0];
+    while ($nr <= $data2[1]) {
+        $matriz = $lote->somaMensal($nr, $ano);
+        while ($dados = $matriz->fetchObject()) {
+            if (!empty($dados->NPECAS)) {
+                if ($nr == '01')
+                    $mes = 'Janeiro';
+                if ($nr == '02')
+                    $mes = 'Fevereiro';
+                if ($nr == '03')
+                    $mes = 'Março';
+                if ($nr == '04')
+                    $mes = 'Abril';
+                if ($nr == '05')
+                    $mes = 'Maio';
+                if ($nr == '06')
+                    $mes = 'Junho';
+                if ($nr == '07')
+                    $mes = 'Julho';
+                if ($nr == '08')
+                    $mes = 'Agosto';
+                if ($nr == '09')
+                    $mes = 'Setembro';
+                if ($nr == '10')
+                    $mes = 'Outubro';
+                if ($nr == '11')
+                    $mes = 'Novembro';
+                if ($nr == '12')
+                    $mes = 'Dezembro';
+
+
+                $diferenca = ((( $dados->NFEITAS * 100)) / $dados->NPECAS); //porcentagem
+                $faltam = $dados->NPECAS - $dados->NFEITAS;
+
+                $diferenca2 = number_format($diferenca, 2, '.', '.');
+
+                echo "['$mes',$diferenca2],";
+            }
+        }
+        $nr++;
+    }
+    ?>
+
+
+
+
+                    ]);
+
+                    var options = {
+                        width: 400, height: 420,
+                        redFrom: 90, redTo: 100,
+                        yellowFrom: 75, yellowTo: 90,
+                        minorTicks: 5
+                    };
+
+                    var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+                    chart.draw(data, options);
+
+
+                }
+            </script>
+            <?php
+        }
+        /* Captação de dados */
+        $buffer = ob_get_contents(); // Obtém os dados do buffer interno
+        $filename = "code.html"; // Nome do arquivo HTML
+        file_put_contents($filename, $buffer); // Grava os dados do buffer interno no arquivo HTML
+        ?>  
         <?php require_once "./actionRodape.php"; ?>
 
     </body>

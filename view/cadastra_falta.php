@@ -92,46 +92,52 @@ controlaAcessoUrl($url, $pagina);
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <form method="post" role="form">
-                                            <div class="form-group">                                            
-                                                <label for="id_funcionario" class="tamanho-fonte">Funcionário:</label><small> (Campo Obrigatório)</small>
-                                                <select name="id_funcionario" class="form-control" required="required">                                       
-                                                    <?php
-                                                    echo "<option value=''><b>Selecione ...</b></option>";
-                                                    include_once '../modell/Funcionario.class.php';
-                                                    $fun = new Funcionario();
-                                                    $matriz = $fun->listaFuncionario();
+                                            <div class="col-lg-6">
+                                                <div class="form-group">                                            
+                                                    <label for="id_funcionario" class="tamanho-fonte">Funcionário:</label><small> (Campo Obrigatório)</small>
+                                                    <select name="id_funcionario" class="form-control" required="required">                                       
+                                                        <?php
+                                                        echo "<option value=''><b>Selecione ...</b></option>";
+                                                        include_once '../modell/Funcionario.class.php';
+                                                        $fun = new Funcionario();
+                                                        $matriz = $fun->listaFuncionario();
 
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->ativo == true) {
-                                                            $cod = $dados->id_funcionario;
-                                                            $nome = $dados->nome;
-                                                            echo "<option value=" . $cod . ">" . $nome . "</option>";
+                                                        while ($dados = $matriz->fetchObject()) {
+                                                            if ($dados->ativo == true) {
+                                                                $cod = $dados->id_funcionario;
+                                                                $nome = $dados->nome;
+                                                                echo "<option value=" . $cod . ">" . $nome . "</option>";
+                                                            }
                                                         }
-                                                    }
-                                                    ?>
-                                                </select>                            
+                                                        ?>
+                                                    </select>                            
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="data">Data:</label>
+                                                    <input type="date" id="data" name="data" class="form-control" required="required" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="hora_ini">Hora de Início:</label>
+                                                    <input type="time" id="hora_ini" name="hora_ini" class="form-control" step='1' min="00:00:00" max="23:59:00" required="required"  />
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="data">Data:</label>
-                                                <input type="date" id="data" name="data" class="form-control" required="required" />
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="hora_fim">Hora Final:</label>
+                                                    <input type="time" id="hora_fim" name="hora_fim" class="form-control" step='1' min="00:00:00" max="23:59:00" required="required"  />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="motivo">Motivo da falta:</label>
+                                                    <input type="text" id="motivo" name="motivo" class="form-control"  required="required"/>
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="hora_ini">Hora de Início:</label>
-                                                <input type="time" id="hora_ini" name="hora_ini" class="form-control" step='1' min="00:00:00" max="23:59:00" required="required"  />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="hora_fim">Hora Final:</label>
-                                                <input type="time" id="hora_fim" name="hora_fim" class="form-control" step='1' min="00:00:00" max="23:59:00" required="required"  />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="motivo">Motivo da falta:</label>
-                                                <input type="text" id="motivo" name="motivo" class="form-control"  required="required"/>
-                                            </div>                                    
-                                            <div class="form-group">
-                                                <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
-                                                <button type="reset" name="cancelar" value="cancelar" class="btn btn-inverse">Cancelar</button>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
+                                                    <button type="reset" name="cancelar" value="cancelar" class="btn btn-inverse">Cancelar</button>
+                                                </div> 
                                             </div> 
 
                                         </form>
@@ -152,23 +158,29 @@ controlaAcessoUrl($url, $pagina);
 
                                         if (isset($cadastro)) {
                                             if (empty($motivo)) {
-                                                echo "<div class='alert alert-danger alert-dismissable'>
-                                            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                            Algum dos campos acima não foi preenchido corretamente.
-                                        </div>";
+                                               echo "<div class='col-lg-12'>
+                                                            <div class='alert alert-danger alert-dismissable'>
+                                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                Algum dos campos acima não foi preenchido corretamente.
+                                                            </div>
+                                                        </div>";
                                                 //echo "<div class='alert alert-danger' role='alert'>Algum dos campos acima não foi preenchido corretamente.</div>";
                                             } else {
                                                 $status = $prod->cadastraFalta($id_funcionario, $data, $hora_ini, $hora_fim, $motivo, $status);
                                                 if ($status == true) {
-                                                    echo "<div class='alert alert-info alert-dismissable'>
-                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                Registro inserido com sucesso.
-                                            </div>";
+                                                    echo "<div class='col-lg-12'>
+                                                                <div class='alert alert-info alert-dismissable'>
+                                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                    Registro inserido com sucesso.
+                                                                </div>
+                                                            </div>";
                                                 } else {
-                                                    echo "<div class='alert alert-danger alert-dismissable'>
-                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                    Erro ao inserir o resgistro.
-                                                </div>";
+                                                    echo "<div class='col-lg-12'>
+                                                                <div class='alert alert-danger alert-dismissable'>
+                                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                    Erro ao inserir o resgistro.
+                                                                </div>
+                                                            </div>";
                                                 }
                                             }
                                         }
@@ -198,7 +210,7 @@ controlaAcessoUrl($url, $pagina);
                                         <th>Hora fim</th>
                                         <th>Motivo</th>
                                         <th>Tempo</th>
-                                        <!--<th><span class="glyphicon glyphicon-info-sign" title="Visualizar lote"></span></th>-->
+                                        <th><i class="fa fa-trash"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -251,6 +263,9 @@ controlaAcessoUrl($url, $pagina);
                                                     <td title='hora_fim' class='editavel'>" . $dados->hora_fim . "</td>
                                                     <td title='motivo' class='editavel'>" . $dados->motivo . "</td>
                                                     <td title='tempo'><b>" . $tempo . "</b></td>
+                                             <td>     
+							<span class='glyphicon glyphicon-trash' id='deletar' value='deletar'  onclick='deletar(" . $dados->id_falta . ");'></span> 													
+                                                    </td>
                                               </tr>";
                                     }//<button title='finalizar lote' type='submit' id='ativar' value='ativar'  onclick='ativar(" . $dados->id . ");' class='btn btn-default'> </button>
                                     ?>
@@ -261,6 +276,7 @@ controlaAcessoUrl($url, $pagina);
                 </div>
             </div>
         </div>
+        <script src="../ajax/falta/deletar_falta.js"></script>
 
         <?php require_once "./actionRodape.php"; ?>
     </body>

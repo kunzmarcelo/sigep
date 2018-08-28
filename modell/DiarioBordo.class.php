@@ -12,10 +12,7 @@ class DiarioBordo extends BancoDadosPDO {
     protected $id_produto;
     protected $id_operacao;
     protected $pecas_boas;
-    protected $pecas_ruins;
-    protected $hora_ini;
-    protected $hora_fim;
-    protected $motivo;
+    protected $pecas_ruins;    
     protected $obs;
 
     function __get($atributo) {
@@ -26,8 +23,8 @@ class DiarioBordo extends BancoDadosPDO {
         $this->$atributo = $valor;
     }
 
-    function cadastraDiarioBordo($id_posto, $data_trabalhada, $id_funcionario, $turno, $id_produto, $id_operacao, $pecas_boas, $pecas_ruins, $hora_ini, $hora_fim, $motivo, $obs) {
-        return $this->inserir("diario_bordo", "id_posto,data_trabalhada,id_funcionario,turno,id_produto,id_operacao,pecas_boas,pecas_ruins,hora_ini,hora_fim,motivo,obs", "'$id_posto','$data_trabalhada','$id_funcionario','$turno','$id_produto','$id_operacao','$pecas_boas','$pecas_ruins','$hora_ini','$hora_fim','$motivo','$obs'");
+    function cadastraDiarioBordo($id_posto, $data_trabalhada, $id_funcionario, $turno, $id_produto, $id_operacao, $pecas_boas, $pecas_ruins, $obs) {
+        return $this->inserir("diario_bordo", "id_posto,data_trabalhada,id_funcionario,turno,id_produto,id_operacao,pecas_boas,pecas_ruins,obs", "'$id_posto','$data_trabalhada','$id_funcionario','$turno','$id_produto','$id_operacao','$pecas_boas','$pecas_ruins','$obs'");
     }
 
     function listaDiarioBordo() {
@@ -92,9 +89,6 @@ ORDER BY diario_bordo.data_trabalhada ASC");
             diario_bordo.data_trabalhada,
 diario_bordo.pecas_boas,
 diario_bordo.pecas_ruins,
-diario_bordo.hora_ini,
-diario_bordo.hora_fim,
-diario_bordo.motivo,
 diario_bordo.id_posto,
 (diario_bordo.pecas_boas * operacao.custo_operacao) AS TOTALPECASBOAS, 
 (diario_bordo.pecas_ruins * operacao.custo_operacao) AS TOTALPECASRUINS,
@@ -159,7 +153,7 @@ GROUP BY diario_bordo.id_funcionario;");
     }
     
     function graficoParadas($data_trabalhada_ini, $data_trabalhada_fim){
-        return $this->listarTodosMuitosParaMuitos("diario_bordo.data_trabalhada,hora_ini,hora_fim,motivo,TIMEDIFF(diario_bordo.hora_fim, diario_bordo.hora_ini) TEMPO, funcionario.nome,posto_trabalho.numero",
+        return $this->listarTodosMuitosParaMuitos("diario_bordo.data_trabalhada,,hora_fim,motivo,TIMEDIFF(diario_bordo.hora_fim, diario_bordo.hora_ini) TEMPO, funcionario.nome,posto_trabalho.numero",
                 "diario_bordo,produto,posto_trabalho,operacao,funcionario",
                 "diario_bordo.hora_ini !='00:00:00'
 AND diario_bordo.id_produto = produto.id_produto

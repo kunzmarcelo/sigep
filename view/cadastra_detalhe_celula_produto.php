@@ -53,8 +53,8 @@ controlaAcessoUrl($url, $pagina);
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <form method="post" role="form">
+                                    <form method="post" role="form">
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="id_celula" class="tamanho-fonte">Pessoas por célula de trabalho:</label><small> (Campo Obrigatório)</small>
                                                 <select name="id_celula" class="form-control" required="required" >                                       
@@ -100,18 +100,48 @@ controlaAcessoUrl($url, $pagina);
                                             </div>
                                             <div class="form-group">
                                                 <label for="data">Data da produção:</label>
-                                                <input type="date" id="data" name="data" class="form-control" required="required" />
+                                                <input type="date" id="data" name="data" value="<?= date('Y-m-d') ?>" class="form-control" required="required" />
                                             </div>
                                             <div class="form-group">
                                                 <label for="n_pecas">Quantidade de serem produzidas:</label>
                                                 <input type="number" id="n_pecas" name="n_pecas" class="form-control" placeholder="numero de peças" required="required" />
                                             </div>
+                                        </div>
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="tempo_unitario">Tempo Unitário do Produto:</label>
                                                 <input type="time" id="tempo_unitario" name="tempo_unitario" class="form-control" step='1' min="00:00:00" max="24:00:00" />
                                             </div>
+
                                             <div class="form-group">
-                                                <label for="reajuste">Reajuste em porcentagem para mais:</label>
+                                                <label for="n_feitas">Quantidade de peças produzidas:</label>
+                                                <input type="number" id="n_feitas" name="n_feitas" class="form-control" placeholder="numero de peças"  />
+                                            </div>
+                                            <div class="form-group">                                            
+                                                <label for="abstencao" class="tamanho-fonte">Funcionário que faltou:</label><small> (Campo Obrigatório)</small>
+                                                <select name="abstencao" class="form-control" required="required">                                       
+                                                    <?php
+                                                    echo "<option value='0'><b>Selecione ...</b></option>";
+                                                    include_once '../modell/Funcionario.class.php';
+                                                    $fun = new Funcionario();
+                                                    $matriz = $fun->listaFuncionario();
+
+                                                    while ($dados = $matriz->fetchObject()) {
+                                                        if ($dados->ativo == true && $dados->departamento != 'Escritório') {
+                                                            $nome = $dados->nome;
+                                                            echo "<option value=1>" . $nome . "</option>";
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>                            
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="motivo">Motivo:</label>
+                                                <input type="text" id="motivo" name="motivo" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="reajuste">Reajuste da Tabela Configuração de Horários:</label><small> Alterar configuração <a href="cadastra_config_celula.php" target="_blanck" >clique aqui</a></small>
                                                 <select name="reajuste" class="form-control" required="required">                                       
                                                     <?php
                                                     $diasemana = array('Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado');
@@ -132,55 +162,22 @@ controlaAcessoUrl($url, $pagina);
                                                         if ($dados->status == true) {
                                                             $desconto = $dados->desconto;
                                                             $descricao = $dados->dias;
-                                                            echo "<option value='$desconto'>" . $descricao . ' ' . $desconto . '% ' . "</option>";
+                                                            echo "<option  value='$desconto'>" . $descricao . ' ' . $desconto . '% ' . "</option>";
                                                         }
                                                     }
                                                     ?>
-                                                </select> 
-
-<!--                                        <select name="reajuste" class="form-control" required="required">
-                                            <option value="05">05</option>
-                                            <option value="10">10</option>
-                                            <option value="15">15</option>
-                                            <option value="20">20</option>
-                                            <option value="25">25</option>
-                                        </select>-->
+                                                </select>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="n_feitas">Quantidade de peças produzidas:</label>
-                                                <input type="number" id="n_feitas" name="n_feitas" class="form-control" placeholder="numero de peças"  />
-                                            </div>
-                                            <div class="form-group">                                            
-                                                <label for="abstencao" class="tamanho-fonte">Funcionário que faltou:</label><small> (Campo Obrigatório)</small>
-                                                <select name="abstencao" class="form-control" required="required">                                       
-                                                    <?php
-                                                    echo "<option value='0'><b>Selecione ...</b></option>";
-                                                    include_once '../modell/Funcionario.class.php';
-                                                    $fun = new Funcionario();
-                                                    $matriz = $fun->listaFuncionario();
-
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->ativo == true && $dados->departamento != 'Escritório') {
-
-                                                            $nome = $dados->nome;
-                                                            echo "<option value=1>" . $nome . "</option>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </select>                            
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="motivo">Motivo:</label>
-                                                <input type="text" id="motivo" name="motivo" class="form-control" />
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
-                                            </div>
-                                        </form>
-                                    </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
+                                            <button type="reset" class="btn btn-default" >Limpar</button>
+                                        </div>
+                                    </form>
+                                    
                                 </div>
                             </div>
+                            
 
                             <?php
                             include_once "../modell/DetalheCelulaProduto.class.php";
@@ -226,6 +223,7 @@ controlaAcessoUrl($url, $pagina);
                             }
                             ?>
 
+                        </div>
                         </div>
                     </div>
                 </div>

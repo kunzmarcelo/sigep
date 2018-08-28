@@ -1,3 +1,17 @@
+
+<script>
+    document.getElementById('btn').onclick = function () {
+        var conteudo = document.getElementById('impressao').innerHTML,
+                tela_impressao = window.open('about');
+
+        tela_impressao.document.write(conteudo);
+        tela_impressao.window.print();
+        tela_impressao.window.close();
+    };
+</script>
+
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
 <!--<script src="../bootstrap/assets/js/toucheffects.js"></script>-->
 
 
@@ -16,4 +30,5 @@
 
 <!-- Custom Theme JavaScript -->
 <script src="../startbootstrap/dist/js/sb-admin-2.js"></script>
+
 

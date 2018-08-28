@@ -22,8 +22,8 @@ $valor = $_POST['valor'];
 //echo $id_funcao.'->'.$campo .'->'.$valor;
 //var_dump($id);
 
-include_once '../modell/Operacao.class.php';
-$fun = new Operacao();
+include_once '../modell/BancoDadosPDO.class.php';
+$fun = new BancoDadosPDO();
    $status = $fun->alterar("operacao", "$campo='$valor'", "id_operacao='$id_funcao'");
    if($status == true){
        

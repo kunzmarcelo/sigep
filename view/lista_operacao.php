@@ -144,17 +144,16 @@ controlaAcessoUrl($url, $pagina);
 
 
                 <div class="panel panel-default">
-                    <div class="table-responsive">
-                        <div class="panel-heading" style="text-align: center">
-                            Listagem
-                        </div>
-                        <table width="100%" class="table table-striped table-bordered table-hover" id="tblEditavel">
-                            <thead>
+                            <div class="panel-heading" style="text-align: center">
+                                Listagem
+                            </div>
+                            <table width="100%" class="table table-striped table-bordered table-hover" id="tblEditavel">
+                                <thead>
                                 <tr>
                                     <th>#</th>                                            
                                     <th>Operação</th>
                                     <th>Tempo de ciclo</th>
-                                    <th>¹Setores</th>                               
+                                    <th>Setor</th>                               
                                     <th>Valor</th>
                                     <th><i class='fa fa-low-vision'></i></th>
                                 </tr>
@@ -175,11 +174,27 @@ controlaAcessoUrl($url, $pagina);
                                     include_once "../modell/Operacao.class.php";
                                     $lote = new Operacao();
                                     $matriz = $lote->listaOperacaoProduto($id_produto);
+
+
+                                    include_once "../modell/ConfigSalario.class.php";
+                                    $lote2 = new ConfigSalario();
+                                    $matriz2 = $lote2->listaConfigSalario('TRUE');
+
+                                    while ($dados2 = $matriz2->fetchObject()) {
+                                        if ($dados2->status_config_salario == true) {
+                                            $custo_mao_obra = ($dados2->valor / ($dados2->hora_semanal * $dados2->dias_semana)) / 60;
+                                        }else{
+                                            echo "<script>alert('Opss. Algo deu errado na configuração de sálarios, estou direcionando você para verificação'); window.location.href='./lista_config_salario.php?p=erro';</script>";
+                                        }
+                                    }
+
+
 //$matriz = $lote->listaTdosFuncaoLigacao();
                                     $somaTempo = 0;
                                     $media_final = 0;
                                     $total_funcoes = 0;
-                                    $custo_mao_obra = 0.25; //0.25 CUSTO DE MÃO DE OBRA POR MINUTO 
+
+//$custo_mao_obra = 0.25; //0.25 CUSTO DE MÃO DE OBRA POR MINUTO 
                                     $setor = 0;
 
                                     while ($dados = $matriz->fetchObject()) {
@@ -191,14 +206,14 @@ controlaAcessoUrl($url, $pagina);
                                         $media = $calculo0 + $calculo1 + $calculo2;
 
 
-                                        if ($dados->setor_operacao == 'Inicio') {
-                                            $setor = "<span class='label label-default'>Início</span>";
-                                        } elseif ($dados->setor_operacao == 'Costura') {
-                                            $setor = "<span class='label label-info'>Costura</span>";
-                                        } elseif ($dados->setor_operacao == 'Acabamento') {
-                                            $setor = "<span class='label label-primary'>Acabamento</span>";
-                                        } elseif ($dados->setor_operacao == 'Finalização') {
-                                            $setor = "<span class='label label-success'>Finalização</span>";
+                                        if ($dados->descricao_setor == 'Inicio') {
+                                            $setor = "<span class='label label-default'>$dados->descricao_setor</span>";
+                                        } elseif ($dados->descricao_setor == 'Costura') {
+                                            $setor = "<span class='label label-info'>$dados->descricao_setor</span>";
+                                        } elseif ($dados->descricao_setor == 'Acabamento') {
+                                            $setor = "<span class='label label-primary'>$dados->descricao_setor</span>";
+                                        } elseif ($dados->descricao_setor == 'Finalização') {
+                                            $setor = "<span class='label label-success'>$dados->descricao_setor</span>";
                                         }
 
                                         if ($dados->status_operacao == true) {
@@ -206,7 +221,7 @@ controlaAcessoUrl($url, $pagina);
                                                     <td title='id_operacao'>" . $dados->id_operacao . "</td>                                                    
                                                     <td title='operacao' class='editavel'><b> " . $dados->operacao . "</b></td>
                                                     <td title='tempo_operacao' class='editavel'> " . $dados->tempo_operacao . "</td>
-                                                    <td title='setor_operacao' class='editavel'> " . $setor . "</td>
+                                                    <td title='id_setor' class='editavel'> " . $setor . "</td>
                                                     <td title='custo médio'>R$ " . number_format($media, 2, ',', '') . "</td>
                                                     <td>
 							<span class='glyphicon glyphicon-eye-open' id='finalizar' value='finalizar'  onclick='finalizar(" . $dados->id_operacao . ");'></span>
@@ -217,7 +232,7 @@ controlaAcessoUrl($url, $pagina);
                                                     <td title='id_operacao'>" . $dados->id_operacao . "</td>                                                    
                                                     <td title='operacao' class='editavel'><b> " . $dados->operacao . "</b></td>
                                                     <td title='tempo_operacao' class='editavel'> " . $dados->tempo_operacao . "</td>
-                                                    <td title='setor_operacao' class='editavel'> " . $setor . "</td>
+                                                    <td title='id_setor' class='editavel'> " . $setor . "</td>
                                                     <td title='custo médio'>R$ " . number_format($media, 2, ',', '') . "</td>
                                                     <td>
                                                        <span class='glyphicon glyphicon-eye-close' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_operacao . ");'></span>
@@ -257,54 +272,52 @@ controlaAcessoUrl($url, $pagina);
                                     $minutos1 = floor($sobra_horas1 / 60);
                                     $sobra_minutos1 = ($sobra_horas1 % 60);
                                     $segundos1 = $sobra_minutos1;
-                                    $resultadoTempoEstimadoParaMais = $horas1 . ' hora(s), ' .  $minutos1 . ' minuto(s) e ' .  $segundos1.' segundo(s)';
-                                    
-                                    
-                                   
+                                    $resultadoTempoEstimadoParaMais = $horas1 . ':' . $minutos1 . ':' . $segundos1;
+
+
+
                                     $total_segundosMenos = $total_segundos - (($porcentagem / 100) * $total_segundos);
                                     $horasMenos = floor($total_segundosMenos / (60 * 60));
                                     $sobra_horasMenos = ($total_segundosMenos % (60 * 60));
                                     $minutosMenos = floor($sobra_horasMenos / 60);
                                     $sobra_minutosMenos = ($sobra_horasMenos % 60);
                                     $segundosMenos = $sobra_minutosMenos;
-                                    $resultadoTempoEstimadoParaMenos = $horasMenos . ' hora(s), ' . $minutosMenos . ' minuto(s) e ' . $segundosMenos.' segundo(s)';
+                                    $resultadoTempoEstimadoParaMenos = $horasMenos . ':' . $minutosMenos . ':' . $segundosMenos;
                                     ?>
 
                                 </tbody>
                             </table>
 
-                                    <?php if (!empty($produto)) { ?>
-                        <hr>
-                                <table class="table table-hover">
-                                    <thead style="text-align: right">
+                            <?php if (!empty($produto)) { ?>
+                                <hr>
+                                <table width="100%" class="table table-striped table-bordered table-hover">
+                                    <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Produto</th>                                            
-                                            <th>Soma do tempo de ciclo</th>
-                                            <th>Mais 10%</th>
-                                            <th>Menos 10%</th>
+                                            <th>Soma do tempo de ciclo</th>                                           
                                             <th>Total</th>
                                         </tr>
                                     </thead>                                    
                                     <tbody>
                                         <tr>
-                                            <td><?= $id_produto?></td>
+                                            <td><?= $id_produto ?></td>
                                             <td><?= $produto ?></td>
                                             <td><b><i><?= $horas . ' hora(s), ' . $minutos . ' minuto(s) e ' . $segundos . ' segundo(s)'; ?></i></b></td>
-                                            <td title="variação para mais"><?= $resultadoTempoEstimadoParaMais; ?></td>
-                                            <td title="variação para menos"><?= $resultadoTempoEstimadoParaMenos; ?></td>
-                                            <td>R$ <?= number_format($media_final, 2, ',', ''); ?></td>
+                                            <!--<td title="variação para mais"><?= $resultadoTempoEstimadoParaMais; ?></td>-->
+                                            <!--<td title="variação para menos"><?= $resultadoTempoEstimadoParaMenos; ?></td>-->
+                                            <td><b>R$ <?= number_format($media_final, 2, ',', ''); ?></b></td>
                                         </tr>
                                     </tbody>
                                 </table>
-        <?php
-    }
-}
-/* Captação de dados */
-$buffer = ob_get_contents(); // Obtém os dados do buffer interno
-$filename = "code.html"; // Nome do arquivo HTML
-file_put_contents($filename, $buffer); // Grava os dados do buffer interno no arquivo HTML
-?>
+                                <?php
+                            }
+                        }
+                        /* Captação de dados */
+                        $buffer = ob_get_contents(); // Obtém os dados do buffer interno
+                        $filename = "code.html"; // Nome do arquivo HTML
+                        file_put_contents($filename, $buffer); // Grava os dados do buffer interno no arquivo HTML
+                        ?>
                         <table class="table table-hover">
                             <thead>
                                 <tr>                                            
@@ -315,26 +328,27 @@ file_put_contents($filename, $buffer); // Grava os dados do buffer interno no ar
                                 <tr>
                                     <td>
                                         <button type='submit' value='fechar_todos' class='btn btn-default'  onclick='fechar_todos("<?= $id_produto ?>")'>Ocultar Todos</button>
-                                    </td> 
+                                    </td>
                                     <td>
-                                        <button type='submit' value='mostrar_acabamentos' class='btn btn-primary'  onclick='mostrar_acabamentos("<?= $id_produto ?>")'>Somar Acabamento</button>
+                                        <button type='submit' value='mostrar_inicio' class='btn btn-github'  onclick='mostrar_inicio("<?= $id_produto ?>")'>Somar Início</button>
                                     </td>
                                     <td>
                                         <button type='submit' value='mostrar_costura' class='btn btn-info'  onclick='mostrar_costura("<?= $id_produto ?>")'>Somar Costura</button>
                                     </td>
                                     <td>
+                                        <button type='submit' value='mostrar_acabamentos' class='btn btn-primary'  onclick='mostrar_acabamentos("<?= $id_produto ?>")'>Somar Acabamento</button>
+                                    </td>                                    
+                                    <td>
                                         <button type='submit' value='mostrar_finalizacao' class='btn btn-success'  onclick='mostrar_finalizacao("<?= $id_produto ?>")'>Somar Finalização</button>
                                     </td>
-                                    <td>
-                                        <button type='submit' value='mostrar_inicio' class='btn btn-github'  onclick='mostrar_inicio("<?= $id_produto ?>")'>Somar Início</button>
-                                    </td>
+
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
+        <!--</div>-->
 
 
 
@@ -346,6 +360,6 @@ file_put_contents($filename, $buffer); // Grava os dados do buffer interno no ar
         <script src="../ajax/operacao/mostrar_finalizacao.js"></script>
         <script src="../ajax/operacao/mostrar_acabamentos.js"></script>
         <script src="../ajax/operacao/mostrar_costura.js"></script>
-<?php require_once "./actionRodape.php"; ?>
+        <?php require_once "./actionRodape.php"; ?>
     </body>
 </html>

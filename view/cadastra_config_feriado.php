@@ -96,7 +96,7 @@ controlaAcessoUrl($url, $pagina);
                 </div>
                 <!-- /.row -->
 
-                
+
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
@@ -115,10 +115,20 @@ controlaAcessoUrl($url, $pagina);
                                                 <label for="data">Data:</label>
                                                 <input type="date" id="data" name="data" class="form-control" required="required" />
                                             </div>
-                                            <div class="form-group">
+<!--                                            <div class="form-group">
                                                 <label for="numero">Numero de dias:</label>
+                                                <select class="form-control" name="numero" required="required">
+                                                    <option value="">Selecione...</option>
+                                                    <?php
+                                                    for ($i = 1; $i <= 10; $i++) {
+                                                        //echo "<option value='$i'>$i dia(s)</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+
+
                                                 <input type="number" id="numero" name="numero" class="form-control" required="required" value="1" min="1" max="5"/>
-                                            </div>                                    
+                                            </div>                                    -->
                                             <div class="form-group">
                                                 <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
                                                 <button type="reset" name="cancelar" value="cancelar" class="btn btn-inverse">Cancelar</button>                    
@@ -128,18 +138,18 @@ controlaAcessoUrl($url, $pagina);
                                     </div>
                                 </div>
                                 <?php
-                                include_once "../modell/Calendario.class.php";
+                                include_once "../modell/ConfigFeriado.class.php";
 
 //instancia a classe de controle
-                                $prod = new Calendario();
+                                $prod = new ConfigFeriado();
 
                                 $descricao = \filter_input(INPUT_POST, 'descricao');
-                                $numero = \filter_input(INPUT_POST, 'numero');
+                                $numero = 1;
                                 $data = \filter_input(INPUT_POST, 'data');
-                                
+
                                 $cadastro = \filter_input(INPUT_POST, 'cadastrar');
-                                
-                              
+
+
                                 if (isset($cadastro)) {
                                     if (empty($descricao)) {
                                         echo "<div class='alert alert-danger alert-dismissable'>
@@ -148,7 +158,7 @@ controlaAcessoUrl($url, $pagina);
                                         </div>";
                                         //echo "<div class='alert alert-danger' role='alert'>Algum dos campos acima não foi preenchido corretamente.</div>";
                                     } else {
-                                        $status = $prod->cadastraCalendario($descricao, $data, $numero);
+                                        $status = $prod->cadastraConfigFeriado($descricao, $data, $numero);
                                         if ($status == true) {
                                             echo "<div class='alert alert-info alert-dismissable'>
                                                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -167,10 +177,10 @@ controlaAcessoUrl($url, $pagina);
                         </div>
                     </div>
                 </div>
-                
-                
-                
-                
+
+
+
+
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -185,16 +195,16 @@ controlaAcessoUrl($url, $pagina);
                                         <th>#</th>
                                         <th>Data</th>                                        
                                         <th>Descrição</th>                                        
-                                        <th>numero</th>
-                                        <!--<th><i class="fa fa-low-vision"></i></th>-->                                        
+                                        <th>Dias</th>
+                                    <th><i class="fa fa-trash"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>                       
 
                                     <?php
-                                    include_once "../modell/Calendario.class.php";
-                                    $lote = new Calendario();
-                                    $matriz = $lote->listaCalendario();
+                                    include_once "../modell/ConfigFeriado.class.php";
+                                    $lote = new ConfigFeriado();
+                                    $matriz = $lote->listaConfigFeriado();
 
                                     while ($dados = $matriz->fetchObject()) {
                                         //echo $dados->data_fabri;                                        
@@ -203,16 +213,15 @@ controlaAcessoUrl($url, $pagina);
 
 
                                         echo "<tr>
-                                                    <td title='id_lote'>" . $dados->id_calendario . "</td>
+                                                    <td title='id_lote'>" . $dados->id_config_feriado . "</td>
                                                     <td>" . $data1[2] . '/' . $data1[1] . '/' . $data1[0] . "</b></td>
                                                     <td title='descricao' class='editavel'>" . $dados->descricao . "</td>
-                                                    <td title='numero' class='editavel'>" . $dados->numero . "</td>
-                                                       
-                                                     
+                                                    <td title='numero' class='editavel'>" . $dados->numero . " dia(s)</td>
+                                                       <td>    
+							<span class='glyphicon glyphicon-trash' id='deletar' value='deletar'  onclick='deletar(" . $dados->id_config_feriado . ");'></span> 													
+                                                    </td>                                                     
                                               </tr>";
                                     }//<button title='finalizar lote' type='submit' id='ativar' value='ativar'  onclick='ativar(" . $dados->id . ");' class='btn btn-default'> </button>
-
-                                    
                                     ?>
                                 </tbody>
                             </table>
@@ -222,9 +231,7 @@ controlaAcessoUrl($url, $pagina);
                 </div>
             </div>
         </div>
-
-        <script src="../ajax/finalizar_lote.js"></script>
-        <script src="../ajax/ativa_lote.js"></script>
-<?php require_once "./actionRodape.php"; ?>
+        <script src="../ajax/config_feriado/deletar_feriado.js"></script>
+        <?php require_once "./actionRodape.php"; ?>
     </body>
 </html>

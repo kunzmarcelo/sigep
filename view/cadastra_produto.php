@@ -38,9 +38,9 @@ controlaAcessoUrl($url, $pagina);
                             $titulo = $con->listarUm("menu_filho", "link like '$part[3]'");
                             $resultado = $titulo->fetchObject();
                             ?>
-                            
-                            <?= $resultado->nome?>
-                           </h1>
+
+                            <?= $resultado->nome ?>
+                        </h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -53,8 +53,8 @@ controlaAcessoUrl($url, $pagina);
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <form method="post" role="form">
+                                    <form method="post" role="form">
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="descricao">Nome do produto:</label>
                                                 <input type="text" id="descricao" name="descricao" class="form-control" placeholder="Ex: jaqueta de tactel" required="required"  />
@@ -80,6 +80,8 @@ controlaAcessoUrl($url, $pagina);
                                                     <input type="text" id="custo_tecido" name="custo_tecido" class="form-control" placeholder="Ex: 1.35"   />
                                                 </div>
                                             </div> 
+                                        </div>
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="descricao2">Nome do sub produto:</label>
                                                 <input type="text" id="descricao2" name="descricao2" class="form-control" placeholder="Ex: forro"   />
@@ -102,58 +104,66 @@ controlaAcessoUrl($url, $pagina);
                                                 <label for="tempo_producao">Tempo integral de produção:</label>
                                                 <input type="time" id="tempo_producao" name="tempo_producao" step="2" class="form-control" min="00:00:00" max="20:00:00"   />
                                             </div>
+                                        </div>
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
                                                 <button type="reset" name="cancelar" value="cancelar" class="btn btn-inverse">Cancelar</button>                    
                                             </div>
-                                        </form>
+                                        </div>
+                                    </form>
 
-                                        <?php
-                                        include_once "../modell/Produto.class.php";
+                                    <?php
+                                    include_once "../modell/Produto.class.php";
 
 //instancia a classe de controle
-                                        $prod = new Produto();
+                                    $prod = new Produto();
 
-                                        $descricao = \filter_input(INPUT_POST, 'descricao');
+                                    $descricao = \filter_input(INPUT_POST, 'descricao');
 //                        $composicao = \filter_input(INPUT_POST, 'composicao');
-                                        $preco = \filter_input(INPUT_POST, 'preco');
+                                    $preco = \filter_input(INPUT_POST, 'preco');
 //                            $referencia = \filter_input(INPUT_POST, 'referencia');
-                                        $material = \filter_input(INPUT_POST, 'tecido');
-                                        $custo_material = \filter_input(INPUT_POST, 'custo_tecido');
-                                        $tempo_producao = \filter_input(INPUT_POST, 'tempo_producao');
+                                    $material = \filter_input(INPUT_POST, 'tecido');
+                                    $custo_material = \filter_input(INPUT_POST, 'custo_tecido');
+                                    $tempo_producao = \filter_input(INPUT_POST, 'tempo_producao');
 //                           
-                                        $descricao2 = \filter_input(INPUT_POST, 'descricao2');
-                                        $material2 = \filter_input(INPUT_POST, 'tecido2');
-                                        $custo_material2 = \filter_input(INPUT_POST, 'custo_tecido2');
-                                        $update_date = date("Y-m-d");
-                                        $status = true;
-                                        $cadastro = \filter_input(INPUT_POST, 'cadastrar');
+                                    $descricao2 = \filter_input(INPUT_POST, 'descricao2');
+                                    $material2 = \filter_input(INPUT_POST, 'tecido2');
+                                    $custo_material2 = \filter_input(INPUT_POST, 'custo_tecido2');
+                                    $update_date = date("Y-m-d");
+                                    $status = true;
+                                    $cadastro = \filter_input(INPUT_POST, 'cadastrar');
 
-                                        if (isset($cadastro)) {
-                                            if (empty($descricao)) {
-                                                echo "<div class='alert alert-danger alert-dismissable'>
-                                            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                            Algum dos campos acima não foi preenchido corretamente.
-                                        </div>";
-                                                //echo "<div class='alert alert-danger' role='alert'>Algum dos campos acima não foi preenchido corretamente.</div>";
-                                            } else {
-                                                $status = $prod->cadastraProduto($descricao, $preco, $material, $custo_material, $tempo_producao, $descricao2, $material2, $custo_material2, $update_date, $status);
-                                                if ($status == true) {
-                                                    echo "<div class='alert alert-info alert-dismissable'>
-                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                Registro inserido com sucesso.
-                                            </div>";
+                                    if (isset($cadastro)) {
+                                        if (empty($descricao)) {
+                                             echo "<div class='col-lg-12'>
+                                                        <div class='alert alert-danger alert-dismissable'>
+                                                            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                            Algum dos campos acima não foi preenchido corretamente.
+                                                        </div>
+                                                        </div>";
+                                             } else {
+                                            $status = $prod->cadastraProduto($descricao, $preco, $material, $custo_material, $tempo_producao, $descricao2, $material2, $custo_material2, $update_date, $status);
+                                            if ($status == true) {
+                                                echo "<div class='col-lg-12'>
+                                                            <div class='alert alert-info alert-dismissable'>
+                                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                Registro inserido com sucesso.
+                                                            </div>
+                                                            </div>";
                                                 } else {
-                                                    echo "<div class='alert alert-danger alert-dismissable'>
-                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                    Erro ao inserir o resgistro.
-                                                </div>";
-                                                }
+                                                    echo "<div class='col-lg-12'>
+                                                            <div class='alert alert-danger alert-dismissable'>
+                                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                Erro ao inserir o resgistro.
+                                                            </div>
+                                                            </div>";
                                             }
                                         }
-                                        ?>
-                                        <!--</div>-->
-                                    </div>
+                                    }
+                                    ?>
+                                    <!--</div>-->
+                                    <!--</div>-->
                                 </div>
                             </div>
                         </div>

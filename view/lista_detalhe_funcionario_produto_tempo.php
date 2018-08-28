@@ -4,8 +4,7 @@ session_start();
 $url = basename($_SERVER['SCRIPT_FILENAME']);
 $pagina = basename(__FILE__);
 if ($url != 'index.php')
-    include_once "../view/funcoes.php";
-{
+    include_once "../view/funcoes.php"; {
     include_once "../view/funcoes.php";
 }
 controlaAcessoUrl($url, $pagina);
@@ -18,7 +17,7 @@ controlaAcessoUrl($url, $pagina);
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
-<?php include_once "./actionCabecalho.php"; ?>
+        <?php include_once "./actionCabecalho.php"; ?>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
         <script type="text/javascript">
@@ -73,7 +72,7 @@ controlaAcessoUrl($url, $pagina);
 
     <body>
         <div id="wrapper">
-<?php require_once './actionfonteMenu.php'; ?>
+            <?php require_once './actionfonteMenu.php'; ?>
             <div id="page-wrapper">
 
                 <div class="row">
@@ -90,7 +89,7 @@ controlaAcessoUrl($url, $pagina);
                             $resultado = $titulo->fetchObject();
                             ?>
 
-<?= $resultado->nome ?>
+                            <?= $resultado->nome ?>
                         </h1>
                     </div>
                     <!-- /.col-lg-12 -->
@@ -175,7 +174,7 @@ controlaAcessoUrl($url, $pagina);
                                             <th>Operação</th>                                        
 <!--                                            <th>Inicio</th>
                                             <th>Fim</th>-->
-                                            <!--<th>Qtd.</th>-->
+                                            <th>Qtd.</th>
 <!--                                            <th>Etimado</th>-->
                                             <th>Prod.</th> 
                                             <!--<th>Falt</th>--> 
@@ -193,7 +192,7 @@ controlaAcessoUrl($url, $pagina);
                                             <th>Operação</th>                                        
 <!--                                            <th>Inicio</th>
                                             <th>Fim</th>-->
-                                            <!--<th>Qtd.</th>-->
+                                            <th>Qtd.</th>
 <!--                                            <th>Etimado</th>-->
                                             <th>Prod.</th> 
                                             <!--<th>Falt</th>--> 
@@ -226,8 +225,9 @@ controlaAcessoUrl($url, $pagina);
                                                 $somaTempoMinu = 0;
                                                 $somaTempoSegu = 0;
                                                 $funcionario = 0;
-                                                $somarMedia =0;
+                                                $somarMedia = 0;
                                                 $custo_mao_obra = 0.25; //0.25 CUSTO DE MÃO DE OBRA POR MINUTO 
+                                                //$custo_mao_obra = 0.093; //0.25 CUSTO DE MÃO DE OBRA POR MINUTO 
                                                 while ($dados = $matriz->fetchObject()) {
 //                                                $data1 = explode("-", $dados->data_ini);
 //                                                $data2 = explode("-", $dados->data_fim);
@@ -279,6 +279,7 @@ controlaAcessoUrl($url, $pagina);
                                                             <td title='Numero de controle'><b>" . $dados->numero . "</b></td>                                                            
                                                             <td title='id_produto' class='editavel'>" . $dados->descricao . "</td>
                                                             <td title='id_operacao' class='editavel'><b>" . $dados->operacao . "</b></td>
+                                                            <td title='peca_produzida' class='editavel'>" . $dados->quantidade . "</td>
                                                             <td title='peca_produzida' class='editavel'>" . $dados->peca_produzida . "</td>
                                                             <td title='pecas faltantes' ><b>" . $resultadoTempoEstimado . "</b></td>
                                                             <td title='pecas faltantes' ><b>R$ " . number_format($media, 2, ',', '') . "</b></td>
@@ -288,7 +289,7 @@ controlaAcessoUrl($url, $pagina);
                                                                 </a>                                                    
                                                             </td>
                                                       </tr>";
-                                                    $somarMedia +=$media;
+                                                    $somarMedia += $media;
                                                 }
                                                 ?>
                                             </tbody>
@@ -300,15 +301,15 @@ controlaAcessoUrl($url, $pagina);
                                                 <tr>
                                                     <th>Tempo Calendario</th>
                                                     <th>Tempo liquido</th>
-                                                    <th>¹TCLM</th>
+                                                    <!--<th>¹TCLM</th>-->
                                                     <th>Funcionário</th>
                                                     <th>Período</th>
-                                                    <th>Trabalhado no mês</th>
-                                                    <th>Faltam</th>
+                                                    <!--<th>Trabalhado no mês</th>-->
+                                                    <th>Tempo Trab.</th>
                                                     <th>Total</th>
                                                 </tr>
                                             </thead>
-                                            
+
                                             <tbody>
                                                 <tr>
                                                     <td>
@@ -393,64 +394,10 @@ controlaAcessoUrl($url, $pagina);
                                                         ?>
 
                                                     </td>
-                                                    <td>
-                                                        <?php
-                                                        include_once '../modell/Calendario.class.php';
-                                                        $calen = new Calendario();
 
-                                                        $matriz = $calen->listaCalendarioMes(date('m'));
-                                                        $diasDescontos = 0;
-                                                        while ($dados = $matriz->fetchObject()) {
-                                                            $diasDescontos += $dados->numero;
-                                                        }
-
-                                                        function dias_uteis($mes, $ano) {
-
-                                                            $uteis = 0;
-                                                            // Obtém o número de dias no mês 
-                                                            // (http://php.net/manual/en/function.cal-days-in-month.php)
-                                                            $dias_no_mes = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
-
-                                                            for ($dia = 1; $dia <= $dias_no_mes; $dia++) {
-
-                                                                // Aqui você pode verifica se tem feriado
-                                                                // ----------------------------------------
-                                                                // Obtém o timestamp
-                                                                // (http://php.net/manual/pt_BR/function.mktime.php)
-                                                                $timestamp = mktime(0, 0, 0, $mes, $dia, $ano);
-                                                                $semana = date("N", $timestamp);
-
-                                                                if ($semana < 6)
-                                                                    $uteis++;
-                                                            }
-
-                                                            return $uteis;
-                                                            //echo $uteis;
-                                                        }
-
-                                                        $dias_trabalhados = (dias_uteis(date('m'), date('Y'))) - $diasDescontos;
-                                                        $hora_ini1 = explode(":", $hora_ini);
-                                                        $hora_fim1 = explode(":", $hora_fim);
-                                                        $hora_int1 = explode(":", $hora_des);
-
-                                                        $tempoTCLP1 = (($hora_ini1[0] * 3600) + ($hora_ini1[1] * 60) + ($hora_ini1[2]));
-                                                        $tempoTCLP2 = (($hora_fim1[0] * 3600) + ($hora_fim1[1] * 60) + ($hora_fim1[2]));
-                                                        $tempoTCLP3 = (($hora_int1[0] * 3600) + ($hora_int1[1] * 60) + ($hora_int1[2]));
-
-                                                        $total_segundos = (($tempoTCLP2 - $tempoTCLP1) - $tempoTCLP3) * $dias_trabalhados;
-                                                        //$total_segundos = ($resultado_tempo - (($resultado_tempo)));
-
-                                                        $horas = floor($total_segundos / (60 * 60));
-                                                        $sobra_horas = ($total_segundos % (60 * 60));
-                                                        $minutos = floor($sobra_horas / 60);
-                                                        $sobra_minutos = ($sobra_horas % 60);
-                                                        $segundos = $sobra_minutos;
-                                                        echo "<b>$horas:$minutos:0$segundos</b>";
-                                                        ?>
-                                                    </td>
 
                                                     <td>
-        <?php echo $funcionario; ?>
+                                                        <?php echo $funcionario; ?>
 
                                                     </td>
                                                     <td>
@@ -472,26 +419,10 @@ controlaAcessoUrl($url, $pagina);
                                                         echo "<span><b> $horas1:$minutos1:$segundos1 <b></span>";
                                                         ?>
                                                     </td>
+
                                                     
                                                     <td>
-                                                        <?php
-                                                        $tempoTCLP1 = (($hora_ini1[0] * 3600) + ($hora_ini1[1] * 60) + ($hora_ini1[2]));
-                                                        $tempoTCLP2 = (($hora_fim1[0] * 3600) + ($hora_fim1[1] * 60) + ($hora_fim1[2]));
-                                                        $tempoTCLP3 = (($hora_int1[0] * 3600) + ($hora_int1[1] * 60) + ($hora_int1[2]));
-
-                                                        $total_segundos = (($tempoTCLP2 - $tempoTCLP1) - $tempoTCLP3) * $dias_trabalhados;
-
-                                                        $total_segundos1 = ((($tempoTCLP2 - $tempoTCLP1) - $tempoTCLP3) * $dias_trabalhados) - (($somaTempoHora * 3600) + ($somaTempoMinu * 60) + ($somaTempoSegu));
-                                                        $horas1 = floor($total_segundos1 / (60 * 60));
-                                                        $sobra_horas1 = ($total_segundos1 % (60 * 60));
-                                                        $minutos1 = floor($sobra_horas1 / 60);
-                                                        $sobra_minutos1 = ($sobra_horas1 % 60);
-                                                        $segundos1 = $sobra_minutos1;
-                                                        echo "<span><b> $horas1:$minutos1:$segundos1 <b></span>";
-                                                        ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo 'R$ ' .number_format($somarMedia,2,',','.'); ?>
+                                                        <?php echo 'R$ ' . number_format($somarMedia, 2, ',', '.'); ?>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -521,6 +452,6 @@ controlaAcessoUrl($url, $pagina);
 
         <script src="../ajax/detalhe_funcionario_produto/deletar_detalhe_funcionario_produto.js"></script>
         <script src="../ajax/jquery.js"></script>
-<?php require_once "./actionRodape.php"; ?>
+        <?php require_once "./actionRodape.php"; ?>
     </body>
 </html>

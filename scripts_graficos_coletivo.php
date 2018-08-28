@@ -6,7 +6,7 @@
         var data = google.visualization.arrayToDataTable([
             ['Mês', 'Peças Produzidas', 'Produção Determinada'],
 <?php
-include_once "../sigep/modell/BancoDadosPDO.class.php";
+include_once "../sigep2.0/modell/BancoDadosPDO.class.php";
 $lote = new BancoDadosPDO();
 
 $data_teste = $data_ini;

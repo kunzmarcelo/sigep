@@ -10,7 +10,7 @@ class Operacao extends BancoDadosPDO {
     protected $tempo_operacao;
     protected $status_operacao;
     protected $id_produto;
-    protected $setor_operacao;
+    protected $id_setor;
 
     //protected $tempo_producao;
 
@@ -22,8 +22,8 @@ class Operacao extends BancoDadosPDO {
         $this->$atributo = $valor;
     }
 
-    function cadastraOperacao($operacao, $custo_operacao, $tempo_operacao, $status_operacao, $id_produto, $setor_operacao) {
-        return $this->inserir("operacao", "operacao,custo_operacao,tempo_operacao,status_operacao,id_produto,setor_operacao", "'$operacao','$custo_operacao','$tempo_operacao','$status_operacao','$id_produto','$setor_operacao'");
+    function cadastraOperacao($operacao, $custo_operacao, $tempo_operacao, $status_operacao, $id_produto, $id_setor) {
+        return $this->inserir("operacao", "operacao,custo_operacao,tempo_operacao,status_operacao,id_produto,id_setor", "'$operacao','$custo_operacao','$tempo_operacao','$status_operacao','$id_produto','$id_setor'");
     }
 
     function listaOperacao() {
@@ -31,11 +31,11 @@ class Operacao extends BancoDadosPDO {
     }
 
     function listaOperacaoProduto($id_produto) {
-        return $this->listarTodos("operacao,produto where operacao.id_produto = produto.id_produto AND operacao.id_produto = $id_produto ORDER BY operacao.setor_operacao ASC");
+        return $this->listarTodos("operacao,produto,setores where operacao.id_setor = setores.id_setor AND operacao.id_produto = produto.id_produto AND operacao.id_produto = $id_produto ORDER BY setores.ordem, operacao.id_operacao ASC");
     }
 
-    function listaOperacaoProdutoSetor($id_produto, $setor_operacao) {
-        return $this->listarTodos("operacao,produto where operacao.id_produto = produto.id_produto AND operacao.id_produto = $id_produto AND operacao.setor_operacao='$setor_operacao' ORDER BY operacao.setor_operacao ASC");
+    function listaOperacaoProdutoSetor($id_produto, $id_setor) {
+        return $this->listarTodos("operacao,produto where operacao.id_produto = produto.id_produto AND operacao.id_produto = $id_produto AND operacao.id_setor='$id_setor' ORDER BY operacao.id_setor ASC");
     }
 
     function listaTdosOperacaoLigacao() {

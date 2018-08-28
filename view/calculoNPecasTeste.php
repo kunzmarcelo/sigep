@@ -91,24 +91,23 @@ controlaAcessoUrl($url, $pagina);
                                                 <input type="time" id="tempo" name="tempo" class="form-control" step='1' min="00:00:00" max="23:59:00" required="required"/>
                                             </div>
                                             <div class="form-group">
-                                                <label for="id_celula" class="tamanho-fonte">Pessoas por célula de trabalho:</label><small> (Campo Obrigatório)</small>
-                                                <select name="id_celula" class="form-control" required="required" >                                       
-                                                    <?php
-                                                    echo "<option value=''>Selecione ...</option>";
-                                                    include_once '../modell/CelulaTrabalho.class.php';
-                                                    $lote = new CelulaTrabalho();
-                                                    $matriz = $lote->listaCelula();
 
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->status_celula == TRUE) {
-                                                            $id_celula = $dados->id_celula;
-                                                            $pessoas_celula = $dados->pessoas_celula;
-                                                            $funcionarios = $dados->funcionarios;
-                                                            echo "<option value=" . $pessoas_celula . ">" . $pessoas_celula . ' - ' . $funcionarios . "</option>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </select>                            
+
+
+                                                <label for="n_pessoas" class="tamanho-fonte">Quantidade de Funcionários:</label><small> (Campo Obrigatório)</small>
+                                                <select name="n_pessoas" class="form-control" required="required" >
+                                                    <option value="">Selecione...</option>
+                                                    <option value="1">1 Funcionários</option>
+                                                    <option value="2">2 Funcionários</option>
+                                                    <option value="3">3 Funcionários</option>
+                                                    <option value="4">4 Funcionários</option>
+                                                    <option value="5">5 Funcionários</option>
+                                                    <option value="6">6 Funcionários</option>
+                                                    <option value="7">7 Funcionários</option>
+                                                    <option value="8">8 Funcionários</option>
+                                                    <option value="9">9 Funcionários</option>
+                                                </select>
+
                                             </div>
                                             <div class="form-group">
                                                 <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Calcular</button>
@@ -123,7 +122,7 @@ controlaAcessoUrl($url, $pagina);
                                     $hora_ini = \filter_input(INPUT_POST, 'hora_ini');
                                     $hora_fim = \filter_input(INPUT_POST, 'hora_fim');
                                     $hora_int = \filter_input(INPUT_POST, 'hora_int');
-                                    $n_pessoas = \filter_input(INPUT_POST, 'id_celula');
+                                    $n_pessoas = \filter_input(INPUT_POST, 'n_pessoas');
                                     $cadastro = \filter_input(INPUT_POST, 'cadastrar');
 //                            $n_peca = \filter_input(INPUT_POST, 'n_peca');
                                     $hora_uni = \filter_input(INPUT_POST, 'tempo'); // 

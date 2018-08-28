@@ -92,18 +92,18 @@ controlaAcessoUrl($url, $pagina);
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <form method="post" role="form">
                                             <div class="form-group">
-                                                <label for="descricao_pai">Descrição de Categoria:</label>
+                                                <label for="descricao_pai">Nome da Categoria Pai:</label>
                                                 <input type="text" id="descricao_pai" name="descricao_pai" class="form-control" required="required" placeholder="Ex: Produtos"/>
                                             </div>
                                             <div class="form-group">
-                                                <label for="ordem_pai">Ordem de exibição:</label>
+                                                <label for="ordem_pai">Ordem de Exibição no Menu:</label>
                                                 <input type="text" id="ordem_pai" name="ordem_pai" class="form-control" required="required" placeholder="Ex: 1,2,3"/>
                                             </div>
                                             <div class="form-group">
-                                                <label for="icone_pai">Icone da Categoria:</label>
+                                                <label for="icone_pai">Ícone da Categoria:</label><small> Para cadastro de icone <a href="https://fontawesome.com/v4.7.0/icons/" target="_blank">Clique aqui:</a></small>
                                                 <input type="text" id="icone_pai" name="icone_pai" class="form-control" required="required" placeholder="Ex: fa fa-archive ou glyphicon glyphicon-barcode"/>
                                             </div>
                                             <div class="form-group">
@@ -190,6 +190,9 @@ controlaAcessoUrl($url, $pagina);
                                                     <td>
                                                        <span class='glyphicon glyphicon-eye-close' id='ativar' value='ativar' onclick='ativar(" . $dados->id_menu . ");'></span>                                                       
                                                     </td>
+                                                    <td>
+                                                       <span class='glyphicon glyphicon-trash' id='deletarMenuPai' value='deletarMenuPai' onclick='deletarMenuPai(" . $dados->id_menu . ");'></span>                                                       
+                                                    </td>
                                               </tr>";
                                                 } else {
                                                     echo "<tr>
@@ -199,6 +202,9 @@ controlaAcessoUrl($url, $pagina);
                                                     <td title='icone_pai' class='editavel'><span class= '$dados->icone_pai'  ></span></td> 
                                                     <td>     
 							<span class='glyphicon glyphicon-eye-open' id='finalizar' value='finalizar'   onclick='finalizar(" . $dados->id_menu . ");'></span> 													
+                                                    </td>
+                                                    <td>     
+							<span class='glyphicon glyphicon-trash' id='deletarMenuPai' value='deletarMenuPai'   onclick='deletarMenuPai(" . $dados->id_menu . ");'></span> 													
                                                     </td>
                                               </tr>";
                                                 }
@@ -219,6 +225,7 @@ controlaAcessoUrl($url, $pagina);
 
         <script src="../ajax/menu/finalizar_menu_pai.js"></script>
         <script src="../ajax/menu/ativa_menu_pai.js"></script>
+        <script src="../ajax/menu/deletar_menus.js"></script>
 
         <?php require_once "./actionRodape.php"; ?>
 

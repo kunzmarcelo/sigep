@@ -91,84 +91,98 @@ controlaAcessoUrl($url, $pagina);
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <form method="post" role="form">                                                                                                           
-                                            <div class="form-group">
-                                                <label for="pessoas_celula">Número de pessoas por célula de trabalho:</label>
-                                                <input type="number" id="pessoas_celula" name="pessoas_celula" class="form-control" placeholder="" required="required"  />
-                                            </div>                                    
-                                            <div class="form-group">
-                                                <label for="numero_celula">Número da célula de trabalho:</label>
-                                                <input type="number" id="numero_celula" name="numero_celula" class="form-control" placeholder="" required="required"  />
+                                    <div class="col-lg-12">
+                                        <form method="post" role="form">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="funcionarios">Nome das pessoas que atuam nessa célula:</label>
+                                                    <input type="text" id="funcionarios" name="funcionarios" class="form-control" placeholder="João/Maria/Tereza/etc...">
+                                                </div>                                  
+                                                <div class="form-group">
+                                                    <label for="pessoas_celula">Número de pessoas por célula de trabalho:</label>
+                                                    <input type="number" id="pessoas_celula" name="pessoas_celula" class="form-control" placeholder="" required="required"  />
+                                                </div> 
                                             </div>
-                                            <div class="form-group">
-                                                <label for="funcionarios">Nome das pessoas que atuam nessa célula:</label>
-                                                <input type="text" id="funcionarios" name="funcionarios" class="form-control" placeholder="João/Maria/Tereza/etc...">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="setor" class="tamanho-fonte">Setor de atuação dessa célula:</label><small> (Campo Obrigatório)</small>
-                                                <select name="setor" class="form-control" required="required" >                                       
-                                                    <?php
-                                                    echo "<option value=''>Selecione ...</option>";
-                                                    include_once '../modell/Setores.class.php';
-                                                    $lote = new Setores();
-                                                    $matriz = $lote->listaSetor();
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="numero_celula">Número da célula de trabalho:</label>
+                                                    <input type="number" id="numero_celula" name="numero_celula" class="form-control" placeholder="" required="required"  />
+                                                </div>
 
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->status_setor == TRUE) {
-                                                            $cod = $dados->id_setor;
-                                                            $n_lote = $dados->descricao;
-                                                            $obs = $dados->obs;
-                                                            echo "<option value=" . $n_lote . ">" . $n_lote . "</option>";
+                                                <div class="form-group">
+                                                    <label for="setor" class="tamanho-fonte">Setor de atuação dessa célula:</label><small> (Campo Obrigatório)</small>
+                                                    <select name="setor" class="form-control" required="required" >                                       
+                                                        <?php
+                                                        echo "<option value=''>Selecione ...</option>";
+                                                        include_once '../modell/Setores.class.php';
+                                                        $lote = new Setores();
+                                                        $matriz = $lote->listaSetor();
+
+                                                        while ($dados = $matriz->fetchObject()) {
+                                                            if ($dados->status_setor == TRUE) {
+                                                                $cod = $dados->id_setor;
+                                                                $n_lote = $dados->descricao_setor;
+                                                                $obs = $dados->obs;
+                                                                echo "<option value=" . $n_lote . ">" . $n_lote . "</option>";
+                                                            }
                                                         }
-                                                    }
-                                                    ?>
-                                                </select>                            
+                                                        ?>
+                                                    </select>                            
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
-                                                <button type="reset" name="cancelar" value="cancelar" class="btn btn-inverse">Cancelar</button>                    
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
+                                                    <button type="reset" name="cancelar" value="cancelar" class="btn btn-inverse">Cancelar</button>                    
+                                                </div>
                                             </div>
                                         </form>
-                                    </div>
-                                    <?php
-                                    include_once "../modell/CelulaTrabalho.class.php";
+
+                                        <?php
+                                        include_once "../modell/CelulaTrabalho.class.php";
 
 //instancia a classe de controle
-                                    $prod = new CelulaTrabalho();
+                                        $prod = new CelulaTrabalho();
 
-                                    $pessoas_celula = \filter_input(INPUT_POST, 'pessoas_celula');
-                                    $funcionarios = \filter_input(INPUT_POST, 'funcionarios');
-                                    $numero_celula = \filter_input(INPUT_POST, 'numero_celula');
-                                    $setor = \filter_input(INPUT_POST, 'setor');
-                                    $data = date('Y-m-d');
-                                    $status_celula = TRUE;
+                                        $pessoas_celula = \filter_input(INPUT_POST, 'pessoas_celula');
+                                        $funcionarios = \filter_input(INPUT_POST, 'funcionarios');
+                                        $numero_celula = \filter_input(INPUT_POST, 'numero_celula');
+                                        $setor = \filter_input(INPUT_POST, 'setor');
+                                        $data = date('Y-m-d');
+                                        $status_celula = TRUE;
 //                       
-                                    $cadastro = \filter_input(INPUT_POST, 'cadastrar');
+                                        $cadastro = \filter_input(INPUT_POST, 'cadastrar');
 
-                                    if (isset($cadastro)) {
-                                        if (empty($pessoas_celula)) {
-                                            echo "<div class='alert alert-danger alert-dismissable'>
-                                            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                            Algum dos campos acima não foi preenchido corretamente.
-                                        </div>";
-                                            //echo "<div class='alert alert-danger' role='alert'>Algum dos campos acima não foi preenchido corretamente.</div>";
-                                        } else {
-                                            $status = $prod->cadastraCelula($pessoas_celula, $data, $numero_celula, $funcionarios, $setor, $status_celula);
-                                            if ($status == true) {
-                                                echo "<div class='alert alert-info alert-dismissable'>
-                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                Registro inserido com sucesso.
-                                            </div>";
+                                        if (isset($cadastro)) {
+                                            if (empty($pessoas_celula)) {
+                                                echo "<div class='col-lg-12'>
+                                                            <div class='alert alert-danger alert-dismissable'>
+                                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                Algum dos campos acima não foi preenchido corretamente.
+                                                            </div>
+                                                        </div>";
+                                                //echo "<div class='alert alert-danger' role='alert'>Algum dos campos acima não foi preenchido corretamente.</div>";
                                             } else {
-                                                echo "<div class='alert alert-danger alert-dismissable'>
-                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                    Erro ao inserir o resgistro.
-                                                </div>";
+                                                $status = $prod->cadastraCelula($pessoas_celula, $data, $numero_celula, $funcionarios, $setor, $status_celula);
+                                                if ($status == true) {
+                                                    echo "<div class='col-lg-12'>
+                                                                <div class='alert alert-info alert-dismissable'>
+                                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                    Registro inserido com sucesso.
+                                                                </div>
+                                                            </div>";
+                                                } else {
+                                                    echo "<div class='col-lg-12'>
+                                                                <div class='alert alert-danger alert-dismissable'>
+                                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                    Erro ao inserir o resgistro.
+                                                                </div>
+                                                            </div>";
+                                                }
                                             }
                                         }
-                                    }
-                                    ?>                       
+                                        ?>                       
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -183,10 +197,10 @@ controlaAcessoUrl($url, $pagina);
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Célula</th>
+                                <th>Qtd.</th>
                                 <th>Nomes</th>
-                                <th>N° pessoas</th>
                                 <th>Setor</th>
-                                <th>Número da célula</th>
                                 <th>Data Cadastro</th>                                        
                                 <th><i class="fa fa-low-vision"></i></th>
                             </tr>
@@ -204,22 +218,22 @@ controlaAcessoUrl($url, $pagina);
                                 if ($dados->status_celula == TRUE) {
                                     echo "<tr>
                                             <td title='id_celula'>" . $dados->id_celula . "</td>                                                   
-                                            <td title='funcionarios' class='editavel'>" . $dados->funcionarios . "</td>
-                                            <td title='pessoas_celula' class='editavel'>" . $dados->pessoas_celula . "</td>                                                   
-                                            <td title='setor' class='editavel'>" . $dados->setor . "</td>
                                             <td title='numero_celula' class='editavel'>" . $dados->numero_celula . "</td>
+                                            <td title='pessoas_celula' class='editavel'>" . $dados->pessoas_celula . "</td>                                                   
+                                            <td title='funcionarios' class='editavel'>" . $dados->funcionarios . "</td>
+                                            <td title='setor' class='editavel'>" . $dados->setor . "</td>
                                             <td title='data de cadastro' >" . $data1[2] . '/' . $data1[1] . '/' . $data1[0] . "</b></td>
                                             <td>     
                                                 <span class='glyphicon glyphicon-eye-open' id='desativar' value='desativar'  onclick='desativar(" . $dados->id_celula . ");'></span> 													
                                             </td>
                                                 </tr>";
-                                }else{
-                                     echo "<tr>
+                                } else {
+                                    echo "<tr>
                                             <td title='id_celula'>" . $dados->id_celula . "</td>                                                   
-                                            <td title='funcionarios' class='editavel'>" . $dados->funcionarios . "</td>
-                                            <td title='pessoas_celula' class='editavel'>" . $dados->pessoas_celula . "</td>                                                   
-                                            <td title='setor' class='editavel'>" . $dados->setor . "</td>
                                             <td title='numero_celula' class='editavel'>" . $dados->numero_celula . "</td>
+                                            <td title='pessoas_celula' class='editavel'>" . $dados->pessoas_celula . "</td>                                                   
+                                            <td title='funcionarios' class='editavel'>" . $dados->funcionarios . "</td>
+                                            <td title='setor' class='editavel'>" . $dados->setor . "</td>
                                             <td title='data de cadastro' >" . $data1[2] . '/' . $data1[1] . '/' . $data1[0] . "</b></td>
                                             <td>     
                                                 <span class='glyphicon glyphicon-eye-close' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_celula . ");'></span> 													

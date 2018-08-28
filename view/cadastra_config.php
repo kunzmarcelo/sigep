@@ -77,7 +77,7 @@ controlaAcessoUrl($url, $pagina);
                             $resultado = $titulo->fetchObject();
                             ?>
 
-                            <?= $resultado->nome ?>
+<?= $resultado->nome ?>
                         </h1>
                     </div>
                     <!-- /.col-lg-12 -->
@@ -92,28 +92,35 @@ controlaAcessoUrl($url, $pagina);
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <form method="post" role="form">                                                                         
-                                            <div class="form-group">
-                                                <label for="meta_faturamento">Meta de faturamento:</label>
-                                                <input type="number" id="meta_faturamento" name="meta_faturamento" class="form-control" required="required"  />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="meta_producao">Meta de produção:</label>
-                                                <input type="number" id="meta_producao" name="meta_producao" class="form-control"  required="required"  />
-                                            </div>                                    
-                                            <div class="form-group">
-                                                <label for="data_ini">Data inicial:</label>
-                                                <input type="date" id="data_ini" name="data_ini" class="form-control"  required="required"   />
-                                            </div>                                    
-                                            <div class="form-group">
-                                                <label for="data_fim">Data Final:</label>
-                                                <input type="date" id="data_fim" name="data_fim" class="form-control"  required="required"   />
-                                            </div>                                    
+                                    <div class="col-lg-12">
+                                        <form method="post" role="form">
+                                            <div class="col-lg-6">
 
-                                            <div class="form-group">
-                                                <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
-                                                <button type="reset" name="cancelar" value="cancelar" class="btn btn-inverse">Cancelar</button>                    
+                                                <div class="form-group">
+                                                    <label for="meta_faturamento">Meta de faturamento:</label>
+                                                    <input type="number" id="meta_faturamento" name="meta_faturamento" class="form-control" required="required"  />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="meta_producao">Meta de produção:</label>
+                                                    <input type="number" id="meta_producao" name="meta_producao" class="form-control"  required="required"  />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="data_ini">Data inicial:</label>
+                                                    <input type="date" id="data_ini" name="data_ini" class="form-control"  required="required"   />
+                                                </div>                                    
+
+                                                <div class="form-group">
+                                                    <label for="data_fim">Data Final:</label>
+                                                    <input type="date" id="data_fim" name="data_fim" class="form-control"  required="required"   />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
+                                                    <button type="reset" name="cancelar" value="cancelar" class="btn btn-inverse">Cancelar</button>                    
+                                                </div>                                
                                             </div>                                
                                         </form>
                                         <?php
@@ -135,23 +142,29 @@ controlaAcessoUrl($url, $pagina);
 
                                         if (isset($cadastro)) {
                                             if (empty($meta_faturamento)) {
-                                                echo "<div class='alert alert-danger alert-dismissable'>
-                                            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                            Algum dos campos acima não foi preenchido corretamente.
-                                        </div>";
+                                                echo "<div class='col-lg-12'>
+                                                            <div class='alert alert-danger alert-dismissable'>
+                                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                Algum dos campos acima não foi preenchido corretamente.
+                                                            </div>
+                                                        </div>";
                                                 //echo "<div class='alert alert-danger' role='alert'>Algum dos campos acima não foi preenchido corretamente.</div>";
                                             } else {
                                                 $status = $prod->cadastraConfig($meta_faturamento, $meta_producao, $data_ini, $data_fim, $hora_ini, $hora_fim, $hora_des, $status, $desconto);
                                                 if ($status == true) {
-                                                    echo "<div class='alert alert-info alert-dismissable'>
-                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                Registro inserido com sucesso.
-                                            </div>";
+                                                    echo "<div class='col-lg-12'>
+                                                                <div class='alert alert-info alert-dismissable'>
+                                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                    Registro inserido com sucesso.
+                                                                </div>
+                                                            </div>";
                                                 } else {
-                                                    echo "<div class='alert alert-danger alert-dismissable'>
-                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                    Erro ao inserir o resgistro.
-                                                </div>";
+                                                    echo "<div class='col-lg-12'>
+                                                                <div class='alert alert-danger alert-dismissable'>
+                                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                    Erro ao inserir o resgistro.
+                                                                </div>
+                                                            </div>";
                                                 }
                                             }
                                         }
@@ -180,7 +193,7 @@ controlaAcessoUrl($url, $pagina);
                                         <th>Produção Mês</th>
                                         <th>Data Ini</th>
                                         <th>Data Fim</th>
-                                       <th><i class="fa fa-low-vision"></i></th>
+                                        <th><i class="fa fa-low-vision"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>                       

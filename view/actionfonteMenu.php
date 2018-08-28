@@ -58,7 +58,7 @@ $dados = $resultado->fetchObject();
                                         <?= $res['nome'] ?>
                                     </a>
                                 </li>
-                                <li role='separator' class='divider'></li>
+                                <!--<li role='separator' class='divider'></li>-->
                                 <?php
                             }
                         }

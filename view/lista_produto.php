@@ -112,14 +112,14 @@ controlaAcessoUrl($url, $pagina);
                                     <tr>
                                         <th>#</th>
                                         <th>Descrição</th>
-                                        <th>Preço Médio</th>
+                                        <th>Valor</th>
                                         <th>Tempo</th>
                                         <th>Kg ou M</th>
-                                        <th>Valor</th>
+                                        <th>Valor 1</th>
                                         <th>Sub material</th>
                                         <th>Kg ou M</th>
-                                        <th>Valor</th>
-                                        <th>SubTotal</th>
+                                        <th>Valor 2</th>
+                                        <th>Custo Total</th>
                                         <th><i class='fa fa-low-vision'></i></th>
                                         <th><i class='fa fa-trash-o'></i></th>
                                     </tr>
@@ -128,14 +128,14 @@ controlaAcessoUrl($url, $pagina);
                                     <tr>
                                         <th>#</th>
                                         <th>Descrição</th>
-                                        <th>Preço Médio</th>
+                                        <th>Valor</th>
                                         <th>Tempo</th>
                                         <th>Kg ou M</th>
-                                        <th>Valor</th>
+                                        <th>Valor 1</th>
                                         <th>Sub material</th>
                                         <th>Kg ou M</th>
-                                        <th>Valor</th>
-                                        <th>SubTotal</th>
+                                        <th>Valor 2</th>
+                                        <th>Custo Total</th>
                                         <th><i class='fa fa-low-vision'></i></th>
                                         <th><i class='fa fa-trash-o'></i></th>
                                     </tr>
@@ -161,65 +161,77 @@ controlaAcessoUrl($url, $pagina);
                                             }
 
 
-                                            $tempo_producao = explode(":", $dados->tempo_producao);
-                                            $custo_minuto = 0.25;
-                                            $calculo[0] = ($tempo_producao[0] * 60) * $custo_minuto;
-                                            $calculo[1] = $tempo_producao[1] * $custo_minuto;
-                                            $calculo[2] = ($tempo_producao[2] / 60 ) * $custo_minuto;
-                                            $soma_tempo = $calculo[1] + $calculo[0] + $calculo[2];
-                                            $custo_sub_produto = $dados->material2 * $dados->custo_material2;
 
+                                            include_once "../modell/ConfigSalario.class.php";
+                                            $lote2 = new ConfigSalario();
+                                            $matriz2 = $lote2->listaConfigSalario('TRUE');
 
-//                                          // ----->>>>> Novo calculo de custo de produção funciona sem o calculo do tempo, pois
+                                            while ($dados2 = $matriz2->fetchObject()) {
+                                                if ($dados2->status_config_salario == true) {
+                                                    $custo_mao_obra = ($dados2->valor / ($dados2->hora_semanal * $dados2->dias_semana)) / 60;
+                                                } else {
+                                                    echo "<script>alert('Opss. Algo deu errado na configuração de sálarios, estou direcionando você para verificação'); window.location.href='./lista_config_salario.php?p=erro';</script>";
+                                                    //break;
+                                                }
+                                            }
 
-                                            $subtotal = (float) ((($dados->material * $dados->custo_material) + $soma_tempo) + $custo_sub_produto);
+                                            $tempo_producao = explode(":", $dados->tempo_producao);                                           
+                                            $calculo[0] = ($tempo_producao[0] * 60) * $custo_mao_obra;
+                                            $calculo[1] = $tempo_producao[1] * $custo_mao_obra;
+                                            $calculo[2] = ($tempo_producao[2] / 60 ) * $custo_mao_obra;
+                                            
+                                            
+//                                          // ----->>>>> Novo calculo de custo de produção funciona com o calculo do tempo, pois
+
+                                            $subtotal = (float) ((($dados->material * $dados->custo_material) + ($dados->material2 * $dados->custo_material2)) + $calculo[1] + $calculo[0] + $calculo[2]);
 //                                          é realizado quando lista o detalhe produto função ------>>>>> IMPORTANTE
                                             //$subtotal = (float) (($dados->tecido * $dados->custo_tecido) + $custo_sub_produto);
                                             //print_r($subtotal);
 
                                             if ($dados->status == true) {
                                                 echo"<tr>
-                                                <td title='id'>" . $dados->id_produto . "</td>                                                    
-                                                <td title='descricao' class='editavel'>" . substr($dados->descricao, 0, 30) . "</td>                                                   
-                                                <td title='preco' class='editavel'> <b>" . 'R$ ' . number_format($dados->preco, 2, ',', '.') . "</b></td>
-                                                <td title='tempo_producao' class='editavel'>" . $dados->tempo_producao . "</td>
-                                                <td title='material' class='editavel'>" . $dados->material . "</td>
-                                                <td title='custo_material' class='editavel'>" . 'R$ ' . number_format($dados->custo_material, 2, ',', '.') . "</td>                                                    
-                                                <td title = 'descricao2' class = 'editavel'>" . $dados->descricao2 . "</td>
-                                                <td title='material2' class='editavel'>" . $dados->material2 . "</td>
-                                                <td title='custo_material2' class='editavel'>" . 'R$ ' . number_format($dados->custo_material2, 2, ',', '.') . "</td>
-                                                <td><b>" . 'R$ ' . number_format($subtotal, 2, ',', '.') . "</b></td>
-                                                <td>     
-                                                    <span class='glyphicon glyphicon-eye-open' id='ocultar' value='ocultar'  onclick='ocultar(" . $dados->id_produto . ");'></span> 													
-                                                </td>
-                                                <td>
-                                                    <a href='#' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_produto . ");'>
-                                                       <i class='fa fa-trash'></i>
-                                                    </a>                                                    
-                                                </td>";
+                                                        <td title='id'>" . $dados->id_produto . "</td>                                                    
+                                                        <td title='descricao' class='editavel'>" . substr($dados->descricao, 0, 60) . "</td>                                                   
+                                                        <td title='preco' class='editavel'>" .  number_format($dados->preco, 2, ',', '.') . "</td>                                                   
+                                                        <td title='tempo_producao' class='editavel'>" . $dados->tempo_producao . "</td>
+                                                        <td title='material' class='editavel'>" . $dados->material . "</td>
+                                                        <td title='custo_material' class='editavel'>" . 'R$ ' . number_format($dados->custo_material, 2, ',', '.') . "</td>                                                    
+                                                        <td title = 'descricao2' class = 'editavel'>" . $dados->descricao2 . "</td>
+                                                        <td title='material2' class='editavel'>" . $dados->material2 . "</td>
+                                                        <td title='custo_material2' class='editavel'>" . 'R$ ' . number_format($dados->custo_material2, 2, ',', '.') . "</td>
+                                                        <td><b>" . 'R$ ' . number_format($subtotal, 2, ',', '.') . "</b></td>
+                                                        <td>     
+                                                            <span class='glyphicon glyphicon-eye-open' id='ocultar' value='ocultar'  onclick='ocultar(" . $dados->id_produto . ");'></span> 													
+                                                        </td>
+                                                        <td>
+                                                            <a href='#' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_produto . ");'>
+                                                               <i class='fa fa-trash'></i>
+                                                            </a>                                                    
+                                                        </td>";
                                                 echo"</tr>";
                                             } else {
                                                 echo"<tr>
-                                                <td title='id'>" . $dados->id_produto . "</td>                                                    
-                                                <td title='descricao' class='editavel'>" . substr($dados->descricao, 0, 30) . "</td>                                                   
-                                                <td title='preco' class='editavel'> <b>" . 'R$ ' . number_format($dados->preco, 2, ',', '.') . "</b></td>
-                                                <td title='tempo_producao' class='editavel'>" . $dados->tempo_producao . "</td>
-                                                <td title='material' class='editavel'>" . $dados->material . "</td>
-                                                <td title='custo_material' class='editavel'>" . 'R$ ' . number_format($dados->custo_material, 2, ',', '.') . "</td>                                                    
-                                                <td title = 'descricao2' class = 'editavel'>" . $dados->descricao2 . "</td>
-                                                <td title='material2' class='editavel'>" . $dados->material2 . "</td>
-                                                <td title='custo_material2' class='editavel'>" . 'R$ ' . number_format($dados->custo_material2, 2, ',', '.') . "</td>
-                                                <td><b>" . 'R$ ' . number_format($subtotal, 2, ',', '.') . "</b></td>
-                                                <td>     
-                                                    <span class='glyphicon glyphicon-eye-close' id='visualizar' value='visualizar'  onclick='visualizar(" . $dados->id_produto . ");'></span> 													
-                                                </td>
-                                                <td>
-                                                    <a href='#' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_produto . ");'>
-                                                        <i class='fa fa-trash'></i>
-                                                    </a>                                                    
-                                                </td>";
+                                                        <td title='id'>" . $dados->id_produto . "</td>                                                    
+                                                        <td title='descricao' class='editavel'>" . substr($dados->descricao, 0, 60) . "</td>                                                   
+                                                        <td title='preco' class='editavel'>" .  number_format($dados->preco, 2, ',', '.') . "</td>                                                   
+                                                        <td title='tempo_producao' class='editavel'>" . $dados->tempo_producao . "</td>
+                                                        <td title='material' class='editavel'>" . $dados->material . "</td>
+                                                        <td title='custo_material' class='editavel'>" . 'R$ ' . number_format($dados->custo_material, 2, ',', '.') . "</td>                                                    
+                                                        <td title = 'descricao2' class = 'editavel'>" . $dados->descricao2 . "</td>
+                                                        <td title='material2' class='editavel'>" . $dados->material2 . "</td>
+                                                        <td title='custo_material2' class='editavel'>" . 'R$ ' . number_format($dados->custo_material2, 2, ',', '.') . "</td>
+                                                        <td><b>" . 'R$ ' . number_format($subtotal, 2, ',', '.') . "</b></td>
+                                                        <td>     
+                                                            <span class='glyphicon glyphicon-eye-close' id='visualizar' value='visualizar'  onclick='visualizar(" . $dados->id_produto . ");'></span> 													
+                                                        </td>
+                                                        <td>
+                                                            <a href='#' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_produto . ");'>
+                                                                <i class='fa fa-trash'></i>
+                                                            </a>                                                    
+                                                        </td>";
                                                 echo"</tr>";
                                             }
+//                                                                                                    <td title='preco' class='editavel'> <b>" . 'R$ ' . number_format($dados->preco, 2, ',', '.') . "</b></td>
                                         }
                                     }
                                     ?>
@@ -228,12 +240,12 @@ controlaAcessoUrl($url, $pagina);
                         </div>
                         <!--</div>-->
                         <!--</div>-->
-                        <?php
-                        /* Captação de dados */
-                        $buffer = ob_get_contents(); // Obtém os dados do buffer interno
-                        $filename = "code.html"; // Nome do arquivo HTML
-                        file_put_contents($filename, $buffer); // Grava os dados do buffer interno no arquivo HTML
-                        ?>
+<?php
+/* Captação de dados */
+$buffer = ob_get_contents(); // Obtém os dados do buffer interno
+$filename = "code.html"; // Nome do arquivo HTML
+file_put_contents($filename, $buffer); // Grava os dados do buffer interno no arquivo HTML
+?>
                         <div class="row">
                             <div class="panel-body">
                                 <div class="form-group">
@@ -249,7 +261,7 @@ controlaAcessoUrl($url, $pagina);
                             </div>
                             <div class="col-xs-12 col-sm-12">
                                 <div class="form-group">
-                                    <label for="legenda">*Sub Total ((tecido em metros * custo tecido) + (tecido em metros2 * custo tecido2) + (tempo * 0,15)).</label><br>
+                                    <label for="legenda">*Sub Total ((Kg ou M * Valor 1) + (Kg ou M 2 * Valor 2) + (tempo * <?= number_format($custo_mao_obra,3,',','.')?>)).</label><br>
                                     <label for="legenda">* Para o calculo exato de produção <a href="calculoCustoPecaProduto.php">clique aqui.</a></label>
                                 </div>
                             </div>
@@ -262,7 +274,7 @@ controlaAcessoUrl($url, $pagina);
 
 <!--<script src="../bootstrap/assets/js/toucheffects.js"></script>-->
         <script src="../ajax/deletar_produto.js"></script>
-        <?php require_once "./actionRodape.php"; ?>
+<?php require_once "./actionRodape.php"; ?>
 
 
     </body>

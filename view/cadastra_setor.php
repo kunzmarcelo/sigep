@@ -54,11 +54,15 @@ controlaAcessoUrl($url, $pagina);
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <form method="post" role="form">
                                             <div class="form-group">
-                                                <label for="descricao">Descrição:</label>
-                                                <input type="text" id="descricao" name="descricao" class="form-control" placeholder="descrição" required="required"/>
+                                                <label for="descricao_setor">Descrição:</label>
+                                                <input type="text" id="descricao_setor" name="descricao_setor" class="form-control" placeholder="descrição" required="required"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ordem">Ordem:</label>
+                                                <input type="number" id="ordem" name="ordem" class="form-control" placeholder="ordem" required="required"/>
                                             </div>
                                             <div class="form-group">
                                                 <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
@@ -73,8 +77,9 @@ controlaAcessoUrl($url, $pagina);
 //instancia a classe de controle
                                     $prod = new Setores();
 
-                                    $descricao = \filter_input(INPUT_POST, 'descricao');
-                                    $ordem = 0;
+                                    $descricao = \filter_input(INPUT_POST, 'descricao_setor');
+                                    $ordem = \filter_input(INPUT_POST, 'ordem');
+                                   
 
                                     $status_setor = TRUE;
 //                       
@@ -127,7 +132,7 @@ controlaAcessoUrl($url, $pagina);
                                             if ($dados->status_setor == TRUE) {
                                                 echo "<tr>
                                                 <td title='id_setor'>" . $dados->id_setor . "</td>
-                                                <td title='descricao'>" . $dados->descricao . "</td>
+                                                <td title='descricao_setor'>" . $dados->descricao_setor . "</td>
                                                 <td title='ordem' class='editavel'>" . $dados->ordem . "</td>
                                                <td>     
                                                     <span class='glyphicon glyphicon-eye-open' id='desativar' value='desativar'  onclick='desativar(" . $dados->id_setor . ");'></span> 													
@@ -136,7 +141,7 @@ controlaAcessoUrl($url, $pagina);
                                             } else {
                                                 echo "<tr>
                                                 <td title='id_setor'>" . $dados->id_setor . "</td>
-                                                <td title='descricao'>" . $dados->descricao . "</td>
+                                                <td title='descricao_setor'>" . $dados->descricao_setor . "</td>
                                                 <td title='ordem' class='editavel'>" . $dados->ordem . "</td>
                                                <td>     
                                                     <span class='glyphicon glyphicon-eye-close' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_setor . ");'></span> 													

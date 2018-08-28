@@ -71,7 +71,7 @@ controlaAcessoUrl($url, $pagina);
                                 $part = explode("/", $url);
                                 $part[3];
 
-                                include_once '../modell/Produto.class.php';
+                                include_once '../modell/BancoDadosPDO.class.php';
                                 $con = new BancoDadosPDO();
                                 $titulo = $con->listarUm("menu_filho", "link like '$part[3]'");
                                 $resultado = $titulo->fetchObject();
@@ -92,89 +92,119 @@ controlaAcessoUrl($url, $pagina);
                                 </div>
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="col-lg-6">
-                                            <form method="post" role="form">  
+                                        <form method="post" role="form">
+                                            <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label for="data_ini">Data inicial:</label>
                                                     <input type="date" id="data_ini" name="data_ini" class="form-control"  required="required"   />
-                                                </div>                                    
+                                                </div>
                                                 <div class="form-group">
                                                     <label for="data_fim">Data Final:</label>
                                                     <input type="date" id="data_fim" name="data_fim" class="form-control"  required="required"   />
-                                                </div>                                    
+                                                </div>
                                                 <div class="form-group">
                                                     <label for="hora_ini">Hora Inicial:</label>
                                                     <input type="time" id="hora_ini" name="hora_ini" class="form-control"  required="required"   />
-                                                </div>                                    
+                                                </div>
+
                                                 <div class="form-group">
                                                     <label for="hora_fim">Hora Final:</label>
                                                     <input type="time" id="hora_fim" name="hora_fim" class="form-control"  required="required"   />
-                                                </div>                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label for="hora_des">Hora de desconto:</label>
+                                                    <label for="hora_des">Tempo de Intervalos:</label>
                                                     <input type="time" id="hora_des" name="hora_des" class="form-control"  required="required"   />
                                                 </div>                                    
                                                 <div class="form-group">
-                                                    <label for="desconto">Reajuste:</label>
-                                                    <input type="number" id="desconto" name="desconto" class="form-control"  required="required"   />
+                                                    <label for="desconto">Reajuste de Tempo para Mais:</label>
+                                                    <select name="desconto" class="form-control" required="required">
+                                                        <option value="">Selecione...</option>
+                                                        <?php 
+                                                        for($i=1; $i<=30; $i++)
+                                                            echo "<option value='$i'>$i%</option>"
+                                                        ?>
+                                                    </select>
+
+                                                    <!--<input type="number" id="desconto" name="desconto" class="form-control"  required="required"   />-->
                                                 </div>                                    
                                                 <div class="form-group">
-                                                    <label for="dias_semana">Dias da semana:</label>
-                                                    <input type="number" id="dias_semana" name="dias_semana" class="form-control"  required="required"   />
-                                                </div>                                    
+                                                    <label for="dias">Dia da semana:</label>
+                                                    <select name="dias" class="form-control" required="required">
+                                                        <option value="">Selecione...</option>
+                                                        <option value="Segunda">Segunda - Feira</option>
+                                                        <option value="Terça">Terça - Feira</option>
+                                                        <option value="Quarta">Quarta - Feira</option>
+                                                        <option value="Quinta">Quinta - Feira</option>
+                                                        <option value="Sexta">Sexta - Feira</option>
+                                                        <option value="Sábado">Sábado</option>
+                                                        <option value="Domingo">Domingo</option>
+                                                    </select>
+                                                    <!--<input type="text" id="dias" name="dias" class="form-control"  required="required"   />-->
+                                                </div>
                                                 <div class="form-group">
-                                                    <label for="dias">Dias:</label>
-                                                    <input type="text" id="dias" name="dias" class="form-control"  required="required"   />
+                                                    <label for="equivalencia">Equivalência:</label>
+                                                    <input type="text" id="equivalencia" name="equivalencia" value="1 dia" class="form-control" disabled="disabled" />
                                                 </div>                                    
+                                            </div>
+                                            <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
                                                     <button type="reset" name="cancelar" value="cancelar" class="btn btn-inverse">Cancelar</button>                    
                                                 </div> 
-                                            </form>
+                                            </div> 
+                                        </form>
 
 
-                                            <?php
-                                            include_once "../modell/ConfigCelula.class.php";
+
+                                        <?php
+                                        include_once "../modell/ConfigCelula.class.php";
 
 //instancia a classe de controle
-                                            $prod = new ConfigCelula();
+                                        $prod = new ConfigCelula();
 
 
-                                            $data_ini = \filter_input(INPUT_POST, 'data_ini');
-                                            $data_fim = \filter_input(INPUT_POST, 'data_fim');
-                                            $hora_ini = \filter_input(INPUT_POST, 'hora_ini');
-                                            $hora_fim = \filter_input(INPUT_POST, 'hora_fim');
-                                            $hora_des = \filter_input(INPUT_POST, 'hora_des');
-                                            $desconto = \filter_input(INPUT_POST, 'desconto');
-                                            $dias_semana = \filter_input(INPUT_POST, 'dias_semana');
-                                            $dias = \filter_input(INPUT_POST, 'dias');
-                                            $status = TRUE;
-                                            $cadastro = \filter_input(INPUT_POST, 'cadastrar');
+                                        $data_ini = \filter_input(INPUT_POST, 'data_ini');
+                                        $data_fim = \filter_input(INPUT_POST, 'data_fim');
+                                        $hora_ini = \filter_input(INPUT_POST, 'hora_ini');
+                                        $hora_fim = \filter_input(INPUT_POST, 'hora_fim');
+                                        $hora_des = \filter_input(INPUT_POST, 'hora_des');
+                                        $desconto = \filter_input(INPUT_POST, 'desconto');
+                                        $dias_semana = '1';
+                                        $dias = \filter_input(INPUT_POST, 'dias');
+                                        $status = TRUE;
+                                        $cadastro = \filter_input(INPUT_POST, 'cadastrar');
 
-                                            if (isset($cadastro)) {
-                                                if (empty($data_ini)) {
-                                                    echo "<div class='alert alert-danger alert-dismissable'>
-                                            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                            Algum dos campos acima não foi preenchido corretamente.
-                                        </div>";
-                                                    //echo "<div class='alert alert-danger' role='alert'>Algum dos campos acima não foi preenchido corretamente.</div>";
+                                        if (isset($cadastro)) {
+                                            if (empty($data_ini)) {
+                                                echo "<div class='col-lg-12'>
+                                                            <div class='alert alert-danger alert-dismissable'>
+                                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                Algum dos campos acima não foi preenchido corretamente.
+                                                            </div>
+                                                        </div>";
+                                                //echo "<div class='alert alert-danger' role='alert'>Algum dos campos acima não foi preenchido corretamente.</div>";
+                                            } else {
+                                                $status = $prod->cadastraConfig($data_ini, $data_fim, $hora_ini, $hora_fim, $hora_des, $status, $desconto, $dias_semana, $dias);
+                                                if ($status == true) {
+                                                    echo "<div class='col-lg-12'>
+                                                                <div class='alert alert-info alert-dismissable'>
+                                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                    Registro inserido com sucesso.
+                                                                </div>
+                                                            </div>";
                                                 } else {
-                                                    $status = $prod->cadastraConfig($data_ini, $data_fim, $hora_ini, $hora_fim, $hora_des, $status, $desconto, $dias_semana, $dias);
-                                                    if ($status == true) {
-                                                        echo "<div class='alert alert-info alert-dismissable'>
-                                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                Registro inserido com sucesso.
-                                            </div>";
-                                                    } else {
-                                                        echo "<div class='alert alert-danger alert-dismissable'>
-                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                                    Erro ao inserir o resgistro.
-                                                </div>";
-                                                    }
+                                                    echo "<div class='col-lg-12'>
+                                                                <div class='alert alert-danger alert-dismissable'>
+                                                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                                                    Erro ao inserir o resgistro.
+                                                                </div>
+                                                            </div>";
                                                 }
                                             }
-                                            ?>                       
-                                        </div>
+                                        }
+                                        ?>                       
                                     </div>
                                 </div>
                             </div>
@@ -188,15 +218,16 @@ controlaAcessoUrl($url, $pagina);
                             <thead>
                                 <tr>
                                     <th>#</th>                                                                             
-                                    <th>Data Ini</th>
-                                    <th>Data Fim</th>
-                                    <th>Hora Ini</th>
-                                    <th>Hora fim</th>
-                                    <th>Hora des</th>
+                                    <th>Início</th>
+                                    <th>Final</th>
+                                    <th>Início</th>
+                                    <th>Final</th>
                                     <th>Desconto</th>
-                                    <th>Quant. Dias</th>
+                                    <th>Reajuste</th>
+                                    <th>Equivalência</th>
                                     <th>Dias</th>
-                                    <th><i class="fa fa-low-vision"></i></th>                                        
+                                    <th><i class="fa fa-low-vision"></i></th>
+                                    <th><i class="fa fa-trash"></i></th>
                                 </tr>
                             </thead>
                             <tbody>                       
@@ -221,10 +252,13 @@ controlaAcessoUrl($url, $pagina);
                                                     <td title='hora_fim' class='editavel'>" . $dados->hora_fim . "</td>
                                                     <td title='hora_des' class='editavel'>" . $dados->hora_des . "</td>
                                                     <td title='desconto' class='editavel'>" . $dados->desconto . "%</td>
-                                                    <td title='dias_semana' class='editavel'>" . $dados->dias_semana . "</td>
+                                                    <td title='dias_semana' class='editavel'>" . $dados->dias_semana . " dia</td>
                                                     <td title='dias' class='editavel'>" . $dados->dias . "</td>
                                                     <td>     
 							<span class='glyphicon glyphicon-eye-open' id='finalizar' value='finalizar'  onclick='finalizar(" . $dados->id_config . ");'></span> 													
+                                                    </td>
+                                                    <td>     
+							<span class='glyphicon glyphicon-trash' id='deletar' value='deletar'  onclick='deletar(" . $dados->id_config . ");'></span> 													
                                                     </td>
                                               </tr>";
                                     } else {
@@ -236,10 +270,13 @@ controlaAcessoUrl($url, $pagina);
                                                     <td title='hora_fim' class='editavel'>" . $dados->hora_fim . "</td>
                                                     <td title='hora_des' class='editavel'>" . $dados->hora_des . "</td>
                                                     <td title='desconto' class='editavel'>" . $dados->desconto . "%</td>
-                                                    <td title='dias_semana' class='editavel'>" . $dados->dias_semana . "</td>
+                                                    <td title='dias_semana' class='editavel'>" . $dados->dias_semana . " dia</td>
                                                     <td title='dias' class='editavel'>" . $dados->dias . "</td>
                                                     <td>    
 							<span class='glyphicon glyphicon-eye-close' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_config . ");'></span> 													
+                                                    </td>
+                                                    <td>    
+							<span class='glyphicon glyphicon-trash' id='deletar' value='deletar'  onclick='deletar(" . $dados->id_config . ");'></span> 													
                                                     </td>
                                               </tr>";
                                     }
@@ -252,7 +289,8 @@ controlaAcessoUrl($url, $pagina);
                 </div>
             </div>
         </div>
-        <script src="../ajax/config_celula.js"></script>
-<?php require_once "./actionRodape.php"; ?>      
+        <script src="../ajax/config_celula/config_celula.js"></script>
+        <script src="../ajax/config_celula/deletar_config_celula.js"></script>
+        <?php require_once "./actionRodape.php"; ?>      
     </body>
 </html>

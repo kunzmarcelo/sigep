@@ -16,3 +16,9 @@
 
 <link rel="icon" href="../bibliotecas/imagens/icone_logo.ico" type="image/x-icon">
 
+<style>
+    #impressao table{
+         border-collapse: collapse;
+    }
+    
+</style>

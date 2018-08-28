@@ -4,8 +4,7 @@ session_start();
 $url = basename($_SERVER['SCRIPT_FILENAME']);
 $pagina = basename(__FILE__);
 if ($url != 'index.php')
-    include_once "../view/funcoes.php";
-{
+    include_once "../view/funcoes.php"; {
     include_once "../view/funcoes.php";
 }
 controlaAcessoUrl($url, $pagina);
@@ -19,13 +18,13 @@ controlaAcessoUrl($url, $pagina);
 <html lang="pt-BR">
     <head>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<?php include_once "./actionCabecalho.php"; ?>
+        <?php include_once "./actionCabecalho.php"; ?>
     </head>
     <body>
         <div id="wrapper">
-<?php require_once './actionfonteMenu.php'; ?>
+            <?php require_once './actionfonteMenu.php'; ?>
             <div id="page-wrapper">
-<div class="row">
+                <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
                             <?php
@@ -114,38 +113,45 @@ controlaAcessoUrl($url, $pagina);
                     data.addColumn('string', 'ToolTip');
 
                     // For each orgchart box, provide the name, manager, and tooltip to show.
-                    data.addRows([
+                   
+                            data.addRows([
+                            [{v: <?= "'$descricao'" ?>, f: '<?= "$descricao" ?><div style="color:green; font-style:italic">Produto</div>'}, '', 'The Product'],
+                                <?php
+                                    include_once "../modell/Setores.class.php";
+                                    $prod2 = new Setores();
+                                    $matriz2 = $prod2->listaSetor();
+                                    while ($dados2 = $matriz2->fetchObject()) {
+                                            echo ("[{v:'$dados2->descricao_setor', f:'$dados2->descricao_setor'},'$descricao','Setor'],");           
+                                    }
+                                    
+                                    include_once "../modell/Operacao.class.php";
+            $lote = new Operacao();
+            $matriz = $lote->listaOperacaoProduto($id_produto);
+        
+                                    while ($dados = $matriz->fetchObject()) {
 
-                        [{v: <?= "'$descricao'" ?>, f: '<?= "$descricao" ?><div style="color:green; font-style:italic">Produto</div>'}, '', 'The Product'],
-                        [{v: 'Inicio', f: 'Inicio<div style="color:red; font-style:italic">Setor</div>'}, '<?= "$descricao" ?>', 'ST'],
-                        [{v: 'Costura', f: ' Costura<div style="color:red; font-style:italic">Setor</div>'}, '<?= "$descricao" ?>', 'ST'],
-                        [{v: 'Acabamento', f: 'Acabamento <div style="color:red; font-style:italic">Setor</div>'}, '<?= "$descricao" ?>', 'ST'],
-                        [{v: 'Finalização', f: 'Finalização <div style="color:red; font-style:italic">Setor</div>'}, '<?= "$descricao" ?>', 'ST'],
-    <?php
-    include_once "../modell/Operacao.class.php";
-    $lote = new Operacao();
-    $matriz = $lote->listaOperacaoProduto($id_produto);
-    while ($dados = $matriz->fetchObject()) {
+                                        echo ("['$dados->operacao','$dados->descricao_setor',''],");
+                                        //   ['Alice', 'Mike', ''],
+                                    }
+                                    ?>
 
 
-        echo ("['$dados->operacao','$dados->setor_operacao',''],");
-//   ['Alice', 'Mike', ''],
+                                ]);
+
+                        // Create the chart.
+                        var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+                        google.charts.load('current', {packages: ['orgchart']});
+                        
+                        // Draw the chart, setting the allowHtml option to true for the tooltips.
+                        chart.draw(data, {allowHtml: true});
+                    }
+                </script>
+        <?php
     }
     ?>
-                    ]);
-
-                    // Create the chart.
-                    var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
-                    // Draw the chart, setting the allowHtml option to true for the tooltips.
-                    chart.draw(data, {allowHtml: true});
-                }
-            </script>
-            <?php
-        }
-        ?>
 
 
-<?php require_once "./actionRodape.php"; ?>
+    <?php require_once "./actionRodape.php"; ?>
 
     </body>
 </html>
