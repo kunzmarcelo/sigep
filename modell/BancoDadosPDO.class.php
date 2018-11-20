@@ -1,22 +1,5 @@
 <?php
 
-//$this->base = "marcelo_kunz";
-//$this->db = new PDO("mysql:host=localhost;dbname=$this->base", 'marcelo_kunz', 'VSyg39EJLW');
-//function __destruct() {
-//fecha a conexão com o banco de dados
-//$this->db->close();
-// }
-//$last_id = "select last_insert_id() as cod";
-//echo $last_id;
-//echo $sql;
-
-/*
-  $resultado2 = $this->db->query($last_id);
-  $resultado2->fetchObject();
-  $resultado2->cod;
-  print_r($resultado2);
- */
-
 class BancoDadosPDO {
 
     protected $db;
@@ -24,15 +7,8 @@ class BancoDadosPDO {
 
     function __construct() {
         try {
-
-
             $this->base = "sigep2";
-            $this->db = new PDO("mysql:host=localhost;dbname=$this->base", "root", "");
-            // $this->base = "micuim";
-            // $this->db = new PDO("mysql:host=localhost;dbname=$this->base", "micuim", "pD0Fb9Q164");
-            //$this->base = "marcelo_kunz";
-            // $this->db = new PDO("mysql:host=localhost;dbname=$this->base", 'marcelo_kunz', 'VSyg39EJLW');
-            // base conectada no computador local           
+            $this->db = new PDO("mysql:host=localhost;dbname=$this->base", "root", "");               
             return TRUE;
         } catch (PDOException $e) {
             return "<br> Erro na conexão " . $e->getMessage();
@@ -61,7 +37,7 @@ class BancoDadosPDO {
 
     function alterar($tabela, $campos_valores, $condicao) {
         // mysql_set_charset('utf8');
-        //echo "chegou aqui";
+       
         $sql = "update $tabela set $campos_valores where $condicao ";
          //echo $sql;
         try {
