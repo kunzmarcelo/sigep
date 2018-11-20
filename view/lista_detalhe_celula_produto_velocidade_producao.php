@@ -177,13 +177,19 @@ controlaAcessoUrl($url, $pagina);
                                                 while ($dados = $matriz->fetchObject()) {
                                                     $data1 = explode("-", $dados->DATACELULA);
                                                     $diferenca = ((( $dados->pecas_finalizadas * 100)) / $dados->pecas_determinadas); //porcentagem
-                                                    if (number_format($diferenca, 2, '.', '.') <= '79.99') {
+                                                    if (number_format($diferenca, 2, '.', '.') <= '65.99') {
                                                         $diferenca2 = "<span class='label label-danger'>" . number_format($diferenca, 2, '.', '.') . " %</span>";
-                                                    } else {
+                                                    } elseif (number_format($diferenca, 2, '.', '.') > '65.99' && number_format($diferenca, 2, '.', '.') <= '75.99') {
+                                                        $diferenca2 = "<span class='label label-warning'>" . number_format($diferenca, 2, '.', '.') . " %</span>";
+                                                    } elseif (number_format($diferenca, 2, '.', '.') > '75.99' && number_format($diferenca, 2, '.', '.') <= '85.99') {
                                                         $diferenca2 = "<span class='label label-info'>" . number_format($diferenca, 2, '.', '.') . " %</span>";
+                                                    } elseif (number_format($diferenca, 2, '.', '.') > '85.99' && number_format($diferenca, 2, '.', '.') <= '95.99') {
+                                                        $diferenca2 = "<span class='label label-primary'>" . number_format($diferenca, 2, '.', '.') . " %</span>";
+                                                    } elseif (number_format($diferenca, 2, '.', '.') > '95.99') {
+                                                        $diferenca2 = "<span class='label label-success'>" . number_format($diferenca, 2, '.', '.') . " %</span>";
                                                     }
                                                     echo "<tr>                                                        
-                                                        <td>" . $data1[2] . '/' . $data1[1] . '/' . $data1[0] . "</b></td>                                                                                                          
+                                                        <td>" . $data1[2] . '/' . $data1[1] . '/' . $data1[0] . "</td>                                                                                                          
                                                         <td title='$dados->pecas_determinadas peças' class=''>" . $dados->pecas_determinadas . " peças</td>                                                 
                                                         <td title='$dados->pecas_finalizadas peças' class=''>" . $dados->pecas_finalizadas . " peças </td>
                                                         <td title='' class=''>" . $diferenca2 . "</td>
@@ -195,7 +201,15 @@ controlaAcessoUrl($url, $pagina);
                                         </table>
                                     </div>
                                 </div>
-
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p> <span class='label label-danger'>Velocidade</span> <= 65.99 % </p>
+                                <p> <span class='label label-warning'>Velocidade</span> > 65.99 % && <= 75.99 % </p>
+                                <p> <span class='label label-info'>Velocidade</span> > 75.99 % && <= 85.99 % </p>
+                                <p> <span class='label label-primary'>Velocidade</span> > 85.99 % && <= 95.99 % </p>
+                                <p> <span class='label label-success'>Velocidade</span> > 95.99 % </p>
                             </div>
                         </div>
                         <div class="row">
@@ -204,9 +218,18 @@ controlaAcessoUrl($url, $pagina);
                             </div>
                         </div>
                     </div>
+                       <?php
+        }
+
+        /* Captação de dados */
+        $buffer = ob_get_contents(); // Obtém os dados do buffer interno
+        $filename = "code.html"; // Nome do arquivo HTML
+        file_put_contents($filename, $buffer); // Grava os dados do buffer interno no arquivo HTML
+        ?>  
                 </div>
             </div>
 
+<?php require_once "./actionRodape.php"; ?>
 
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
             <script type="text/javascript">
@@ -251,14 +274,6 @@ controlaAcessoUrl($url, $pagina);
                     chart.draw(data, options);
                 }
             </script>
-            <?php
-        }
-
-        /* Captação de dados */
-        $buffer = ob_get_contents(); // Obtém os dados do buffer interno
-        $filename = "code.html"; // Nome do arquivo HTML
-        file_put_contents($filename, $buffer); // Grava os dados do buffer interno no arquivo HTML
-        ?>  
-<?php require_once "./actionRodape.php"; ?>
+     
     </body>
 </html>

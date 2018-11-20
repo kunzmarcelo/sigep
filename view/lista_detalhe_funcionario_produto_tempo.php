@@ -229,8 +229,6 @@ controlaAcessoUrl($url, $pagina);
                                                 $custo_mao_obra = 0.25; //0.25 CUSTO DE MÃO DE OBRA POR MINUTO 
                                                 //$custo_mao_obra = 0.093; //0.25 CUSTO DE MÃO DE OBRA POR MINUTO 
                                                 while ($dados = $matriz->fetchObject()) {
-//                                                $data1 = explode("-", $dados->data_ini);
-//                                                $data2 = explode("-", $dados->data_fim);
                                                     $nome = explode(" ", $dados->nome);
 
                                                     $faltam = $dados->quantidade - $dados->peca_produzida;
@@ -240,9 +238,6 @@ controlaAcessoUrl($url, $pagina);
                                                         $faltam = '-';
                                                     }
 
-//                                                if ($data2[2] > $data1[2]) {
-//                                                    $data2[0] = $data2[0].'*';
-//                                                }
 
                                                     $tempoUni = explode(":", $dados->tempo_operacao);
                                                     $tempo3 = (($tempoUni[0] * 3600) + ($tempoUni[1] * 60) + ($tempoUni[2] ));
@@ -301,11 +296,12 @@ controlaAcessoUrl($url, $pagina);
                                                 <tr>
                                                     <th>Tempo Calendario</th>
                                                     <th>Tempo liquido</th>
+                                                    <th>Tempo Trab.</th>
                                                     <!--<th>¹TCLM</th>-->
                                                     <th>Funcionário</th>
                                                     <th>Período</th>
                                                     <!--<th>Trabalhado no mês</th>-->
-                                                    <th>Tempo Trab.</th>
+                                                    
                                                     <th>Total</th>
                                                 </tr>
                                             </thead>
@@ -340,11 +336,8 @@ controlaAcessoUrl($url, $pagina);
                                                             }
                                                         }
 
-
                                                         $data_atual = date('Y-m-d');
-                                                        //echo $data_atual;
-                                                        //echo $data_atual;
-                                                        //echo $data_fim;
+                                                       
                                                         if ($data_atual > $data_fim) {
                                                             echo" <div class='alert alert-warning' role='alert'>
                                                                     <h5> <span class='glyphicon glyphicon-warning-sign'></span> Oops! Confira a data na configuraçao.</h5>
@@ -394,8 +387,17 @@ controlaAcessoUrl($url, $pagina);
                                                         ?>
 
                                                     </td>
-
-
+                                                     <td>
+                                                        <?php
+                                                        $total_segundos1 = (($somaTempoHora * 3600) + ($somaTempoMinu * 60) + ($somaTempoSegu));
+                                                        $horas1 = floor($total_segundos1 / (60 * 60));
+                                                        $sobra_horas1 = ($total_segundos1 % (60 * 60));
+                                                        $minutos1 = floor($sobra_horas1 / 60);
+                                                        $sobra_minutos1 = ($sobra_horas1 % 60);
+                                                        $segundos1 = $sobra_minutos1;
+                                                        echo "<strike> $horas1:$minutos1:$segundos1 </strike>";
+                                                        ?>
+                                                    </td>
                                                     <td>
                                                         <?php echo $funcionario; ?>
 
@@ -408,17 +410,7 @@ controlaAcessoUrl($url, $pagina);
                                                         echo $data1[2] . '/' . $data1[1] . ' à ' . $data2[2] . '/' . $data2[1] . '/' . $data2[0];
                                                         ?>
                                                     </td>
-                                                    <td>
-                                                        <?php
-                                                        $total_segundos1 = (($somaTempoHora * 3600) + ($somaTempoMinu * 60) + ($somaTempoSegu));
-                                                        $horas1 = floor($total_segundos1 / (60 * 60));
-                                                        $sobra_horas1 = ($total_segundos1 % (60 * 60));
-                                                        $minutos1 = floor($sobra_horas1 / 60);
-                                                        $sobra_minutos1 = ($sobra_horas1 % 60);
-                                                        $segundos1 = $sobra_minutos1;
-                                                        echo "<span><b> $horas1:$minutos1:$segundos1 <b></span>";
-                                                        ?>
-                                                    </td>
+                                                   
 
                                                     
                                                     <td>

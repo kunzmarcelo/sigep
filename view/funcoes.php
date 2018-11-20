@@ -53,28 +53,4 @@ function controlaAcessoUrl($url, $pagina) {
         }
     }
 }
-//
-//include_once "../modell/FuncaoNovo.class.php";
-//$lote = new FuncaoNovo();
-//$matriz = $lote->listaFuncao();
-////$matriz = $lote->listaTdosFuncaoLigacao();
-//
-//while ($dados = $matriz->fetchObject()) {
-//
-//
-//    $nomeProduto = $dados->descricao;
-//
-//
-//    $dados2 = array(
-//        "id_funcao" => $dados->id_funcao,
-//        "funcao" => $dados->funcao,);
-//// Esta é a array que deseja que seja retornada
-//
-//
-//    $jsonAux[$nomeProduto][] = $dados2;
-//}
-//
-//$fp = fopen('produtos.json', 'w');
-//fwrite($fp, json_encode($jsonAux));
-//fclose($fp);
-?>
+

@@ -30,7 +30,7 @@ class Producao extends BancoDadosPDO {
     }
 
     function listaProducao() {
-        return $this->listarTodos("producao ORDER BY status DESC");
+        return $this->listarTodos("producao ORDER BY id_producao DESC");
     }
     function listaProducaoAgrupado() {
         return $this->listarTodos("producao GROUP BY numero ORDER BY numero ASC");

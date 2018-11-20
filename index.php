@@ -69,27 +69,25 @@ $_SESSION['permissao'] = $dados->permissao;
 
                 <ul class='nav navbar-top-links navbar-right'>                    
                     <li class="dropdown">
-<!--                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-bell fa-fw"></i> Avisos <i class="fa fa-caret-down"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-alerts">
-                            <li>
-                                <a href="#">
-                                    <div>
-                                        <?php
-                                        require_once "../sigep2.0/modell/BancoDadosPDO.class.php";
+                        <!--                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                                    <i class="fa fa-bell fa-fw"></i> Avisos <i class="fa fa-caret-down"></i>
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-alerts">
+                                                    <li>
+                                                        <a href="#">
+                                                            <div>
+                        <?php
+                        require_once "../sigep2.0/modell/BancoDadosPDO.class.php";
 
-                                        $lote = new BancoDadosPDO();
-                                        $matriz = $lote->listarTodos("config_celula");
-
-                                        
-                                        ?>
-
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="divider"></li>                            
-                        </ul>-->
+                        $lote = new BancoDadosPDO();
+                        $matriz = $lote->listarTodos("config_celula");
+                        ?>
+                        
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="divider"></li>                            
+                                                </ul>-->
                         <!-- /.dropdown-alerts -->
                         <?php
                         require_once "../sigep2.0/modell/BancoDadosPDO.class.php";
@@ -268,17 +266,9 @@ $_SESSION['permissao'] = $dados->permissao;
                 $data_ini = date('Y-m-d');
                 if (empty($data_ini)) {
                     echo" <div class='alert alert-warning' role='alert'>
-                                    <h4> <span class='glyphicon glyphicon-warning-sign'></span> Oops! Selecione os campos acima.</h4>
-                                </div>";
-                } else {
-                    ?>
-                                                                                                                                <div class="panel panel-default">
-                                                                                                                                    <div class="panel-heading" style="text-align: center">
-                                                                                                                                        Gráfico de produção diária de todas as células
-                                                                                                                                    </div>
-                                                                                                                                    <div id="pecas_produzidas" style="width: 100%; height: 100%"></div>
-                                                                                                                                </div>
-                    <?php
+                            <h4> <span class='glyphicon glyphicon-warning-sign'></span> Oops! Selecione os campos acima.</h4>
+                        </div>";
+                } else {                    
                     include_once './scripts_graficos_coletivo.php';
                 }
                 ?>
@@ -289,10 +279,20 @@ $_SESSION['permissao'] = $dados->permissao;
                     <div class="col-lg-12">
                         <?php
                         $data_ini = date('Y-m-d');
-                        $id_celula = '9';
+                        include_once './modell/BancoDadosPDO.class.php';
+                        $con = new BancoDadosPDO();                       
+                        $matriz3 = $con->listarTodos("celula_trabalho WHERE status_celula=true");
+
+//                        while ($dados = $matriz3->fetchObject()) {
+//                            if ($dados->status_celula == true) {
+//                                echo $dados->funcionarios;
+//                            }
+//                        }
+
+                        $id_celula = '4';
                         if (empty($data_ini)) {
                             echo" <div class='alert alert-warning' role='alert'>
-                                                    <h4> <span class='glyphicon glyphicon-warning-sign'></span> Oops! Selecione os campos acima.</h4>
+                                                    <h4> <span class='glyphicon glyphicon-warning-sign'></span> Oops! Algo deu errado, tente novamente mais tarde.</h4>
                                                 </div>";
                         } else {
                             ?>
@@ -304,6 +304,54 @@ $_SESSION['permissao'] = $dados->permissao;
                             </div>
                             <?php
                             include_once './scripts_graficos_3.php';
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <?php
+                        $data_ini = date('Y-m-d');
+                      
+                        $id_celula = '10';
+                        if (empty($data_ini)) {
+                            echo" <div class='alert alert-warning' role='alert'>
+                                                    <h4> <span class='glyphicon glyphicon-warning-sign'></span> Oops! Algo deu errado, tente novamente mais tarde.</h4>
+                                                </div>";
+                        } else {
+                            ?>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="text-align: center">
+                                    Gráfico de produção diária por célula
+                                </div>
+                                <div id="pecas_produzidas_celulas2" style="width: 100%; height: 100%"></div>
+                            </div>
+                            <?php
+                            include_once './scripts_graficos_2.php';
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <?php
+                        $data_ini = date('Y-m-d');
+                      
+                        $id_celula = '13';
+                        if (empty($data_ini)) {
+                            echo" <div class='alert alert-warning' role='alert'>
+                                                    <h4> <span class='glyphicon glyphicon-warning-sign'></span> Oops! Algo deu errado, tente novamente mais tarde.</h4>
+                                                </div>";
+                        } else {
+                            ?>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="text-align: center">
+                                    Gráfico de produção diária por célula
+                                </div>
+                                <div id="pecas_produzidas_celulas13" style="width: 100%; height: 100%"></div>
+                            </div>
+                            <?php
+                            include_once './scripts_graficos_13.php';
                         }
                         ?>
                     </div>

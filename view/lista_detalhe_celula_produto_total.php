@@ -53,10 +53,31 @@ controlaAcessoUrl($url, $pagina);
                         <div class="panel-body">
                             <div class="form-group">
                                 <form class="form-horizontal" method="post">
-                                    <div class="form-group">                                
+                                    <div class="form-group"> 
+                                    <div class="col-xs-6">
+                                        <label for="id_celula" class="tamanho-fonte">Pessoas por célula de trabalho:</label><small> (Campo Obrigatório)</small>
+                                        <select name="id_celula" class="form-control" required="required" >                                       
+                                            <?php
+                                            echo "<option value=''>Selecione ...</option>";
+                                            include_once '../modell/CelulaTrabalho.class.php';
+                                            $lote = new CelulaTrabalho();
+                                            $matriz = $lote->listaCelula();
+
+                                            while ($dados = $matriz->fetchObject()) {
+                                                if ($dados->status_celula == TRUE) {
+                                                    $cod = $dados->id_celula;
+                                                    $n_lote = $dados->funcionarios;
+                                                    echo "<option value=" . $cod . ">" . $n_lote . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                    <div class="form-group">
                                         <div class="col-xs-6">
                                             <label for="data">Data inicial:</label>
-                                            <input type="date" name="data" value="data" class="form-control" required="required" >
+                                            <input type="date" name="data" value="<?=date('2018-01-01')?>" class="form-control" required="required" >
                                         </div>
                                     </div>                                   
                                     <div class="form-group">                                
@@ -112,6 +133,7 @@ controlaAcessoUrl($url, $pagina);
                                             <?php
                                             if (isset($_POST['enviar'])) {
                                                 $data_ini = $_POST['data'];
+                                                $id_celula =$_POST['id_celula'];
 //                                    $data_fim = $_POST['data1'];
 
                                                 $data1 = explode("-", $data_ini);
@@ -123,7 +145,7 @@ controlaAcessoUrl($url, $pagina);
                                                 $nr = $data1[1];
                                                 $ano = $data1[0];
                                                 while ($nr <= $data2[1]) {
-                                                    $matriz = $lote->somaMensal($nr, $ano);
+                                                    $matriz = $lote->somaMensal($nr, $ano,$id_celula);
                                                     while ($dados = $matriz->fetchObject()) {
                                                         if (!empty($dados->NPECAS)) {
                                                             if ($nr == '01')
@@ -198,6 +220,7 @@ controlaAcessoUrl($url, $pagina);
                         ['Label', 'Value'],
     <?php
     $data_ini = $_POST['data'];
+    $id_celula =$_POST['id_celula'];
 //                                    $data_fim = $_POST['data1'];
 
     $data1 = explode("-", $data_ini);
@@ -209,7 +232,7 @@ controlaAcessoUrl($url, $pagina);
     $nr = $data1[1];
     $ano = $data1[0];
     while ($nr <= $data2[1]) {
-        $matriz = $lote->somaMensal($nr, $ano);
+        $matriz = $lote->somaMensal($nr, $ano, $id_celula);
         while ($dados = $matriz->fetchObject()) {
             if (!empty($dados->NPECAS)) {
                 if ($nr == '01')

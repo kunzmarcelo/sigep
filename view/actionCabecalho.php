@@ -17,8 +17,10 @@
 <link rel="icon" href="../bibliotecas/imagens/icone_logo.ico" type="image/x-icon">
 
 <style>
-    #impressao table{
-         border-collapse: collapse;
+    @media print{
+        #impressao {
+            border: 1px solid;
+        }
     }
-    
+
 </style>

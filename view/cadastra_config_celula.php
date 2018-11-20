@@ -4,8 +4,7 @@ session_start();
 $url = basename($_SERVER['SCRIPT_FILENAME']);
 $pagina = basename(__FILE__);
 if ($url != 'index.php')
-    include_once "../view/funcoes.php";
-{
+    include_once "../view/funcoes.php"; {
     include_once "../view/funcoes.php";
 }
 controlaAcessoUrl($url, $pagina);
@@ -18,7 +17,7 @@ controlaAcessoUrl($url, $pagina);
 <html lang="pt-BR">
     <head>
 
-<?php include_once "./actionCabecalho.php"; ?>
+        <?php include_once "./actionCabecalho.php"; ?>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
@@ -60,7 +59,7 @@ controlaAcessoUrl($url, $pagina);
     </head>
     <body>
         <div id="wrapper">
-<?php require_once './actionfonteMenu.php'; ?>
+            <?php require_once './actionfonteMenu.php'; ?>
             <div id="page-wrapper">
                 <div class="row">
                     <div class="row">
@@ -77,7 +76,7 @@ controlaAcessoUrl($url, $pagina);
                                 $resultado = $titulo->fetchObject();
                                 ?>
 
-<?= $resultado->nome ?>
+                                <?= $resultado->nome ?>
                             </h1>
                         </div>
                         <!-- /.col-lg-12 -->
@@ -118,12 +117,17 @@ controlaAcessoUrl($url, $pagina);
                                                     <input type="time" id="hora_des" name="hora_des" class="form-control"  required="required"   />
                                                 </div>                                    
                                                 <div class="form-group">
-                                                    <label for="desconto">Reajuste de Tempo para Mais:</label>
+                                                    <label for="desconto">Reajuste de Tempo para Mais ou para menos:</label>
                                                     <select name="desconto" class="form-control" required="required">
                                                         <option value="">Selecione...</option>
-                                                        <?php 
-                                                        for($i=1; $i<=30; $i++)
-                                                            echo "<option value='$i'>$i%</option>"
+                                                        <?php
+                                                        for ($i = -15; $i <= 15; $i++) {
+                                                            if ($i == 0) {
+                                                                echo "<option value='$i' selected='selected'>$i%</option>";
+                                                            } else {
+                                                                echo "<option value='$i'>$i%</option>";
+                                                            }
+                                                        }
                                                         ?>
                                                     </select>
 

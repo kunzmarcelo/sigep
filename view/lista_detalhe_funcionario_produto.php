@@ -4,8 +4,7 @@ session_start();
 $url = basename($_SERVER['SCRIPT_FILENAME']);
 $pagina = basename(__FILE__);
 if ($url != 'index.php')
-    include_once "../view/funcoes.php";
-{
+    include_once "../view/funcoes.php"; {
     include_once "../view/funcoes.php";
 }
 controlaAcessoUrl($url, $pagina);
@@ -18,7 +17,7 @@ controlaAcessoUrl($url, $pagina);
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
-<?php include_once "./actionCabecalho.php"; ?>
+        <?php include_once "./actionCabecalho.php"; ?>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
         <script type="text/javascript">
@@ -73,7 +72,7 @@ controlaAcessoUrl($url, $pagina);
 
     <body>
         <div id="wrapper">
-<?php require_once './actionfonteMenu.php'; ?>
+            <?php require_once './actionfonteMenu.php'; ?>
             <div id="page-wrapper">
 
                 <div class="row">
@@ -87,10 +86,10 @@ controlaAcessoUrl($url, $pagina);
                             include_once '../modell/Produto.class.php';
                             $con = new BancoDadosPDO();
                             $titulo = $con->listarUm("menu_filho", "link like '$part[3]'");
-                            $resultado = $titulo->fetchObject();
+                            //$resultado = $titulo->fetchObject();
                             ?>
+                            Lista Funcionários Produto
 
-<?= $resultado->nome ?>
                         </h1>
                     </div>
                     <!-- /.col-lg-12 -->
@@ -100,7 +99,7 @@ controlaAcessoUrl($url, $pagina);
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel-heading">
-                            <form class="form-horizontal" method="post">                                
+                            <form class="form-horizontal" method="get">                                
                                 <div class="form-group">                                
                                     <div class="col-xs-6">                                      
                                         <label for="numero" class="tamanho-fonte">Selecione o numero de controle:</label><small> (Campo Obrigatório)</small>
@@ -112,12 +111,14 @@ controlaAcessoUrl($url, $pagina);
                                             $matriz = $fun->listaProducaoAgrupado();
 
                                             while ($dados = $matriz->fetchObject()) {
+                                                if ($dados->status == true ) {
 
-                                                $cod = $dados->id_producao;
-                                                $numero = $dados->numero;
-                                                $quantidade = $dados->quantidade;
-                                                $produto = $dados->produto;
-                                                echo "<option value='$numero'>" . $numero  . "</option>";
+                                                    $cod = $dados->id_producao;
+                                                    $numero = $dados->numero;
+                                                    $quantidade = $dados->quantidade;
+                                                    $produto = $dados->produto;
+                                                    echo "<option value='$numero'>" . $numero . "</option>";
+                                                }
                                             }
                                             ?>
                                         </select>                            
@@ -173,7 +174,7 @@ controlaAcessoUrl($url, $pagina);
                                     </thead>
                                     <tbody>                       
                                         <?php
-                                        $numero = \filter_input(INPUT_POST, 'numero');
+                                        $numero = \filter_input(INPUT_GET, 'numero');
 
                                         if (empty($numero)) {
                                             echo" <div class='alert alert-warning' role='alert'>
@@ -191,9 +192,9 @@ controlaAcessoUrl($url, $pagina);
                                                 $nome = explode(" ", $dados->nome);
 
                                                 $faltam = $dados->quantidade - $dados->peca_produzida;
-                                                if($faltam > 0){
-                                                    $faltam = $faltam.'*';
-                                                }else{
+                                                if ($faltam > 0) {
+                                                    $faltam = $faltam . '*';
+                                                } else {
                                                     $faltam = '-';
                                                 }
 
@@ -207,7 +208,7 @@ controlaAcessoUrl($url, $pagina);
                                                 echo "<tr>                                                            
                                                         <td title='id'>" . $dados->id . "</td>                                                            
                                                         <td title='Numero de controle'><b>" . $dados->numero . "</b></td>                                                            
-                                                        <td title='id_funcionario' class='editavel'><b>" . substr("$dados->nome", 0, 10) . "</b></td>                                                            
+                                                        <td title='id_funcionario' class='editavel'><b>" . substr("$dados->nome", 0, 11) . "</b></td>                                                            
                                                         <td title='id_produto' class='editavel'>" . $dados->descricao . "</td>
                                                         <td title='id_operacao' class='editavel'><b>" . $dados->operacao . "</b></td>
                                                         <td title='quantidade determinada' >" . $dados->quantidade . "</td>                                                            
@@ -247,6 +248,6 @@ controlaAcessoUrl($url, $pagina);
 
         <script src="../ajax/detalhe_funcionario_produto/deletar_detalhe_funcionario_produto.js"></script>
         <script src="../ajax/jquery.js"></script>
-<?php require_once "./actionRodape.php"; ?>
+        <?php require_once "./actionRodape.php"; ?>
     </body>
 </html>

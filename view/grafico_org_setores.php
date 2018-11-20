@@ -62,20 +62,14 @@ controlaAcessoUrl($url, $pagina);
         include_once "../modell/Funcionario.class.php";
         $lote = new Funcionario();
         $matriz = $lote->listaFuncionario();
-
-        //$teste_conta = count($matriz->fetchObject()); //echo $teste_conta;
         while ($dados = $matriz->fetchObject()) {
             $descricao = $dados->nome;
         }
-
         include_once "../modell/Setores.class.php";
         $prod2 = new Setores();
         $matriz2 = $prod2->listaSetor();
         while ($dados2 = $matriz2->fetchObject()) {
-
-            //$descricao_setor = $dados2->descricao_setor;
-
-            //echo ("[{v:'$dados2->descricao_setor', f:'$dados2->descricao_setor'},'$descricao','Setor'],");
+          
         }
         ?>
 
@@ -89,12 +83,9 @@ controlaAcessoUrl($url, $pagina);
                 data.addColumn('string', 'Name');
                 data.addColumn('string', 'Manager');
                 data.addColumn('string', 'ToolTip');
-
                 // For each orgchart box, provide the name, manager, and tooltip to show.
 
                 data.addRows([
-                   // [{v: '$dados->descricao_setor', f: 'setores'}, '', 'Organograma de setores'],
-
                     <?php
 
                         include_once "../modell/Funcionario.class.php";
@@ -103,15 +94,12 @@ controlaAcessoUrl($url, $pagina);
 
                         while ($dados = $matriz->fetchObject()) {
                             if ($dados->ativo == true) {
-                                echo ("['$dados->nome','$dados->descricao_setor','Funcionários'],");
-                            }
-                            //   ['Alice', 'Mike', ''],
+                                $funcionarios = explode(' ',$dados->nome);
+                                echo ("['$funcionarios[0]','$dados->descricao_setor','Funcionários'],");
+                            }                           
                         }
                     ?>
-
-
                 ]);
-
                 // Create the chart.
                 var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
                 google.charts.load('current', {packages: ['orgchart']});

@@ -95,8 +95,8 @@ ORDER BY detalhe_celula_produto.status DESC");
         return $this->listarTodosMuitosParaMuitos("detalhe_celula_produto.data,detalhe_celula_produto.id_celula sum(detalhe_celula_produto.pecas_determinadas) AS NPECAS, sum(detalhe_celula_produto.pecas_finalizadas) AS NFEITAS ", "detalhe_celula_produto", " detalhe_celula_produto.data= '$data_ini' ");
     }
 
-    function somaMensal($mes, $ano) {
-        return $this->listarTodosMuitosParaMuitos("detalhe_celula_produto.data, sum(detalhe_celula_produto.pecas_determinadas) AS NPECAS, sum(detalhe_celula_produto.pecas_finalizadas) AS NFEITAS ", "detalhe_celula_produto", " Month(detalhe_celula_produto.data) = '$mes' AND Year(data) = '$ano'");
+    function somaMensal($mes, $ano, $id_celula) {
+        return $this->listarTodosMuitosParaMuitos("detalhe_celula_produto.data, sum(detalhe_celula_produto.pecas_determinadas) AS NPECAS, sum(detalhe_celula_produto.pecas_finalizadas) AS NFEITAS ", "detalhe_celula_produto", " Month(detalhe_celula_produto.data) = '$mes' AND Year(data) = '$ano' AND detalhe_celula_produto.id_celula = $id_celula");
     }
 
     function graficoFaturamentoMes($mes, $ano) {
@@ -126,7 +126,7 @@ ORDER BY detalhe_celula_produto.status DESC");
                 AND detalhe_celula_produto.id_celula = celula_trabalho.id_celula
                 AND MONTH(detalhe_celula_produto.data)='$mes' 
                 AND YEAR(detalhe_celula_produto.data)='$ano'
-                AND celula_trabalho.pessoas_celula='$id_celula'
+                AND celula_trabalho.id_celula='$id_celula'
                 GROUP BY MONTH(detalhe_celula_produto.data);");
     }
 

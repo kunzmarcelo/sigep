@@ -86,7 +86,7 @@ controlaAcessoUrl($url, $pagina);
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group"> 
-                                            <button type="button" value="Imprimir" class="btn btn-default" id="btn">Imprimir</button>
+                                            <button type="button" value="Imprimir" class="btn btn-info" id="btn"> Imprimir</button>
                                             <!--<input type="submit" value="Salvar em PDF" class="btn btn-default">-->
 
                                         </div>
@@ -98,10 +98,9 @@ controlaAcessoUrl($url, $pagina);
 //                                   
                                 if (empty($id_produto)) {
                                     echo" <div class='alert alert-warning' role='alert'>
-                                                            <h4> <span class='glyphicon glyphicon-warning-sign'></span> Oops! Selecione um produto.</h4>
-                                                         </div>";
+                                            <h4> <span class='glyphicon glyphicon-warning-sign'></span> Oops! Selecione um produto.</h4>
+                                        </div>";
                                 } else {
-
                                     include_once "../modell/Produto.class.php";
                                     $listaUm = new Produto();
                                     $resultado = $listaUm->listarUm("produto", "id_produto = $id_produto");
@@ -110,54 +109,55 @@ controlaAcessoUrl($url, $pagina);
                                     ?>
 
 
-                                    <div id="impressao" >
+                                    <div id="impressao">
                                         <div class="panel panel-default">
                                             <h2>Ficha de produção Lüger Confecções</h2>
                                             <div class="panel-heading">
                                                 Produto:<b><i>( <?= $produto; ?> )</i></b> Lote:________________ Quantidade:___________________ Data:______/______/_______
                                             </div>
                                             <div class="table-responsive">                       
-                                                <table class="table table-hover table-bordered table-condensed" border="1 solid" width="100%" id="tblEditavel">
+                                                <table class="table table-hover table-bordered table-condensed" width="100%" id="tblEditavel" border="1px solid">
                                                     <thead>
                                                         <tr>
-                                                            <th>Operação</th>
-                                                            <th style='width:100px'>Início</th>
-
+                                                            <th>Operação</th>                                                            
                                                             <?php
                                                             include_once "../modell/Funcionario.class.php";
                                                             $fun = new Funcionario();
                                                             $matriz = $fun->listaFuncionarioStatus('1');
-                                                            while ($dados = $matriz->fetchObject()) {
-                                                                $nome = explode(" ", $dados->nome);
+                                                            $resultadoNome = $matriz->fetchAll();
+                                                            $contadorNomes = count($resultadoNome);
+
+                                                            foreach ($resultadoNome as $res) {
+                                                                $nome = explode(" ", $res['nome']);
                                                                 echo "<th style='width:80px'>$nome[0]</th>";
                                                             }
-                                                            ?>
-                                                            <th style='width:100px'>Final</th>
+
+                                                            //echo $contadorNomes
+                                                            ?>                                                          
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        
                                                         <?php
                                                         include_once "../modell/Operacao.class.php";
                                                         $lote = new Operacao();
                                                         $matriz = $lote->listaOperacaoProduto($id_produto);
 
                                                         $resultado = $matriz->fetchAll();
-                                                        $contador = 0;
-                                                        $contador = count($resultado);
+
                                                         //echo $contador;
                                                         foreach ($resultado as $res) {
-                                                            echo "<tr>";
                                                             if ($res['descricao_setor'] == 'Costura') {
                                                                 echo"  <td>" . mb_strtoupper($res['operacao']) . "</td>";
-                                                                for ($i = 0; $i <= $contador; $i++) {
+                                                                for ($i = 1; $i <= $contadorNomes; $i++) {
                                                                     echo "<td></td>";
                                                                 }
                                                             }
-                                                            echo "</tr>"; 
+                                                            echo "</tr>";                                                            
                                                             echo "<tr>";
                                                             if ($res['descricao_setor'] == 'Acabamento') {
                                                                 echo"<td>" . mb_strtoupper($res['operacao']) . "</td>";
-                                                                for ($i = 0; $i <= $contador; $i++) {
+                                                                for ($i=1; $i <= $contadorNomes; $i++) {
                                                                     echo "<td></td>";
                                                                 }
                                                             }
@@ -165,16 +165,15 @@ controlaAcessoUrl($url, $pagina);
                                                             echo "<tr>";
                                                             if ($res['descricao_setor'] == 'Finalização') {
                                                                 echo"<td>" . mb_strtoupper($res['operacao']) . "</td>";
-                                                                for ($i = 0; $i <= $contador; $i++) {
+                                                                for ($i=1; $i <= $contadorNomes; $i++) {                                                                                                                                       
                                                                     echo "<td></td>";
+
                                                                 }
                                                             }
                                                             echo "</tr>";
                                                         }
                                                     }
                                                     ?>
-
-                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>

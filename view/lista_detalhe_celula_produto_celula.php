@@ -126,34 +126,21 @@ controlaAcessoUrl($url, $pagina);
                         </form>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-6">
+                 <div class="row">
+                    <div class="col-xs-6">
                         <div class="form-group">
-                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
-                                <span class='glyphicon glyphicon-plus'></span> Adicionar
-                            </button>
-
-
                             <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#anotacoes">
                                 <span class='glyphicon glyphicon-list-alt'></span> Anotações
                             </button>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
                         <div class="form-group">
                             <form action="gerarPDF.php" class="form-horizontal">
-
                                 <button type="submit" class="btn btn-default">Exportar para PDF</button>
-                                <!--<input type="submit" value="Salvar em PDF" class="btn btn-default">-->
-
                             </form>
-
-
                         </div>
                     </div>
                 </div>
+                
 
 
                 <?php
@@ -168,46 +155,47 @@ controlaAcessoUrl($url, $pagina);
                 }
                 ?>
                 <div class="row">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" style="text-align: center">
-                            Listagem
-                        </div>
-                        <table width="100%" class="table table-striped table-bordered table-hover table-condensed" id="tblEditavel">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Data</th>
-                                    <th>Célula</th>
-                                    <th>Abs</th>
-                                    <th>Motivo</th>
-                                    <th>Produto</th>
-                                    <th>Obs.</th>
-                                    <th>Quant.</th>
-                                    <th>Feitas</th>
-                                    <th>Unit.</th>
-                                    <th>¹Reajuste</th>
-                                    <th>²Estimado</th>
-                                    <!--<th>²Concluído</th>-->
-                                    <th>³Faltam</th>
-                                    <th>Status</th>
-                                    <th><i class="fa fa-trash"></i></th>
-
-                                </tr>
-                            </thead>
-                            <tbody>                       
-
-                                <?php
-                                $data_ini = \filter_input(INPUT_POST, 'data');
-                                $id_celula = \filter_input(INPUT_POST, 'id_celula');
-                                if (empty($id_celula) || empty($data_ini)) {
-                                    echo" <div class='alert alert-warning' role='alert'>
+                    <?php
+                    $data_ini = \filter_input(INPUT_POST, 'data');
+                    $id_celula = \filter_input(INPUT_POST, 'id_celula');
+                    if (empty($id_celula) || empty($data_ini)) {
+                        echo" <div class='alert alert-warning' role='alert'>
                                                <h4> <span class='glyphicon glyphicon-warning-sign'></span> Oops! Selecione todos campos acima.</h4>
                                             </div>";
-                                } else {
+                    } else {
+                        include_once '../modell/BancoDadosPDO.class.php';
+                        $con = new BancoDadosPDO();
+                        $id_celula = \filter_input(INPUT_POST, 'id_celula');
+                        $resultado1 = $con->listarUm("celula_trabalho", "id_celula = $id_celula");
+                        $dados = $resultado1->fetchObject();
+                        //$dados->funcionarios;
+                        ?>
+                        <div class="panel panel-default">                            
+                            <div class="panel-heading" style="text-align: center">
+                                Listagem da <b><?= $dados->funcionarios; ?></b>
+                            </div>
+                            <table width="100%" class="table table-striped table-bordered table-hover table-condensed" id="tblEditavel">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Data</th>
+                                        <th>Produto</th>
+                                        <th>Quant.</th>
+                                        <th>Feitas</th>
+                                        <th>Unit.</th>
+                                        <th>Abs</th>
+                                        <th>Motivo</th>
+                                        <th>Obs.</th>
+                                        <th>¹Reajuste</th>
+                                        <th>²Estimado</th>
+                                        <th>³Faltam</th>
+                                        <th>Status</th>
+                                        <th><i class="fa fa-trash"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>                       
 
-//                            if (isset($_POST['enviar'])) {
-//                                
-
+                                    <?php
                                     $data1 = explode("-", $data_ini);
                                     include_once "../modell/DetalheCelulaProduto.class.php";
                                     $lote = new DetalheCelulaProduto();
@@ -261,14 +249,7 @@ controlaAcessoUrl($url, $pagina);
                                             $tempo3 = (($tempoUni[0] * 3600) + ($tempoUni[1] * 60) + ($tempoUni[2] ));
 
                                             $tempoTotal = ($dados->pecas_determinadas * $tempo3) / ($dados->pessoas_celula - $dados->falta);
-//
-//                                        if ($dados->DATACELULA <= '2017-11-08') {
-//                                            $total_segundos1 = $tempoTotal;
-//                                            $porcentagem = $dados->margem_erro; //0%
-//                                        } else {
-//                                          echo  $porcentagem =   $dados->margem_erro; //>0%
-//                                            $total_segundos1 = $tempoTotal + (($porcentagem / 100) * $tempoTotal);
-//                                        }
+
                                             $porcentagem = $dados->margem_erro; //>0%
                                             $total_segundos1 = $tempoTotal + (($porcentagem / 100) * $tempoTotal);
                                             $horas1 = floor($total_segundos1 / (60 * 60));
@@ -290,13 +271,7 @@ controlaAcessoUrl($url, $pagina);
                                             $tempo3 = (($tempoUni[0] * 3600) + ($tempoUni[1] * 60) + ($tempoUni[2] ));
                                             $tempoTotal = ($dados->pecas_determinadas * $tempo3) / $dados->pessoas_celula;
 
-//                                        if ($dados->DATACELULA <= '2017-11-08') {
-//                                            $total_segundos1 = $tempoTotal;
-//                                            $porcentagem = $dados->margem_erro; //0%
-//                                        } else {
-//                                           
-//                                           echo $total_segundos1 = $tempoTotal + (($porcentagem / 100) * $tempoTotal).'<br>';
-//                                        }
+
                                             $porcentagem = $dados->margem_erro; //>0%
 
                                             $total_segundos1 = $tempoTotal + (($porcentagem / 100) * $tempoTotal);
@@ -307,9 +282,6 @@ controlaAcessoUrl($url, $pagina);
                                             $segundos1 = $sobra_minutos1;
                                             $resultadoTempoEstimado = $horas1 . ':' . $minutos1 . ':' . $segundos1;
                                         }
-
-
-
 
                                         $faltam = $dados->pecas_determinadas - $dados->pecas_finalizadas;
                                         if ($faltam == 0) {
@@ -327,14 +299,13 @@ controlaAcessoUrl($url, $pagina);
                                         echo "<tr>
                                                 <td title='id'>" . $dados->id . "</td>
                                                 <td title='data' class='editavel'>" . $data1[2] . '/' . $data1[1] . "</td>                                                   
-                                                <td title='funcionarios'>" . $dados->funcionarios . "</td>                                                   
-                                                <td title='falta' class='editavel'>" . $falta . "</td>                                                 
-                                                <td title='motivo_falta' class='editavel'>" . $motivo_falta . "</td>                                                 
                                                 <td title='id_produto' class='editavel'>" . $dados->descricao . "</td>
-                                                <td title='obs' class='editavel'>" . $OBSERVACAO . " </td>
                                                 <td title='pecas_determinadas' class='editavel'>" . number_format($dados->pecas_determinadas, 2, '.', '.') . "</td>
                                                 <td title='pecas_finalizadas' class='editavel'>" . number_format($dados->pecas_finalizadas, 2, '.', '.') . "</td>
                                                 <td title='tempo_unitario' class='editavel'>" . $dados->tempo_unitario . "</td>
+                                                <td title='falta' class='editavel'>" . $falta . "</td>                                                 
+                                                <td title='motivo_falta' class='editavel'>" . $motivo_falta . "</td>                                                 
+                                                <td title='obs' class='editavel'>" . $OBSERVACAO . " </td>
                                                 <td title='margem_erro' class='editavel'><b>" . number_format($porcentagem, 2, '.', '.') . " %</b></td>
                                                 <td title='(número de peças * tempo Unitário) / número de pessoas'>" . $tempo_estimado_resultado . " </td>                                             
                                                 <td title='Peças que faltam'>" . $faltam2 . "</td>
@@ -343,7 +314,7 @@ controlaAcessoUrl($url, $pagina);
 							<span class='glyphicon glyphicon-trash' id='deletar' value='deletar'   onclick='deletar(" . $dados->id . ");'></span> 													
                                                     </td>
 
-</tr>";
+                                            </tr>";
                                         // <td title='percentual de peças concluidas'>" . number_format($diferenca, 2, '.', '.') . " %</td>
                                         $somaTempoHora += $horas1;
                                         $somaTempoMinu += $minutos1;
@@ -556,186 +527,6 @@ controlaAcessoUrl($url, $pagina);
                     $filename = "code.html"; // Nome do arquivo HTML
                     file_put_contents($filename, $buffer); // Grava os dados do buffer interno no arquivo HTML
                     ?>
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">Cadastro de Produção</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="post" class="form-horizontal">                                       
-                                        <div class="panel-body">                                                
-                                            <div class="form-group">
-                                                <label for="id_celula" class="tamanho-fonte">Pessoas por célula de trabalho:</label><small> (Campo Obrigatório)</small>
-                                                <select name="id_celula" class="form-control" required="required" >                                       
-                                                    <?php
-                                                    echo "<option value=''>Selecione ...</option>";
-                                                    include_once '../modell/CelulaTrabalho.class.php';
-                                                    $lote = new CelulaTrabalho();
-                                                    $matriz = $lote->listaCelula();
-
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->status_celula == TRUE) {
-                                                            $id_celula = $dados->id_celula;
-                                                            $pessoas_celula = $dados->pessoas_celula;
-                                                            $funcionarios = $dados->funcionarios;
-                                                            echo "<option value=" . $id_celula . ">" . $pessoas_celula . ' - ' . $funcionarios . "</option>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </select>                            
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="id_produto" class="tamanho-fonte">Produto</label><small> (Campo Obrigatório)</small>
-                                                <select name="id_produto" class="form-control" required="required" >                                       
-                                                    <?php
-                                                    echo "<option value=''>Selecione ...</option>";
-                                                    include_once '../modell/Produto.class.php';
-                                                    $prod = new Produto();
-                                                    $matriz = $prod->listaProduto();
-
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->status == true) {
-                                                            $cod = $dados->id_produto;
-                                                            $descricao = $dados->descricao;
-                                                            echo "<option value=" . $cod . ">" . $descricao . "</option>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </select>                            
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="obs">Observação:</label>
-                                                <input type="text" id="obs" name="obs" class="form-control" placeholder="Ex.: MC: manga curta; ML: manga Longa"/>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="data">Data da produção:</label>
-                                                <input type="date" id="data" name="data" class="form-control" required="required" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="n_pecas">Quantidade de serem produzidas:</label>
-                                                <input type="number" id="n_pecas" name="n_pecas" class="form-control" placeholder="numero de peças" required="required" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="tempo_unitario">Tempo Unitário do Produto:</label>
-                                                <input type="time" id="tempo_unitario" name="tempo_unitario" class="form-control" step='1' min="00:00:00" max="24:00:00" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="reajuste">Reajuste em porcentagem para mais:</label>
-                                                <select name="reajuste" class="form-control" required="required">                                       
-                                                    <?php
-                                                    $diasemana = array('Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado');
-                                                    $data = date('Y-m-d');
-
-                                                    // Varivel que recebe o dia da semana (0 = Domingo, 1 = Segunda ...)
-                                                    $diasemana_numero = date('w', strtotime($data));
-
-                                                    // Exibe o dia da semana com o Array
-                                                    // echo $diasemana[$diasemana_numero];
-//                                            echo "<option value=''><b>Selecione ...</b></option>";
-                                                    include_once '../modell/ConfigCelula.class.php';
-                                                    $fun = new ConfigCelula();
-                                                    $matriz = $fun->listaUmConfig($diasemana[$diasemana_numero]);
-
-
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->status == true) {
-                                                            $desconto = $dados->desconto;
-                                                            $descricao = $dados->dias;
-                                                            echo "<option value='$desconto'>" . $descricao . ' ' . $desconto . '% ' . "</option>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </select> 
-
-        <!--                                        <select name="reajuste" class="form-control" required="required">
-                                                    <option value="05">05</option>
-                                                    <option value="10">10</option>
-                                                    <option value="15">15</option>
-                                                    <option value="20">20</option>
-                                                    <option value="25">25</option>
-                                                </select>-->
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="n_feitas">Quantidade de peças produzidas:</label>
-                                                <input type="number" id="n_feitas" name="n_feitas" class="form-control" placeholder="numero de peças"  />
-                                            </div>
-                                            <div class="form-group">                                            
-                                                <label for="abstencao" class="tamanho-fonte">Funcionário que faltou:</label><small> (Campo Obrigatório)</small>
-                                                <select name="abstencao" class="form-control" required="required">                                       
-                                                    <?php
-                                                    echo "<option value='0'><b>Selecione ...</b></option>";
-                                                    include_once '../modell/Funcionario.class.php';
-                                                    $fun = new Funcionario();
-                                                    $matriz = $fun->listaFuncionario();
-
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->ativo == true && $dados->departamento != 'Escritório') {
-
-                                                            $nome = $dados->nome;
-                                                            echo "<option value=1>" . $nome . "</option>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </select>                            
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="motivo">Motivo:</label>
-                                                <input type="text" id="motivo" name="motivo" class="form-control" />
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
-                                            </div>
-                                        </div>
-                                    </form>
-
-                                    <?php
-                                    include_once "../modell/DetalheCelulaProduto.class.php";
-//instancia a classe de controle
-                                    $prodL = new DetalheCelulaProduto();
-
-                                    $id_celula = \filter_input(INPUT_POST, 'id_celula');
-                                    $id_produto = \filter_input(INPUT_POST, 'id_produto');
-                                    $data = \filter_input(INPUT_POST, 'data');
-                                    $pecas_determinadas = \filter_input(INPUT_POST, 'n_pecas');
-                                    $pecas_finalizadas = \filter_input(INPUT_POST, 'n_feitas');
-                                    $tempo_unitario = \filter_input(INPUT_POST, 'tempo_unitario');
-                                    $falta = \filter_input(INPUT_POST, 'abstencao');
-                                    $motivo_falta = \filter_input(INPUT_POST, 'motivo');
-                                    $status = '1';
-                                    $obs = \filter_input(INPUT_POST, 'obs');
-                                    $margem_erro = \filter_input(INPUT_POST, 'reajuste');
-                                    $cadastro = \filter_input(INPUT_POST, 'cadastrar');
-                                    if (isset($cadastro)) {
-                                        if (empty($id_celula) || empty($id_produto) || empty($pecas_determinadas)) {
-                                            echo "<div class='alert alert-danger alert-dismissable'>
-                                            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                            Algum dos campos acima não foi preenchido corretamente.
-                                        </div>";
-                                            //echo "<div class='alert alert-danger' role='alert'>Algum dos campos acima não foi preenchido corretamente.</div>";
-                                        } else {
-                                            //var_dump($id_lote, $id_produto, $data, $n_peca,$preco,$observacao);
-                                            $status = $prodL->cadastraCelulaProduto($id_celula, $id_produto, $data, $pecas_determinadas, $pecas_finalizadas, $tempo_unitario, $status, $obs, $falta, $motivo_falta, $margem_erro);
-                                            if ($status == true) {
-                                                echo "<script> alert('Registro inserido com sucesso.');</script>";
-                                            } else {
-                                                echo "<script> alert('Erro ao inserir registro.');</script>";
-                                            }
-                                        }
-                                    }
-                                    ?>
-
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
 
                     <!-- MODAL DE ANOTAÇÕES -->
                     <div class="modal fade" id="anotacoes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

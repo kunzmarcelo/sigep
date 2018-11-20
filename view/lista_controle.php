@@ -4,7 +4,8 @@ session_start();
 $url = basename($_SERVER['SCRIPT_FILENAME']);
 $pagina = basename(__FILE__);
 if ($url != 'index.php')
-    include_once "../view/funcoes.php"; {
+    include_once "../view/funcoes.php";
+{
     include_once "../view/funcoes.php";
 }
 controlaAcessoUrl($url, $pagina);
@@ -17,7 +18,7 @@ controlaAcessoUrl($url, $pagina);
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
-        <?php include_once "./actionCabecalho.php"; ?>
+<?php include_once "./actionCabecalho.php"; ?>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
         <script type="text/javascript">
@@ -72,7 +73,7 @@ controlaAcessoUrl($url, $pagina);
 
     <body>
         <div id="wrapper">
-            <?php require_once './actionfonteMenu.php'; ?>
+<?php require_once './actionfonteMenu.php'; ?>
             <div id="page-wrapper">
 
                 <div class="row">
@@ -89,7 +90,7 @@ controlaAcessoUrl($url, $pagina);
                             $resultado = $titulo->fetchObject();
                             ?>
 
-                            <?= $resultado->nome ?>
+<?= $resultado->nome ?>
                         </h1>
                     </div>
                     <!-- /.col-lg-12 -->
@@ -113,7 +114,7 @@ controlaAcessoUrl($url, $pagina);
                                     <th colspan="2">Fim</th>
                                     <th>Intervalo</th>
                                     <th>Desconto</th>
-                                    <th><i class="fa fa-trash-o"></i></th>
+                                    <th><i class="fa fa-low-vision"></i></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -162,9 +163,14 @@ controlaAcessoUrl($url, $pagina);
                                     $resultadoTempoEstimado = $horas1 . 'h ' . $minutos1 . 'm ' . $segundos1 . 's';
 // . $dados->hora_ini . ' '
 // . $dados->hora_fim . ' '
-
-                                    if ($dados->status == TRUE) {
-                                        echo "<tr>
+                                    if ($dados->status == TRUE) {                                           
+					$vision = "<span class='glyphicon glyphicon-eye-open' id='finalizar' value='finalizar'  onclick='finalizar(" . $dados->id_producao . ");'></span>";
+                                                  
+                                    } else {
+                                        $vision = "<span class='glyphicon glyphicon-eye-close' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_producao . ");'></span>";
+                                    }
+                                           
+                                    echo "<tr>
                                                 <td title='id_producao'>" . $dados->id_producao . "</td>
                                                 <td title='descricao'>" . $dados->numero . "</td>
                                                 <td title='produto' class='editavel'>" . $dados->produto . "</td>
@@ -173,35 +179,8 @@ controlaAcessoUrl($url, $pagina);
                                                 <td title='data_fim' class='editavel' colspan='2'>" . $data_fim[2] . '/' . $data_fim[1] . '/' . $data_fim[0] . ' ' . $dados->hora_fim . "</td>
                                                 <td title='' >" . $dias . ' ' . $resultadoTempoEstimado . "</td>
                                                 <td title='' >" . $desconto . "</td>
-                                                    <td>     
-							<span class='glyphicon glyphicon-eye-open' id='finalizar' value='finalizar'  onclick='finalizar(" . $dados->id_producao . ");'></span> 													
-                                                    </td>
-                                                <td>
-                                                     <a href='#' id='deletar' value='deletar'  onclick='deletar(" . $dados->id_producao . ");'>
-                                                        <i class='fa fa-trash'></i>
-                                                     </a>                                                    
-                                                 </td>
-                                            </tr>";
-                                    } else {
-                                        echo "<tr>
-                                                <td title='id_producao'>" . $dados->id_producao . "</td>
-                                                <td title='descricao'>" . $dados->numero . "</td>
-                                                <td title='produto' class='editavel'>" . $dados->produto . "</td>
-                                                <td title='quantidade' class='editavel'>" . $dados->quantidade . "</td>
-                                                <td title='hora_ini' class='editavel' colspan='2'>" . $data_ini[2] . '/' . $data_ini[1] . '/' . $data_ini[0] . ' ' . $dados->hora_ini . "</td>
-                                                <td title='hora_fim' class='editavel' colspan='2'>" . $data_fim[2] . '/' . $data_fim[1] . '/' . $data_fim[0] . ' ' . $dados->hora_fim . "</td>
-                                                <td title='' >" . $dias . ' ' . $resultadoTempoEstimado . "</td>
-                                                <td title='' >" . $desconto . "</td>
-                                                     <td>     
-							<span class='glyphicon glyphicon-eye-close' id='ativar' value='ativar'  onclick='ativar(" . $dados->id_producao . ");'></span> 													
-                                                    </td>
-                                                <td>
-                                                     <a href='#' id='deletar' value='deletar'  onclick='deletar(" . $dados->id_producao . ");'>
-                                                        <i class='fa fa-trash'></i>
-                                                     </a>                                                    
-                                                 </td>
-                                            </tr>";
-                                    }
+                                                    <td> $vision</td>
+                                    </tr>";
                                 }
                                 ?>
                             </tbody>

@@ -136,13 +136,13 @@ controlaAcessoUrl($url, $pagina);
                                     <div class="form-group">                                
                                         <div class="col-xs-6">
                                             <label for="data">Data inicial:</label>
-                                            <input type="date" name="data" value="" class="form-control" required="required" >
+                                            <input type="date" name="data" value="<?= date('Y-m-01')?>" class="form-control" required="required" >
                                         </div>									
                                     </div>									
                                     <div class="form-group">                                
                                         <div class="col-xs-6">
                                             <label for="data2">Data Final:</label>
-                                            <input type="date" name="data2" value="" class="form-control" required="required" >
+                                            <input type="date" name="data2" value="<?= date('Y-m-d')?>" class="form-control" required="required" >
                                         </div>									
                                     </div>									
                                     <div class="form-group">                                
@@ -153,7 +153,6 @@ controlaAcessoUrl($url, $pagina);
                                     </div>
                                 </form>
                             </div>
-
                         </div>
                         <div class="panel-body">
                             <div class="col-lg-6">  

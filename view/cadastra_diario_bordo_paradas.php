@@ -55,101 +55,109 @@ controlaAcessoUrl($url, $pagina);
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <form method="post" role="form">
-                                            <div class="form-group">                                            
-                                                <label for="id_posto" class="tamanho-fonte">Selecione o Posto de Trabalho:</label><small> (Campo Obrigatório)</small>
-                                                <select name="id_posto" class="form-control" required="required">
-                                                    <option value="">Selecione...</option>
-                                                    <?php
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">                                            
+                                                    <label for="id_posto" class="tamanho-fonte">Selecione o Posto de Trabalho:</label><small> (Campo Obrigatório)</small>
+                                                    <select name="id_posto" class="form-control" required="required">
+                                                        <option value="">Selecione...</option>
+                                                        <?php
 //                                            echo "<option value='0'></option>";
-                                                    include_once '../modell/PostoTrabalho.class.php';
-                                                    $maquina = new PostoTrabalho();
-                                                    $matriz = $maquina->listaPosto();
+                                                        include_once '../modell/PostoTrabalho.class.php';
+                                                        $maquina = new PostoTrabalho();
+                                                        $matriz = $maquina->listaPosto();
 
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->status == true) {
-                                                            $cod = $dados->id_posto;
-                                                            $nome = $dados->numero;
-                                                            $descricao = $dados->descricao;
-                                                            echo "<option value=" . $cod . ">" . $nome . ' - ' . $descricao . "</option>";
+                                                        while ($dados = $matriz->fetchObject()) {
+                                                            if ($dados->status == true) {
+                                                                $cod = $dados->id_posto;
+                                                                $nome = $dados->numero;
+                                                                $descricao = $dados->descricao;
+                                                                echo "<option value=" . $cod . ">" . $nome . ' - ' . $descricao . "</option>";
+                                                            }
                                                         }
-                                                    }
-                                                    ?>
-                                                </select>                            
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="data">Data:</label><small> (Campo Obrigatório)</small>
-                                                <input type="date" id="data" name="data" class="form-control" required="required"/>
-                                            </div>
-                                            <div class="form-group">                                            
-                                                <label for="id_funcionario" class="tamanho-fonte">Funcionário:</label><small> (Campo Obrigatório)</small>
-                                                <select name="id_funcionario" class="form-control" required="required">                                       
-                                                    <?php
-                                                    echo "<option value=''><b>Selecione ...</b></option>";
-                                                    include_once '../modell/Funcionario.class.php';
-                                                    $fun = new Funcionario();
-                                                    $matriz = $fun->listaFuncionario();
+                                                        ?>
+                                                    </select>                            
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="data">Data:</label><small> (Campo Obrigatório)</small>
+                                                    <input type="date" id="data" name="data" class="form-control" required="required"/>
+                                                </div>
+                                                <div class="form-group">                                            
+                                                    <label for="id_funcionario" class="tamanho-fonte">Funcionário:</label><small> (Campo Obrigatório)</small>
+                                                    <select name="id_funcionario" class="form-control" required="required">                                       
+                                                        <?php
+                                                        echo "<option value=''><b>Selecione ...</b></option>";
+                                                        include_once '../modell/Funcionario.class.php';
+                                                        $fun = new Funcionario();
+                                                        $matriz = $fun->listaFuncionario();
 
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->ativo == true && $dados->departamento != 'Escritório') {
-                                                            $cod = $dados->id_funcionario;
-                                                            $nome = $dados->nome;
-                                                            echo "<option value=" . $cod . ">" . $nome . "</option>";
+                                                        while ($dados = $matriz->fetchObject()) {
+                                                            if ($dados->ativo == true && $dados->departamento != 'Escritório') {
+                                                                $cod = $dados->id_funcionario;
+                                                                $nome = $dados->nome;
+                                                                echo "<option value=" . $cod . ">" . $nome . "</option>";
+                                                            }
                                                         }
-                                                    }
-                                                    ?>
-                                                </select>                            
-                                            </div>
-                                            <div class="form-group">                                            
-                                                <label for="turno" class="tamanho-fonte">Turno:</label><small> (Campo Obrigatório)</small>
-                                                <select name="turno" class="form-control" required="required">                                       
-                                                    <option value="">Selecione...</option>
-                                                    <option value="Manhã">Manhã</option>
-                                                    <option value="Tarde">Tarde</option>
-                                                </select>                            
-                                            </div>
-                                            <div class="form-group"> 
-                                                <label for="id_produto" class="tamanho-fonte">Produto:</label><small> (Campo Obrigatório)</small>
-                                                <select name="id_produto" id="id_produto" class="form-control" required="required">
-                                                    <option value="">Selecione...</option>
-                                                    <?php
-                                                    include_once '../modell/Produto.class.php';
-                                                    $fun = new Produto();
-                                                    $matriz = $fun->listaProduto();
+                                                        ?>
+                                                    </select>                            
+                                                </div>
+                                                <div class="form-group">                                            
+                                                    <label for="turno" class="tamanho-fonte">Turno:</label><small> (Campo Obrigatório)</small>
+                                                    <select name="turno" class="form-control" required="required">                                       
+                                                        <option value="">Selecione...</option>
+                                                        <option value="Manhã">Manhã</option>
+                                                        <option value="Tarde">Tarde</option>
+                                                    </select>                            
+                                                </div>
 
-                                                    while ($dados = $matriz->fetchObject()) {
-                                                        if ($dados->status == true) {
-                                                            $cod = $dados->id_produto;
-                                                            $nome = $dados->descricao;
-                                                            echo "<option value=" . $cod . ">" . $nome . "</option>";
+                                                <div class="form-group"> 
+                                                    <label for="id_produto" class="tamanho-fonte">Produto:</label><small> (Campo Obrigatório)</small>
+                                                    <select name="id_produto" id="id_produto" class="form-control" required="required">
+                                                        <option value="">Selecione...</option>
+                                                        <?php
+                                                        include_once '../modell/Produto.class.php';
+                                                        $fun = new Produto();
+                                                        $matriz = $fun->listaProduto();
+
+                                                        while ($dados = $matriz->fetchObject()) {
+                                                            if ($dados->status == true) {
+                                                                $cod = $dados->id_produto;
+                                                                $nome = $dados->descricao;
+                                                                echo "<option value=" . $cod . ">" . $nome . "</option>";
+                                                            }
                                                         }
-                                                    }
-                                                    ?>
-                                                </select>                            
+                                                        ?>
+                                                    </select>                            
+                                                </div>
                                             </div>
-                                            <div class="form-group"> 
-                                                <label for="id_operacao" class="tamanho-fonte">Função:</label><small> (Campo Obrigatório)</small>
-                                                <select name="id_operacao" id="id_operacao" class="form-control" required="required">
-                                                    <option value="">Selecione um produto...</option>
-                                                </select>
+                                            <div class="col-lg-6">
+                                                <div class="form-group"> 
+                                                    <label for="id_operacao" class="tamanho-fonte">Função:</label><small> (Campo Obrigatório)</small>
+                                                    <select name="id_operacao" id="id_operacao" class="form-control" required="required">
+                                                        <option value="">Selecione um produto...</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="hora_ini">Hora de Ínicio da Parada:</label>
+                                                    <input type="time" id="hora_ini" name="hora_ini" class="form-control" placeholder="" step='1' min="00:00:00" max="23:59:00"  />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="hora_fim">Hora Final da Parada:</label>
+                                                    <input type="time" id="hora_fim" name="hora_fim" class="form-control" placeholder="" step='1' min="00:00:00" max="23:59:00" />
+                                                </div>                                    
+                                                <div class="form-group">
+                                                    <label for="motivo">Motivo:</label>
+                                                    <input type="text" id="motivo" name="motivo" class="form-control" placeholder="Ex: Acabamento"   />
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="hora_ini">Hora de Ínicio da Parada:</label>
-                                                <input type="time" id="hora_ini" name="hora_ini" class="form-control" placeholder="" step='1' min="00:00:00" max="23:59:00"  />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="hora_fim">Hora Final da Parada:</label>
-                                                <input type="time" id="hora_fim" name="hora_fim" class="form-control" placeholder="" step='1' min="00:00:00" max="23:59:00" />
-                                            </div>                                    
-                                            <div class="form-group">
-                                                <label for="motivo">Motivo:</label>
-                                                <input type="text" id="motivo" name="motivo" class="form-control" placeholder="Ex: Acabamento"   />
-                                            </div>
-                                            <div class="form-group">                                   
-                                                <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
-                                                <button type="reset" name="cancelar" value="cancelar" class="btn btn-inverse">Cancelar</button>                    
-<!--                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
-                                                    Cadastrar paradas
-                                                </button>-->
+                                            <div class="col-lg-6">
+                                                <div class="form-group">                                   
+                                                    <button type="submit" name="cadastrar" value="cadastrar" class="btn btn-info">Cadastrar</button>
+                                                    <button type="reset" name="cancelar" value="cancelar" class="btn btn-inverse">Cancelar</button>                    
+                                                    <!--                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
+                                                                                                        Cadastrar paradas
+                                                                                                    </button>-->
+                                                </div>
                                             </div>
 
                                         </form>
@@ -204,7 +212,7 @@ controlaAcessoUrl($url, $pagina);
                 </div>
             </div>
         </div>
-        
+
 
         <?php require_once "./actionRodape.php"; ?>
 
